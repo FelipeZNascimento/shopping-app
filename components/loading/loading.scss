@@ -1,0 +1,23 @@
+.loading {
+    &--fullscreen {
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: $z-index-top-max;
+    }
+
+    &--spinner {
+        background-color: $of-lightgrey;
+        border: 4px solid $of-green;
+        border-radius: 150px;
+        height: 300px;
+        padding: 20px;
+        width: auto;
+    }
+}

@@ -1,0 +1,65 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+const ConfirmationDialog = (props) => {
+    const { onClose, title, message } = props;
+
+    const handleConfirm = () => {
+        onClose(true);
+    };
+
+    const handleCancel = () => {
+        onClose(false);
+    };
+
+    return (
+        <Dialog
+            open
+            onClose={handleCancel}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {message}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    classes={{ root: 'flex-grow' }}
+                    disableElevation
+                    color="secondary"
+                    onClick={handleCancel}
+                >
+                    Cancelar
+                </Button>
+                <Button
+                    autoFocus
+                    classes={{ root: 'flex-grow' }}
+                    disableElevation
+                    color="primary"
+                    variant="contained"
+                    onClick={handleConfirm}
+                >
+                    Confirmar
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
+
+ConfirmationDialog.propTypes = {
+    message: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+};
+
+export default ConfirmationDialog;
