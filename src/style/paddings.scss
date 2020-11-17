@@ -1,0 +1,39 @@
+$padding: (
+    "xxs": 2px,
+    "xs": 4px,
+    "s": 8px,
+    "m": 12px,
+    "l": 16px,
+    "xl": 25px,
+    "xxl": 50px
+);
+
+@each $name, $pixels in $padding {
+    .top-padding-#{$name} {
+        padding-top: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $padding {
+    .left-padding-#{$name} {
+        padding-left: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $padding {
+    .right-padding-#{$name} {
+        padding-right: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $padding {
+    .bottom-padding-#{$name} {
+        padding-bottom: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $padding {
+    .padding-#{$name} {
+        padding: #{$pixels} !important;
+    }
+}

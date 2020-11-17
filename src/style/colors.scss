@@ -1,0 +1,31 @@
+$colors: (
+    "of-red": "#9c5342",
+    "of-brown": "#9e7e6e",
+    "of-beige": "#EDF5E1",
+    "of-green": "#88aa95",
+    "of-lightgrey": "#f5f4f0",
+    "of-blue": "#05386B",
+    "of-disabled": "rgba(0, 0, 0, 0.26)",
+);
+
+@each $name, $hexa in $colors {
+    .#{$name} {
+        color: #{$hexa};
+    }
+}
+
+@each $name, $hexa in $colors {
+    .#{$name}-bg {
+        background-color: #{$hexa};
+    }
+}
+
+$red: #9c5342;
+$of-brown: #9e7e6e;
+$of-beige: #EDF5E1;
+$green: #88aa95;
+$of-green: #88aa95;
+$lightgrey: #f5f4f0;
+$of-lightgrey: #f5f4f0;
+$blue: #05386B;
+$darkcolor: #282c34;

@@ -1,0 +1,24 @@
+export const brand = {
+    description: '',
+};
+
+export const place = {
+    description: '',
+    categoryId: null,
+};
+
+export const placeCategory = {
+    description: '',
+};
+
+export const product = {
+    description: '',    
+    category_description: '',
+    category_id: null,    
+    created: '',
+    id: null
+};
+
+export const productCategory = {
+    description: '',
+};
