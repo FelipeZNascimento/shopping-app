@@ -1,24 +1,26 @@
 export const brand = {
-    description: '',
-};
-
-export const place = {
-    description: '',
-    categoryId: null,
-};
-
-export const placeCategory = {
-    description: '',
-};
-
-export const product = {
-    description: '',    
-    category_description: '',
-    category_id: null,    
     created: '',
+    description: '',
     id: null
 };
 
-export const productCategory = {
+export const place = {
+    category_description: '',
+    category_id: null,    
+    created: '',
+    description: '',    
+    id: null
+};
+
+export const category = {
     description: '',
+    id: null
+};
+
+export const product = {
+    category_description: '',
+    category_id: null,    
+    created: '',
+    description: '',    
+    id: null
 };

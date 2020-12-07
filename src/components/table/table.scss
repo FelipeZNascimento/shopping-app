@@ -1,15 +1,36 @@
 .table {
-    width: 100%;
+    border: 1px solid $of-grey3;
     border-spacing: 0;
+    color: #FFFFFF;
+    text-align: left;
+    width: 100%;
 
-    & thead {
-        color: white;
+    thead {
+        // background-color: #62c462;
+        background-color: $of-grey3;
+        color: black;
         font-weight: bold;
+
+        th {
+            padding: 10px 20px;
+        }
     }
 
-    & th,
-    & td {
-        padding: 10px;
+    tbody {
+        td {
+            padding: 5px 20px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: $of-grey4;
+        }
+        tr:nth-child(odd) {
+            background-color: $of-grey5;
+        }
+
+        tr:hover {
+            background-color: rgba(255,255,255,0.01);
+        }
     }
 
 }

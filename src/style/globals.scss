@@ -17,6 +17,11 @@ a {
     cursor: auto;
 }
 
+.vertical-align-center {
+    display: flex;
+    align-items: center;
+ }
+
 .align-center {
     text-align: center;
 }
@@ -51,7 +56,24 @@ a {
         margin: 10px !important;
     }
     &--invalid {
-        background-color: lighten($red, 50%);
+        background-color: lighten($of-red, 50%);
     }
 
+}
+
+.fab-bottom {
+    bottom: 20px;
+    color: $of-beige !important;
+    position: fixed !important;
+};
+
+.invisible {
+    visibility: hidden;
+}
+
+.clickable {
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
 }

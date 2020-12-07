@@ -5,14 +5,18 @@ import {
     objectTypeInfo,
 } from '../constants/general';
 
-export const fetchItems = (objectType) => async function (dispatch) {
+export const fetchItems = (
+    objectType,
+    orderBy = 'description',
+    sort = 'ASC'
+) => async function (dispatch) {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     const dispatchTarget = objectTypeInfo[objectType].dispatch;
 
     dispatch({ type: ACTIONTYPES[`FETCHING_${dispatchTarget}`] });
 
     try {
-        await fetch(`${apiBaseUrl}${apiCallTarget}`, {
+        await fetch(`${apiBaseUrl}${apiCallTarget}?orderBy=${orderBy}&sort=${sort}`, {
             method: 'GET',
             headers: {},
         })

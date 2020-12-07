@@ -1,4 +1,6 @@
 @import "./style/colors.scss";
+@import "./style/font-sizes.scss";
+@import "./style/margins.scss";
 @import "./style/paddings.scss";
 @import "./style/globals.scss";
 @import "./components/index.scss";
@@ -10,7 +12,7 @@ body {
     "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f4f0;
+  background-color: #272b30;
 }
 
 code {

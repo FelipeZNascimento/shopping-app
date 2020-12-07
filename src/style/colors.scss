@@ -1,31 +1,57 @@
+$of-black: #000000;
+$of-blue: #4369e6;
+$of-green: #62c462;
+$of-orange: #c47b59;
+$of-pink: #844dc2;
+$of-red: #c24d4d;
+$of-white: #ffffff;
+$of-yellow: #c4a859;
+
+$of-grey1: #b8c3cc;
+$of-grey2: #97a1a8;
+$of-grey3: #7a8288;
+$of-grey4: #353b41;
+$of-grey5: #2e3338;
+
+$of-brown: #9e7e6e;
+$of-beige: #EDF5E1;
+
 $colors: (
-    "of-red": "#9c5342",
+    "of-blue": $of-blue,
+    "of-black": $of-black,
+    "of-green": $of-green,
+    "of-orange": $of-orange,
+    "of-pink": $of-pink,
+    "of-red": $of-red,
+    "of-white": $of-white,
+    "of-yellow": $of-yellow,
+    "of-grey1": $of-grey1,
+    "of-grey2": $of-grey2,
+    "of-grey3": $of-grey3,
+    "of-grey4": $of-grey4,
+    "of-grey5": $of-grey5,
+
     "of-brown": "#9e7e6e",
     "of-beige": "#EDF5E1",
-    "of-green": "#88aa95",
     "of-lightgrey": "#f5f4f0",
-    "of-blue": "#05386B",
     "of-disabled": "rgba(0, 0, 0, 0.26)",
 );
 
 @each $name, $hexa in $colors {
-    .#{$name} {
-        color: #{$hexa};
+    .#{$name}-to-black {
+        color: linear-gradient(#{$hexa}, black) !important;
+    }
+    .#{$name}-to-white {
+        color: linear-gradient(#{$hexa}, white) !important;
     }
 }
 
 @each $name, $hexa in $colors {
+    .#{$name} {
+        color: #{$hexa} !important;
+    }
+
     .#{$name}-bg {
-        background-color: #{$hexa};
+        background-color: #{$hexa} !important;
     }
 }
-
-$red: #9c5342;
-$of-brown: #9e7e6e;
-$of-beige: #EDF5E1;
-$green: #88aa95;
-$of-green: #88aa95;
-$lightgrey: #f5f4f0;
-$of-lightgrey: #f5f4f0;
-$blue: #05386B;
-$darkcolor: #282c34;

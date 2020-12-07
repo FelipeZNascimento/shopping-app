@@ -7,14 +7,14 @@ import {
 } from '../constants/general';
 
 // export default async function item(item, objectType) {
-const deleteItem = (object, objectType) => async function (dispatch) {
+const deleteItem = (objectId, objectType) => async function (dispatch) {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     const dispatchTarget = objectTypeInfo[objectType].dispatch;
 
     dispatch({ type: ACTIONTYPES[`DELETING_${dispatchTarget}`] });
 
     try {
-        await fetch(`${apiBaseUrl}${apiCallTarget}${object.id}`, {
+        await fetch(`${apiBaseUrl}${apiCallTarget}${objectId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const deleteItem = (object, objectType) => async function (dispatch) {
                     response: json,
                 });
 
-                return dispatch(fetchItems(objectType));
+                // return dispatch(fetchItems(objectType));
             }) // Error
             .catch((err) => {
                 let errorMessage;

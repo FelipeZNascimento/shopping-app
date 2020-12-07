@@ -10,11 +10,11 @@ const initialState = {
     loading: false,
     saving: false,
     isNotificationOpen: false,
+    brands: [],
     places: [],
     placesCategories: [],
-    brands: [],
     products: [],
-    productsCategories: [],
+    productsCategories: []
 };
 
 export default function appReducer(state = initialState, action) {
@@ -31,9 +31,9 @@ export default function appReducer(state = initialState, action) {
         case ACTIONTYPES.FETCHING_PLACES_CATEGORIES:
         case ACTIONTYPES.FETCHING_PRODUCTS:
         case ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES:
-
             return {
                 ...state,
+                items: [],
                 loading: true,
                 error: false,
             };
@@ -72,6 +72,41 @@ export default function appReducer(state = initialState, action) {
                 error: false,
                 loading: false,
                 productsCategories: action.response,
+            };
+        case ACTIONTYPES.REMOVING_BRAND_FROM_LIST:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                brands: state.brands.filter((item) => item.id !== action.itemId)
+            };
+        case ACTIONTYPES.REMOVING_PLACE_FROM_LIST:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                places: state.places.filter((item) => item.id !== action.itemId)
+            };
+        case ACTIONTYPES.REMOVING_PLACE_CATEGORY_FROM_LIST:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                placesCategories: state.placesCategories.filter((item) => item.id !== action.itemId)
+            };
+        case ACTIONTYPES.REMOVING_PRODUCT_FROM_LIST:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                products: state.products.filter((item) => item.id !== action.itemId)
+            };
+        case ACTIONTYPES.REMOVING_PRODUCT_CATEGORY_FROM_LIST:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                productsCategories: state.productsCategories.filter((item) => item.id !== action.itemId)
             };
 
         case ACTIONTYPES.FETCHING_BRANDS_ERROR:
@@ -173,7 +208,6 @@ export default function appReducer(state = initialState, action) {
                 ...state,
                 isNotificationOpen: action.status !== false,
             };
-
         default:
             return state;
     }

@@ -22,4 +22,9 @@ module.exports = {
     plugins: [
         'react',
     ],
+    "rules": {
+        // disable the rule for all files
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "react-hooks/exhaustive-deps": 'off'
+    }
 };

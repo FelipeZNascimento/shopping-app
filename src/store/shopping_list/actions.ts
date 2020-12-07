@@ -15,7 +15,13 @@ export function removeFromList(product: IProduct) {
     const productId = product.id;
 
     return {
-        type: ACTIONTYPES.REMOVE_FROM_LIST,
+        type: ACTIONTYPES.REMOVING_FROM_LIST,
         productId
+    }
+}
+
+export function clearShoppingList() {
+    return {
+        type: ACTIONTYPES.CLEAR_SHOPPING_LIST
     }
 }

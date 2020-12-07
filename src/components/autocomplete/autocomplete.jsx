@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import MaterialAutocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import MaterialAutocomplete from '@material-ui/lab/Autocomplete';
 import { TextField } from '@material-ui/core/';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
-// const filter = createFilterOptions();
 
 export class Autocomplete extends Component {
     constructor(props) {
@@ -18,19 +17,6 @@ export class Autocomplete extends Component {
 
         this.handleChange = this.handleChange.bind(this);
     }
-
-    // filterAddNewOption = function (options, params) {
-    //     const filtered = filter(options, params);
-
-    //     if (params.inputValue !== '') {
-    //         filtered.push({
-    //             newlyAdded: true,
-    //             description: params.inputValue,
-    //         });
-    //     }
-
-    //     return filtered;
-    // };
 
     sortAlphabetically = function (options) {
         if (!options) {

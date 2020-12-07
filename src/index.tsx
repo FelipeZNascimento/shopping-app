@@ -23,13 +23,17 @@ import {
 import './App.scss';
 
 import {
-    AllProduts,
-    NewPurchase,
+    BrandsSection,
+    CategoriesSection,
+    Menu,
+    PlacesSection,
+    ProductsSection,
+    SidebarList,
     ShoppingList,
-    ShowItems,
+
+    NewPurchase,
 } from './sections/index';
 
-import { objectTypes, objectTypeInfo } from './constants/general';
 
 import { Notification } from './components/index';
 
@@ -56,12 +60,59 @@ const store = createStore(
 const theme = createMuiTheme({
     palette: {
         primary: {
-            main: '#88aa95',
+            main: '#b8c3cc',
         },
         secondary: {
-            main: '#282c34',
+            main: '#b8c3cc',
         },
+        text: {
+            disabled: '#AAAAAA'
+        }
     },
+    overrides: {
+        MuiInputBase: {
+            root: {
+                color: '#ffffff'
+            }
+        },
+        MuiFormLabel: {
+            root: {
+                color: '#7a8288'
+            }
+        },
+        MuiButton: {
+            root: {
+                '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.5) !important'
+                }
+            }
+        },
+        MuiIconButton: {
+            root: {
+                '&:hover': {
+                    backgroundColor: 'rgba(0,0,0,0.5)'
+                }
+            }
+        },
+        MuiDrawer: {
+            paper: {
+                backgroundColor: '#1f2225',
+                borderLeft: '1px solid black',
+                top: '62px'
+            }
+        },
+        MuiDialog: {
+            paper: {
+                backgroundColor: '#1f2225'
+            }
+        },
+        MuiDialogTitle: {
+            root: {
+                color: '#ffffff'
+            }
+        }
+    }
+
 });
 
 // const theme = createMuiTheme();
@@ -70,51 +121,37 @@ render(
     <Provider store={store}>
         <Router>
             <MuiThemeProvider theme={theme}>
-                <ShoppingList />
+                <Menu />
+                <SidebarList />
                 <Notification />
                 <div className="index--container">
                     <Switch>
-                        <Route path={routes.NEW_PURCHASE}>
+                        <Route path={routes.SHOPPING_LIST}>
+                            <ShoppingList />
+                        </Route>
+                        {/* <Route path={routes.NEW_PURCHASE}>
                             <NewPurchase />
+                        </Route> */}
+                        <Route path={routes.PLACES}>
+                            <PlacesSection />
                         </Route>
-                        {/* <Route path={routes.PLACES}>
-                            <ShowItems
-                                objectType={objectTypes.places}
-                                objectTypeInfo={objectTypeInfo[objectTypes.places]}
-                            />
-                        </Route>
-                        <Route path={routes.PLACES_CATEGORIES}>
-                            <ShowItems
-                                objectType={objectTypes.placesCategories}
-                                objectTypeInfo={objectTypeInfo[objectTypes.placesCategories]}
-                            />
+                        <Route path={routes.PRODUCTS}>
+                            <ProductsSection />
                         </Route>
                         <Route path={routes.BRANDS}>
-                            <ShowItems
-                                objectType={objectTypes.brands}
-                                objectTypeInfo={objectTypeInfo[objectTypes.brands]}
-                            />
-                        </Route> */}
-                        <Route path={routes.PRODUCTS}>
-                            <AllProduts />
+                            <BrandsSection />
                         </Route>
-                        {/* <Route path={routes.PRODUCTS}>
-                            <ShowItems
-                                objectType={objectTypes.products}
-                                objectTypeInfo={objectTypeInfo[objectTypes.products]}
-                            />
-                        </Route> */}
-                        {/* <Route path={routes.PRODUCTS_CATEGORIES}>
-                            <ShowItems
-                                objectType={objectTypes.productsCategories}
-                                objectTypeInfo={objectTypeInfo[objectTypes.productsCategories]}
-                            />
-                        </Route> */}
+                        <Route path={routes.PRODUCTS_CATEGORIES}>
+                            <CategoriesSection />
+                        </Route>
+                        <Route path={routes.PLACES_CATEGORIES}>
+                            <CategoriesSection />
+                        </Route>
                         <Route exact path={routes.HOME}>
-                            <NewPurchase />
+                            <ProductsSection />
                         </Route>
                         <Route>
-                            <NewPurchase />
+                            <ProductsSection />
                         </Route>
                     </Switch>
                 </div>

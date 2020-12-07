@@ -20,17 +20,6 @@ export function errorMessage(state) {
     return state.appReducer.errorMessage;
 }
 
-export function returnCategories(state, objectType) {
-    switch (objectType) {
-    case objectTypes.products:
-        return state.appReducer.productsCategories;
-    case objectTypes.places:
-        return state.appReducer.placesCategories;
-    default:
-        return [];
-    }
-}
-
 export function returnItems(state, objectType) {
     switch (objectType) {
     case objectTypes.brands:
@@ -48,44 +37,8 @@ export function returnItems(state, objectType) {
     }
 }
 
-export function returnProducts(state) {
-    return state.appReducer.products;
-}
-
-export function returnProductCategories(state) {
-    return state.appReducer.productsCategories;
-}
-
-export function brands(state) {
-    return state.appReducer.brands;
-}
-
-export function places(state) {
-    return state.appReducer.places;
-}
-
-export function placesCategories(state) {
-    return state.appReducer.placesCategories;
-}
-
-export function products(state) {
-    return state.appReducer.products;
-}
-
-export function productsCategories(state) {
-    return state.appReducer.productsCategories;
-}
-
 export function isAddMode(state) {
     return state.appReducer.isAddMode;
-}
-
-export function isEditMode(state) {
-    return state.appReducer.isEditMode;
-}
-
-export function isSaveMode(state) {
-    return state.appReducer.isSaveMode;
 }
 
 export function isNotificationOpen(state) {

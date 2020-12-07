@@ -4,6 +4,7 @@ import { fetchItems } from './dataGetters';
 import {
     apiBaseUrl,
     objectTypeInfo,
+    objectTypes,
 } from '../constants/general';
 
 
@@ -89,6 +90,53 @@ export const updateItems = (items, objectType) => async function (dispatch) {
 
     dispatch({ type: ACTIONTYPES[`UPDATING_${dispatchTarget}`] });
 };
+
+export const setProductToShoppingList = (itemId) => async function (dispatch) {
+    const apiCallTarget = objectTypeInfo[objectTypes.shoppingList].apiCall;
+    dispatch({ type: ACTIONTYPES.SAVING_SHOPPING_LIST });
+
+    try {
+        await fetch(`${apiBaseUrl}${apiCallTarget}add/${itemId}`, {
+            method: 'GET',
+            headers: {},
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    return Promise.resolve(response.json());
+                }
+
+                return Promise.resolve(response.json())
+                    .then((responseInJson) => Promise.reject(responseInJson));
+            }) // Success
+            .then((json) => {
+                dispatch({
+                    type: ACTIONTYPES.SAVING_SHOPPING_LIST_SUCCESS,
+                    response: json,
+                });
+            }) // Error
+            .catch((err) => {
+                let errorMessage;
+                if (err.sqlMessage) {
+                    errorMessage = err.sqlMessage;
+                } else {
+                    errorMessage = 'Erro desconhecido. Tente novamente mais tarde.';
+                }
+
+                dispatch({
+                    type: ACTIONTYPES.SAVING_SHOPPING_LIST_ERROR,
+                    response: errorMessage,
+                });
+                dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            });
+    } catch (error) {
+        dispatch({
+            type: ACTIONTYPES.SAVING_SHOPPING_LIST_ERROR,
+            response: error,
+        });
+        dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+    }
+};
+
 // export const updateItems = (items, objectType) => async function (dispatch) {
 //     const apiCallTarget = objectTypeInfo[objectType].apiCall;
 //     const dispatchTarget = objectTypeInfo[objectType].dispatch;

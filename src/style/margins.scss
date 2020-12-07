@@ -1,0 +1,40 @@
+$margin: (
+    "none": 0px,
+    "xxs": 2px,
+    "xs": 4px,
+    "s": 8px,
+    "m": 12px,
+    "l": 16px,
+    "xl": 25px,
+    "xxl": 50px
+);
+
+@each $name, $pixels in $margin {
+    .top-margin-#{$name} {
+        margin-top: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $margin {
+    .left-margin-#{$name} {
+        margin-left: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $margin {
+    .right-margin-#{$name} {
+        margin-right: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $margin {
+    .bottom-margin-#{$name} {
+        margin-bottom: #{$pixels} !important;
+    }
+}
+
+@each $name, $pixels in $margin {
+    .margin-#{$name} {
+        margin: #{$pixels} !important;
+    }
+}

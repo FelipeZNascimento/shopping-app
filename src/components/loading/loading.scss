@@ -1,7 +1,7 @@
 .loading {
     &--fullscreen {
         align-items: center;
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(0, 0, 0, 0.4);
         display: flex;
         flex-direction: column;
         height: 100vh;
@@ -13,7 +13,7 @@
     }
 
     &--spinner {
-        background-color: $of-lightgrey;
+    background-color: $of-grey2;
         border: 4px solid $of-green;
         border-radius: 150px;
         height: 300px;

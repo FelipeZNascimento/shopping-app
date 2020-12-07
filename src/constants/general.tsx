@@ -7,6 +7,7 @@ export const objectTypes = Object.freeze({
     places: 3,
     placesCategories: 4,
     productsCategories: 5,
+    shoppingList: 6,
 });
 
 export const objectTypeInfo = Object.freeze({
@@ -39,5 +40,11 @@ export const objectTypeInfo = Object.freeze({
         description: 'Categorias (Produtos)',
         dispatch: 'PRODUCTS_CATEGORIES',
         apiCall: 'products_categories/',
+    },
+    [objectTypes.shoppingList]: {
+        modelId: 'shoppingList',
+        description: 'Lista de Compras',
+        dispatch: 'SHOPPING_LIST',
+        apiCall: 'shopping_list/',
     },
 });
