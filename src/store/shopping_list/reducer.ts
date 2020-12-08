@@ -1,4 +1,12 @@
 import * as ACTIONTYPES from '../actionTypes';
+import * as objectInterfaces from '../../constants/objectInterfaces';
+
+interface IAction {
+    type: string,
+    product: objectInterfaces.IProduct,
+    productId: number,
+    response: objectInterfaces.IShoppingListItem
+}
 
 const initialState = {
     error: false,
@@ -8,7 +16,7 @@ const initialState = {
 
 export default function shoppingListReducer(
     state = initialState,
-    action
+    action: IAction
 ) {
     switch (action.type) {
         case ACTIONTYPES.FETCHING_SHOPPING_LIST:
@@ -41,7 +49,7 @@ export default function shoppingListReducer(
         case ACTIONTYPES.REMOVING_FROM_LIST:
             return {
                 ...state,
-                shoppingList: state.shoppingList.filter((item) => item.id !== action.productId)
+                shoppingList: state.shoppingList.filter((item: objectInterfaces.IShoppingListItem) => item.id !== action.productId)
             };
         case ACTIONTYPES.CLEAR_SHOPPING_LIST:
             return {

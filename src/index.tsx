@@ -30,7 +30,6 @@ import {
     ProductsSection,
     SidebarList,
     ShoppingList,
-
     NewPurchase,
 } from './sections/index';
 
@@ -41,7 +40,8 @@ import { Notification } from './components/index';
 import appReducer from './store/main/reducer';
 import shoppingListReducer from './store/shopping_list/reducer';
 
-import * as serviceWorker from './serviceWorker';
+import registerServiceWorker from './serviceWorker';
+
 import { routes } from './constants/routes';
 
 // Here is where we'll call functions to create our
@@ -164,4 +164,4 @@ render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register();
+registerServiceWorker();
