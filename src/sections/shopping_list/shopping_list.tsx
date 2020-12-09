@@ -14,7 +14,7 @@ import { IShoppingListItem } from '../../constants/objectInterfaces';
 
 // Components
 import { Loading, Table } from '../../components/index';
-import { Remove as RemoveIcon, Clear as ClearIcon, Close as CloseIcon } from '@material-ui/icons';
+import { Close as CloseIcon } from '@material-ui/icons';
 import { Fab } from '@material-ui/core';
 
 import { objectTypes } from '../../constants/general';

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { isMobile } from "react-device-detect";
 import deleteItem from '../../services/dataDeleters';
 
 // Selectors
@@ -85,7 +86,7 @@ const SidebarList = () => {
         );
     };
 
-    if (shoppingList.length === 0) {
+    if (shoppingList.length === 0 || isMobile) {
         return null;
     }
 
