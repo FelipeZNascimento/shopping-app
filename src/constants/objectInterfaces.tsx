@@ -1,7 +1,7 @@
 export interface IBrand {
     created: string;
     description: string;
-    id: number | null;
+    id: number;
 }
 
 export interface IPlace {
@@ -30,6 +30,23 @@ export interface IShoppingListItem {
 }
 
 export interface ICategory {
-    id: number | null;
+    id: number;
     description: string;
+}
+
+export interface IPurchaseItem {
+    id: number;
+    brand_description: string;
+    brand_id: number | null;
+
+    category_description: string;
+    category_id: number | null;
+    created: string;
+    description: string;
+    product_id: number | null;
+
+    quantity: number;
+    unity: number;
+    price: number;
+    total_price: number;
 }

@@ -10,7 +10,7 @@ import { clearShoppingList, removeFromList } from '../../store/shopping_list/act
 import { fetchItems } from '../../services/dataGetters';
 
 // Interfaces
-import { IShoppingListItem } from '../../constants/objectInterfaces';
+import { IShoppingListItem, IProduct } from '../../constants/objectInterfaces';
 
 // Components
 import { Loading, Table } from '../../components/index';
@@ -26,19 +26,19 @@ const ShoppingList = () => {
     const headers = [
         {
             key: 'category_description',
-            value: 'Categoria'
+            value: 'Categoria',
+            sortable: true
         },
         {
             key: 'description',
-            value: 'Produto'
+            value: 'Produto',
+            sortable: true
         }
     ];
 
     useEffect(() => {
-        console.log('Fetching...');
         dispatch(fetchItems(objectTypes.shoppingList));
     }, []);
-
 
     if (shoppingList.length === 0) {
         return null;
@@ -71,6 +71,7 @@ const ShoppingList = () => {
                 bodyColumns={shoppingList}
                 color="green"
                 headerColumns={headers}
+                onCheckboxAction={(productList: IProduct[]) => null}
                 onSecondaryAction={(product: IShoppingListItem) => deleteProduct(product)}
                 onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
             />

@@ -1,54 +1,74 @@
 import React, { useState } from 'react';
 
-import { IconButton } from '@material-ui/core';
+import {
+    Checkbox,
+    IconButton
+} from '@material-ui/core';
 
 import {
-    AddShoppingCart,
+    PlaylistAdd,
     ArrowDropDown as ArrowDropDownIcon,
     ArrowDropUp as ArrowDropUpIcon,
     Delete as DeleteIcon,
 } from '@material-ui/icons';
 
+import { IProduct } from '../../constants/objectInterfaces';
+
 type IHeaderColumn = {
     key: string;
     value: string;
+    sortable: boolean;
 }
 
 interface IProps {
     bodyColumns?: any[];
     color?: string;
     headerColumns: IHeaderColumn[];
+    onCheckboxAction?: null | ((item: any) => void);
     onMainAction?: null | ((item: any) => void);
     onSecondaryAction?: null | ((item: any) => void);
-    onSortChange: (column: string, direction: string) => void;
+    onSortChange?: null | ((column: string, direction: string) => void);
 }
 
 const Table = ({
     bodyColumns = [],
     color = 'green',
     headerColumns,
+    onCheckboxAction = null,
     onMainAction = null,
     onSecondaryAction = null,
-    onSortChange
+    onSortChange = null
 }: IProps) => {
     const state = {
         column: 'description',
         direction: 'ASC'
     };
-
     const [sortState, setSortState] = useState(state);
+    const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
 
-    const renderSortIcon = (key: string) => {
-        if (key !== sortState.column) {
-            return <ArrowDropDownIcon classes={{ root: 'invisible' }} />;
-        }
-        
-        if (sortState.direction === 'ASC') {
-            return <ArrowDropDownIcon classes={{ root: 'of-black' }} />;
+    const checkboxClick = (item: any) => {
+        if (onCheckboxAction === null) {
+            return;
         }
 
-        return <ArrowDropUpIcon classes={{ root: 'of-black' }} />;
+        let updatedCheckedProducts;
+        const index = checkedProducts.findIndex((product: IProduct) => product.id === item.id);
+        if (index === -1) {
+            updatedCheckedProducts = [
+                ...checkedProducts,
+                item
+            ];
+            setCheckedProducts(updatedCheckedProducts);
+        } else {
+            const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
+            updatedCheckedProducts = [...filteredProducts];
+            setCheckedProducts(updatedCheckedProducts);
+        }
+
+        onCheckboxAction(updatedCheckedProducts);
     };
+
+    const isChecked = (item: any) => (checkedProducts.findIndex((product: IProduct) => product.id === item.id) !== -1);
 
     const setSortingState = (key: string) => {
         let newDirection = 'ASC';
@@ -56,15 +76,72 @@ const Table = ({
             newDirection = sortState.direction === 'ASC' ? 'DESC' : 'ASC';
         }
         setSortState({ column: key, direction: newDirection });
-        onSortChange(key, newDirection);
+        if (onSortChange !== null) {
+            onSortChange(key, newDirection);
+        }
+    };
+
+    const renderSortIcon = (key: string) => {
+        if (onSortChange === null) {
+            return;
+        }
+
+        if (key !== sortState.column) {
+            return <ArrowDropDownIcon classes={{ root: 'invisible' }} />;
+        }
+
+        if (sortState.direction === 'ASC') {
+            return <ArrowDropDownIcon classes={{ root: 'of-black' }} />;
+        }
+
+        return <ArrowDropUpIcon classes={{ root: 'of-black' }} />;
     };
 
     const renderHeader = () => {
-        return headerColumns.map((header) => {
+        const tableHeader = [...headerColumns];
+
+        if (onCheckboxAction !== null) {
+            tableHeader.unshift({
+                key: 'onCheckboxAction',
+                value: '',
+                sortable: false
+            });
+        }
+        if (onMainAction !== null) {
+            tableHeader.unshift({
+                key: 'onMainAction',
+                value: '',
+                sortable: false
+            });
+        }
+        if (onSecondaryAction !== null) {
+            tableHeader.push({
+                key: 'onSecondaryAction',
+                value: '',
+                sortable: false
+            });
+        }
+
+        const renderHeaderValue = (header: IHeaderColumn) => {
+            if (header.sortable) {
+                return (
+                    <p
+                        className="right-padding-s margin-none clickable"
+                        onClick={() => setSortingState(header.key)}
+                    >
+                        {header.value}
+                    </p>
+                )
+            }
+
+            return (<p className="right-padding-s margin-none">{header.value}</p>);
+        };
+
+        return tableHeader.map((header) => {
             return (
                 <th key={header.key}>
                     <div className="vertical-align-center">
-                        <p className="right-padding-s margin-none clickable" onClick={() => setSortingState(header.key)}>{header.value}</p>
+                        {renderHeaderValue(header)}
                         {renderSortIcon(header.key)}
                     </div>
                 </th>
@@ -77,20 +154,27 @@ const Table = ({
         return bodyColumns
             .map((item) => {
                 return (
-                    <tr key={item.id}>
+                    <tr key={item.id} className={isChecked(item) ? 'checked' : ''}>
+                        {onCheckboxAction !== null
+                            && <td>
+                                <Checkbox
+                                    size="small"
+                                    inputProps={{ 'aria-label': 'checkbox with small size' }}
+                                    onClick={() => checkboxClick(item)}
+                                />
+                            </td>
+                        }
                         {onMainAction !== null
                             && <td><IconButton
                                 aria-label="add"
                                 onClick={() => onMainAction(item)}
                             >
-                                <AddShoppingCart classes={{ root: 'of-green' }} />
+                                <PlaylistAdd classes={{ root: 'of-green' }} />
                             </IconButton></td>
                         }
                         {item.category_id && <td className="of-white">{item.category_description}</td>}
+                        <td>{item.description}</td>
 
-                        <td>
-                            {item.description}
-                        </td>
                         {onSecondaryAction !== null
                             && <td className="align-right">
                                 <IconButton
@@ -111,7 +195,6 @@ const Table = ({
             <thead className={`of-${color}-bg`}>
                 <tr>
                     {renderHeader()}
-                    <th>&nbsp;</th>
                 </tr>
             </thead>
             <tbody>

@@ -18,14 +18,18 @@
 
     tbody {
         td {
-            padding: 5px 20px;
+            padding: 5px 10px;
         }
-        
+     
         tr:nth-child(even) {
             background-color: $of-grey4;
         }
         tr:nth-child(odd) {
             background-color: $of-grey5;
+        }
+
+        .checked {
+            background-color: rgba($of-grey3, 0.5) !important;
         }
 
         tr:hover {

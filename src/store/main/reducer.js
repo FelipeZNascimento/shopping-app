@@ -126,7 +126,6 @@ export default function appReducer(state = initialState, action) {
         case ACTIONTYPES.SAVING_PLACES_CATEGORIES:
         case ACTIONTYPES.SAVING_PRODUCTS:
         case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES:
-        case ACTIONTYPES.SAVING_PURCHASE:
 
             return {
                 ...state,
@@ -138,7 +137,6 @@ export default function appReducer(state = initialState, action) {
         case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
         case ACTIONTYPES.SAVING_PRODUCTS_SUCCESS:
         case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS:
-        case ACTIONTYPES.SAVING_PURCHASE_SUCCESS:
             return {
                 ...state,
                 saving: false,
@@ -150,7 +148,6 @@ export default function appReducer(state = initialState, action) {
         case ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR:
         case ACTIONTYPES.SAVING_PRODUCTS_ERROR:
         case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR:
-        case ACTIONTYPES.SAVING_PURCHASE_ERROR:
             return {
                 ...state,
                 error: true,

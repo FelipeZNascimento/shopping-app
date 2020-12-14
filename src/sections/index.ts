@@ -5,5 +5,4 @@ export { default as PlacesSection } from './places/places';
 export { default as ProductsSection } from './products/products';
 export { default as SidebarList } from './sidebar_list/sidebar_list';
 export { default as ShoppingList } from './shopping_list/shopping_list';
-
-export { default as NewPurchase } from './new_purchase/new_purchaseContainer';
+export { default as PurchaseForm } from './purchase_form/purchase_form';

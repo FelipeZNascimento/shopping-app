@@ -37,7 +37,7 @@ const AddProductModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.placesCategories));
+        dispatch(fetchItems(objectTypes.productsCategories));
     }, []);
 
     const onDescriptionChange = (event: any) => {

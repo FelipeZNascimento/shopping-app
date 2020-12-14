@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { isMobile } from "react-device-detect";
 import deleteItem from '../../services/dataDeleters';
@@ -8,6 +8,7 @@ import { getShoppingList } from '../../store/shopping_list/selector';
 
 // Actions
 import { clearShoppingList, removeFromList } from '../../store/shopping_list/actions';
+import { fetchItems } from '../../services/dataGetters';
 
 // Interfaces
 import { IShoppingListItem } from '../../constants/objectInterfaces';
@@ -26,6 +27,10 @@ import { objectTypes } from '../../constants/general';
 const SidebarList = () => {
     const dispatch = useDispatch();
     const shoppingList: IShoppingListItem[] = useSelector(getShoppingList);
+
+    useEffect(() => {
+        dispatch(fetchItems(objectTypes.shoppingList));
+    }, []);
 
     const deleteProduct = (product: IShoppingListItem) => {
         dispatch(deleteItem(product?.product_id, objectTypes.shoppingList));

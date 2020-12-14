@@ -45,14 +45,16 @@ const CategoriesSection = () => {
     const productCategoriesHeaders = [
         {
             key: 'description',
-            value: 'Categoria de Produtos'
+            value: 'Categoria de Produtos',
+            sortable: true
         }
     ];
 
     const placeCategoriesHeaders = [
         {
             key: 'description',
-            value: 'Categoria de Lugares'
+            value: 'Categoria de Lugares',
+            sortable: true
         }
     ];
 

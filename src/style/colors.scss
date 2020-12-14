@@ -1,5 +1,6 @@
 $of-black: #000000;
 $of-blue: #4369e6;
+$of-cyan: #59b8c4;
 $of-green: #62c462;
 $of-orange: #c47b59;
 $of-pink: #844dc2;
@@ -17,19 +18,20 @@ $of-brown: #9e7e6e;
 $of-beige: #EDF5E1;
 
 $colors: (
-    "of-blue": $of-blue,
-    "of-black": $of-black,
-    "of-green": $of-green,
-    "of-orange": $of-orange,
-    "of-pink": $of-pink,
-    "of-red": $of-red,
-    "of-white": $of-white,
-    "of-yellow": $of-yellow,
-    "of-grey1": $of-grey1,
-    "of-grey2": $of-grey2,
-    "of-grey3": $of-grey3,
-    "of-grey4": $of-grey4,
-    "of-grey5": $of-grey5,
+    "of-blue":      $of-blue,
+    "of-black":     $of-black,
+    "of-cyan":      $of-cyan,
+    "of-green":     $of-green,
+    "of-orange":    $of-orange,
+    "of-pink":      $of-pink,
+    "of-red":       $of-red,
+    "of-white":     $of-white,
+    "of-yellow":    $of-yellow,
+    "of-grey1":     $of-grey1,
+    "of-grey2":     $of-grey2,
+    "of-grey3":     $of-grey3,
+    "of-grey4":     $of-grey4,
+    "of-grey5":     $of-grey5,
 
     "of-brown": "#9e7e6e",
     "of-beige": "#EDF5E1",
@@ -39,10 +41,10 @@ $colors: (
 
 @each $name, $hexa in $colors {
     .#{$name}-to-black {
-        color: linear-gradient(#{$hexa}, black) !important;
+        background: linear-gradient(#{$hexa}, black) !important;
     }
     .#{$name}-to-white {
-        color: linear-gradient(#{$hexa}, white) !important;
+        background: linear-gradient(#{$hexa}, white) !important;
     }
 }
 

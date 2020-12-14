@@ -6,8 +6,7 @@ export const routes = {
     PRODUCTS: '/products',
     PRODUCTS_CATEGORIES: '/products_categories',
     SHOPPING_LIST: '/shopping_list',
-
-    NEW_PURCHASE: '/new_purchase',
+    PURCHASE_FORM: '/purchase_form',
     HISTORY: '/history',
 };
 

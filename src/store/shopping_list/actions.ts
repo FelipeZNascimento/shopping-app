@@ -6,7 +6,7 @@ import {
 
 export function addToList(product: IProduct) {
     return {
-        type: ACTIONTYPES.ADD_TO_LIST,
+        type: ACTIONTYPES.ADD_TO_SHOPPING_LIST,
         product
     }
 }
@@ -15,7 +15,7 @@ export function removeFromList(product: IProduct) {
     const productId = product.id;
 
     return {
-        type: ACTIONTYPES.REMOVING_FROM_LIST,
+        type: ACTIONTYPES.REMOVE_FROM_SHOPPING_LIST,
         productId
     }
 }

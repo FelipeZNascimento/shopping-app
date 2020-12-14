@@ -19,12 +19,12 @@ const AddBrandModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const [selectedItem, setSelectedItem] = useState<IBrand>(brandModel);
+    const [selectedItem, setSelectedItem] = useState<IBrand | null>(null);
 
     const onDescriptionChange = (event: any) => {
         const value = event.target.value;
 
-        if (value) {
+        if (value && selectedItem) {
             setSelectedItem({
                 ...selectedItem,
                 description: value
@@ -32,11 +32,17 @@ const AddBrandModal = ({
         }
     };
 
+    const onFormConfirm = () => {
+        if (selectedItem) {
+            onConfirm(selectedItem);
+        }
+    };
+
     return (
         <FormDialog
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={() => onConfirm(selectedItem)}
+            onConfirm={onFormConfirm}
             title='Adicionar Nova Marca'
         >
             <TextField

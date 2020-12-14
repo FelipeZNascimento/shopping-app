@@ -8,32 +8,32 @@ import {
 } from '../constants/general';
 
 
-export const setPurchase = (purchase, date, placeId) => async function (dispatch) {
-    dispatch({ type: ACTIONTYPES.SAVING_PURCHASE });
-    try {
-        const response = await fetch(`${apiBaseUrl}/purchases`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'Content-Type',
-            },
-            body: JSON.stringify({
-                purchase,
-                date,
-                placeId,
-            }),
-        });
+// export const setPurchase = (purchase, date, placeId) => async function (dispatch) {
+//     dispatch({ type: ACTIONTYPES.SAVING_PURCHASE });
+//     try {
+//         const response = await fetch(`${apiBaseUrl}/purchases`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Access-Control-Allow-Origin': 'Content-Type',
+//             },
+//             body: JSON.stringify({
+//                 purchase,
+//                 date,
+//                 placeId,
+//             }),
+//         });
 
-        const responseJSON = await response.json();
+//         const responseJSON = await response.json();
 
-        return dispatch({
-            type: ACTIONTYPES.SAVING_PURCHASE_SUCCESS,
-            response: responseJSON,
-        });
-    } catch (error) {
-        return dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_ERROR, response: error });
-    }
-};
+//         return dispatch({
+//             type: ACTIONTYPES.SAVING_PURCHASE_SUCCESS,
+//             response: responseJSON,
+//         });
+//     } catch (error) {
+//         return dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_ERROR, response: error });
+//     }
+// };
 
 export const setItem = (item, objectType) => async function (dispatch) {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;

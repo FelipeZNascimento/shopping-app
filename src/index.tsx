@@ -17,7 +17,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    // Link
 } from 'react-router-dom';
 
 import './App.scss';
@@ -30,7 +29,7 @@ import {
     ProductsSection,
     SidebarList,
     ShoppingList,
-    NewPurchase,
+    PurchaseForm
 } from './sections/index';
 
 
@@ -39,6 +38,7 @@ import { Notification } from './components/index';
 // REDUCERS
 import appReducer from './store/main/reducer';
 import shoppingListReducer from './store/shopping_list/reducer';
+import purchaseReducer from './store/purchase/reducer';
 
 import registerServiceWorker from './serviceWorker';
 
@@ -50,7 +50,8 @@ const middlewares = [thunk];
 const store = createStore(
     combineReducers({
         appReducer,
-        shoppingListReducer
+        shoppingListReducer,
+        purchaseReducer
     }),
     composeWithDevTools(
         applyMiddleware(...middlewares),
@@ -66,7 +67,7 @@ const theme = createMuiTheme({
             main: '#b8c3cc',
         },
         text: {
-            disabled: '#AAAAAA'
+            disabled: '#666666'
         }
     },
     overrides: {
@@ -129,9 +130,6 @@ render(
                         <Route path={routes.SHOPPING_LIST}>
                             <ShoppingList />
                         </Route>
-                        {/* <Route path={routes.NEW_PURCHASE}>
-                            <NewPurchase />
-                        </Route> */}
                         <Route path={routes.PLACES}>
                             <PlacesSection />
                         </Route>
@@ -146,6 +144,9 @@ render(
                         </Route>
                         <Route path={routes.PLACES_CATEGORIES}>
                             <CategoriesSection />
+                        </Route>
+                        <Route path={routes.PURCHASE_FORM}>
+                            <PurchaseForm />
                         </Route>
                         <Route exact path={routes.HOME}>
                             <ProductsSection />

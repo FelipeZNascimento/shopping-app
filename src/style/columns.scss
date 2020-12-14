@@ -1,0 +1,7 @@
+$single_column_width: 8.333;
+
+@for $i from 1 through 12 {
+    .column-width-#{$i} {
+        width: calc(#{$single_column_width} * #{$i} * 1%);
+    }
+}

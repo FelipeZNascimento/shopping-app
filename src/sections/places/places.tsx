@@ -35,11 +35,13 @@ const PlacesSection = () => {
     const headers = [
         {
             key: 'category_description',
-            value: 'Categoria'
+            value: 'Categoria',
+            sortable: true
         },
         {
             key: 'description',
-            value: 'Lugar'
+            value: 'Lugar',
+            sortable: true
         }
     ];
 

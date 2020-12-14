@@ -35,7 +35,8 @@ const BrandsSection = () => {
     const headers = [
         {
             key: 'description',
-            value: 'Marca'
+            value: 'Marca',
+            sortable: true
         }
     ];
 
