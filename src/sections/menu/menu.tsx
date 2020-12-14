@@ -15,6 +15,10 @@ const Menu = () => {
             route: routes.SHOPPING_LIST
         },
         {
+            display: 'Registrar Compra',
+            route: routes.PURCHASE_FORM
+        },
+        {
             display: 'Lugares',
             route: routes.PLACES
         },
