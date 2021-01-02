@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { isMobile } from "react-device-detect";
+import classNames from 'classnames';
 
 import { routes } from '../../constants/routes';
 import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 
+interface menuItem {
+    display: string;
+    route: string;
+}
+
 const Menu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { pathname } = useLocation();
 
-    const menuItems = [
+    const menuItems: menuItem[] = [
         {
             display: 'Lista de Compras',
             route: routes.SHOPPING_LIST
@@ -40,8 +47,19 @@ const Menu = () => {
         }
     ];
 
-    const { pathname } = useLocation();
-    // Marker on button whenever it's selected
+    const renderButton = (item: menuItem) => {
+        const buttonClass = classNames({
+            'button': isMobile,
+            'button--regular': !isMobile,
+            'button__selected': item.route === pathname
+        });
+
+        return (
+            <div className={buttonClass} onClick={() => setIsMenuOpen(false)}>
+                {item.display}
+            </div>
+        )
+    };
 
     if (isMobile) {
         return (
@@ -61,9 +79,10 @@ const Menu = () => {
                     <div className="drawer-container">
                         {menuItems.map((item) => (
                             <Link to={item.route}>
-                                <div className="button" onClick={() => setIsMenuOpen(false)}>
+                                {renderButton(item)}
+                                {/* <div className="button" onClick={() => setIsMenuOpen(false)}>
                                     {item.display}
-                                </div>
+                                </div> */}
                             </Link>
                         ))}
                     </div>
@@ -77,9 +96,7 @@ const Menu = () => {
             <div className="buttons-container">
                 {menuItems.map((item) => (
                     <Link to={item.route}>
-                        <div className="button--regular">
-                            {item.display}
-                        </div>
+                        {renderButton(item)}
                     </Link>
                 ))}
             </div>

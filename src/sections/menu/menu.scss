@@ -37,13 +37,16 @@
 
         &--regular {
             @extend .button;
-            margin: 0 5px;
             padding: 20px;
             text-align: center;
         }
 
         &:hover {
             background-color: rgba(255,255,255,0.1);
+        }
+
+        &__selected {
+            background-color: rgba(255,255,255,0.2);
         }
     }
 }
