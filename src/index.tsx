@@ -2,7 +2,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import thunk from 'redux-thunk';
 
 import {
@@ -71,6 +73,30 @@ const theme = createMuiTheme({
         }
     },
     overrides: {
+        MuiPickersToolbar: {
+            toolbar: {
+                backgroundColor: '#59b8c4'
+            },
+        },
+        MuiPickersCalendarHeader: {
+            dayLabel: {
+                color: "white"
+            },
+        },
+        MuiPickersDay: {
+            day: {
+                color: '#59b8c4',
+            },
+            dayDisabled: {
+                color: '#353b41'
+            },
+            daySelected: {
+                backgroundColor: '#59b8c4'
+            },
+            current: {
+                color: '#fff'
+            }
+        },
         MuiInputBase: {
             root: {
                 color: '#ffffff'
@@ -104,7 +130,8 @@ const theme = createMuiTheme({
         },
         MuiDialog: {
             paper: {
-                backgroundColor: '#1f2225'
+                backgroundColor: '#1f2225',
+                color: '#fff'
             }
         },
         MuiDialogTitle: {
@@ -113,7 +140,6 @@ const theme = createMuiTheme({
             }
         }
     }
-
 });
 
 // const theme = createMuiTheme();
@@ -121,7 +147,7 @@ const theme = createMuiTheme({
 render(
     <Provider store={store}>
         <Router>
-            <MuiThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
                 <Menu />
                 <SidebarList />
                 <Notification />
@@ -156,7 +182,7 @@ render(
                         </Route>
                     </Switch>
                 </div>
-            </MuiThemeProvider>
+            </ThemeProvider>
         </Router>
     </Provider>,
     document.getElementById('root'),

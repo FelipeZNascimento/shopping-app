@@ -6,10 +6,10 @@ export interface IBrand {
 
 export interface IPlace {
     category_description: string;
-    category_id: number | null;
+    category_id: number | undefined;
     created: string;
     description: string;
-    id: number | null;
+    id: number | undefined;
 }
 
 export interface IProduct {

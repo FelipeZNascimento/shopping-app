@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Loading } from '../../components/index';
-import Table from './components/table';
+import moment from 'moment';
 
 // Actions
 import { removeFromList, updateList } from '../../store/purchase/actions';
@@ -13,12 +11,32 @@ import { getPurchaseList } from '../../store/purchase/selector';
 import { isLoading, returnItems } from '../../store/main/selector';
 
 // Interfaces
-import { IPurchaseItem } from '../../constants/objectInterfaces';
+import { IPlace, IPurchaseItem } from '../../constants/objectInterfaces';
 import { objectTypes } from '../../constants/general';
 
+// Components
+import { Fab } from '@material-ui/core';
+import { Save as SaveIcon } from '@material-ui/icons';
+import {
+    Autocomplete,
+    Datepicker,
+    Loading
+} from '../../components/index';
+import Table from './components/table';
+
 const PurchaseForm = () => {
-    const dispatch = useDispatch();
+    const [selectedDate, setSelectedDate] = useState<string>(moment().format());
+    const [selectedPlaceId, setSelectedPlaceId] = useState<number | undefined>(undefined);
+    const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
+
     const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
+    const places: IPlace[] = useSelector((state) => returnItems(state, objectTypes.places));
+    const isFormLoading: boolean = useSelector(isLoading);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchItems(objectTypes.places));
+    }, []);
 
     const headers = [
         {
@@ -51,6 +69,13 @@ const PurchaseForm = () => {
         }
     ];
 
+    const getSum = (total: number, item: IPurchaseItem) => {
+        if(isNaN(item.total_price)) {
+            return total;
+        }
+        return total + item.total_price;
+    };
+
     const removeItem = (item: IPurchaseItem) => {
         dispatch(removeFromList(item));
     };
@@ -78,11 +103,38 @@ const PurchaseForm = () => {
         }
 
         updatedPurchaseList[foundIndex] = item;
+        const totalSum = updatedPurchaseList.reduce(getSum, 0);
+        setPurchaseTotal(totalSum);
         dispatch(updateList(updatedPurchaseList));
     };
 
-    return (
+    if (isFormLoading) {
+        return <Loading />;
+    }
+
+    const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0;
+    return ( 
         <>
+            <Fab
+                classes={{ root: isFabButtonDisabled ? 'of-grey4-bg' : 'of-cyan-bg' }}
+                className="fab-bottom"
+                disabled={isFabButtonDisabled}
+                size="large"
+                variant="extended"
+                onClick={() => { return null }}
+            >
+                <SaveIcon />&nbsp;
+                Salvar compra
+            </Fab>
+            <div className="purchase-form__header bottom-padding-l">
+                <Autocomplete
+                    options={places}
+                    title="Onde?"
+                    onChange={(place) => setSelectedPlaceId(place.id)}
+                />
+                <Datepicker onChange={setSelectedDate} />
+            </div>
+
             <Table
                 bodyColumns={purchaseList}
                 headerColumns={headers}

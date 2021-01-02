@@ -46,7 +46,6 @@ const Table = ({
         return total + item.total_price;
     };
 
-
     const renderHeader = () => {
         const tableHeader = [
             {

@@ -6,7 +6,7 @@ import { TextField } from '@material-ui/core/';
 interface IItem {
     description: string
     firstLetter?: string,
-    id: number
+    id: number | undefined
 }
 
 interface IProps {
