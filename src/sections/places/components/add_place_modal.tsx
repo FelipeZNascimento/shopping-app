@@ -31,7 +31,7 @@ const AddPlaceModal = ({
     onConfirm
 }: IProps) => {
     const categories: ICategory[] = useSelector((state) => returnItems(state, objectTypes.placesCategories));
-    const [selectedItem, setSelectedItem] = useState<IPlace>(placeModel);
+    const [selectedItem, setSelectedItem] = useState<IPlace | null>(null);
 
     const dispatch = useDispatch();
 
@@ -45,7 +45,11 @@ const AddPlaceModal = ({
         if (value) {
             setSelectedItem({
                 ...selectedItem,
-                description: value
+                created: selectedItem?.created || '',
+                category_id: selectedItem?.category_id,
+                category_description: selectedItem?.category_description || '',
+                description: value,
+                id: selectedItem?.id
             });
         }
     };
@@ -57,7 +61,11 @@ const AddPlaceModal = ({
         if (object) {
             setSelectedItem({
                 ...selectedItem,
-                category_id: object.id
+                created: selectedItem?.created || '',
+                category_id: object.id,
+                category_description: selectedItem?.category_description || '',
+                description: selectedItem?.description || '',
+                id: selectedItem?.id
             });
         }
     };
@@ -86,7 +94,7 @@ const AddPlaceModal = ({
         <FormDialog
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={() => onConfirm(selectedItem)}
+            onConfirm={() => selectedItem ? onConfirm(selectedItem) : null}
             title='Adicionar Novo Lugar'
         >
             {renderAddDialogForm()}
