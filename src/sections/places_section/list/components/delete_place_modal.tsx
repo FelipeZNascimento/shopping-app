@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { TextField } from '@material-ui/core';
-import { IPlace } from '../../../constants/objectInterfaces';
+import { IPlace } from '../../../../constants/objectInterfaces';
 
-import ConfirmationDialog from '../../../components/dialogs/confirmation_dialog';
+import ConfirmationDialog from '../../../../components/dialogs/confirmation_dialog';
 
 interface IProps {
     place: IPlace | null;

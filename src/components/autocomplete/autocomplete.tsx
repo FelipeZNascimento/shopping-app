@@ -47,12 +47,13 @@ const Autocomplete = ({
         <MaterialAutocomplete
             disableClearable
             disabled={disabled}
-            id="combo-box-demo"
-            options={autocompleteOptions}
             getOptionLabel={(option) => option.description}
-            renderInput={(params) => <TextField {...params} label={title} variant="outlined" />}
-            value={selected || undefined}
+            id="combo-box-demo"
             inputValue={selected ? selected.description : undefined}
+            renderInput={(params) => <TextField {...params} label={title} variant="outlined" />}
+            style={{ flex: 1 }}
+            options={autocompleteOptions}
+            value={selected || undefined}
             onChange={handleChange}
         />
     );

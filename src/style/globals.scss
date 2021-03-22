@@ -1,5 +1,6 @@
 // z-indexes
 $z-index-top-max: 9999;
+$sidebar-width: 250px;
 
 html {
     box-sizing: border-box;
@@ -23,14 +24,17 @@ a {
  }
 
 .align-center {
+    justify-content: center;
     text-align: center;
 }
 
 .align-right {
+    justify-content: flex-end;
     text-align: right;
 }
 
 .align-left {
+    justify-content: flex-start;
     text-align: left;
 }
 

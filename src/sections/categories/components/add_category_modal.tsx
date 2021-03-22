@@ -19,24 +19,18 @@ const AddCategoryModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const [selectedItem, setSelectedItem] = useState<ICategory | null>(null);
+    const [newCategory, setNewCategory] = useState<string>('');
 
     const onDescriptionChange = (event: any) => {
         const value = event.target.value;
-
-        if (value && selectedItem) {
-            setSelectedItem({
-                ...selectedItem,
-                description: value
-            });
-        }
+        setNewCategory(value);
     };
 
     return (
         <FormDialog
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={() => onConfirm(selectedItem)}
+            onConfirm={() => onConfirm(newCategory)}
             title='Adicionar Nova Categoria'
         >
             <TextField

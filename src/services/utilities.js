@@ -1,3 +1,5 @@
+import { objectTypes } from 'constants/general';
+
 /** assumes array elements are primitive types
 * check whether 2 arrays are equal sets.
 * @param  {} a1 is an array
@@ -47,4 +49,20 @@ export function arrayOfObjectsAreEqual(x, y) {
     });
 
     return areEqual;
+}
+
+export async function http(request) {
+    const response = await fetch(request);
+
+    try {
+        // may error if there is no body
+        response.parsedBody = await response.json();
+    } catch (ex) {
+        console.log(ex)
+    }
+
+    if (!response.ok) {
+        throw new Error(response.statusText);
+    }
+    return response;
 }

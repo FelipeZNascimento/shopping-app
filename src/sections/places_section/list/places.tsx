@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { removeFromList } from '../../store/main/actions';
-import { fetchItems } from '../../services/dataGetters';
-import { setItem } from '../../services/dataSetters';
-import deleteItem from '../../services/dataDeleters';
+import { getPlaces, removeFromList } from 'store/main/actions';
+import { setItem } from 'services/dataSetters';
+import deleteItem from 'services/dataDeleters';
 
 // Selectors
-import { isLoading, returnItems } from '../../store/main/selector';
+import { isLoading, returnItems } from 'store/main/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
 import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, Table } from '../../components/index';
+import { Loading, Table } from 'components/index';
 import AddPlaceModal from './components/add_place_modal';
 import DeletePlaceModal from './components/delete_place_modal';
 
-import { objectTypes } from '../../constants/general';
-import { IPlace } from '../../constants/objectInterfaces';
+import { objectTypes } from 'constants/general';
+import { IPlace } from 'constants/objectInterfaces';
 
-const PlacesSection = () => {
+const PlacesList = () => {
     const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<IPlace | null>(null);
 
@@ -29,7 +28,7 @@ const PlacesSection = () => {
     const isPlacesLoading: boolean = useSelector(isLoading);
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.places));
+        dispatch(getPlaces());
     }, []);
 
     const headers = [
@@ -60,7 +59,7 @@ const PlacesSection = () => {
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(fetchItems(objectTypes.places, column, direction));        
+        dispatch(getPlaces(column, direction));        
     };
 
     return (
@@ -97,4 +96,4 @@ const PlacesSection = () => {
     )
 }
 
-export default PlacesSection;
+export default PlacesList;

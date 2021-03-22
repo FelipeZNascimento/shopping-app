@@ -57,3 +57,20 @@ $colors: (
         background-color: #{$hexa} !important;
     }
 }
+
+@mixin bordered($color, $width) {
+    border: $width solid $color;
+}
+
+@mixin font-colored($color) {
+    color: $color;
+}
+
+@mixin bg-colored($color) {
+    background-color: $color !important;
+}
+  
+@mixin bg-rgba-colored($color, $opacity) {
+    background-color: rgba($color, $opacity) !important;
+}
+  

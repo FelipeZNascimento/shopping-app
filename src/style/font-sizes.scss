@@ -13,3 +13,6 @@ $font-sizes: (
     }
 }
 
+@mixin font-sized($size) {
+    @extend .font-size-#{$size};
+}

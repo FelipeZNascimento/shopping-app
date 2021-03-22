@@ -1,13 +1,22 @@
 export const routes = {
     HOME: '/',
     BRANDS: '/brands',
-    PLACES: '/places',
-    PLACES_CATEGORIES: '/places_categories',
-    PRODUCTS: '/products',
-    PRODUCTS_CATEGORIES: '/products_categories',
-    SHOPPING_LIST: '/shopping_list',
-    PURCHASE_FORM: '/purchase_form',
     HISTORY: '/history',
+
+    // Places
+    PLACES_SECTION: '/places',
+    PLACES_LIST: '/places/list',
+    PLACES_CATEGORIES: '/places/categories',
+
+    // Products
+    PRODUCTS_SECTION: '/products',
+    PRODUCTS_LIST: '/products/list',
+    PRODUCTS_CATEGORIES: '/products/categories',
+
+    // Purchases
+    PURCHASES_SECTION: '/purchases',
+    PURCHASE_FORM: '/purchases/form',
+    SHOPPING_LIST: '/purchases/list',
 };
 
 export default routes;

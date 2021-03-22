@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { isMobile } from "react-device-detect";
 import classNames from 'classnames';
 
-import { routes } from '../../constants/routes';
+import { routes } from 'constants/routes';
 import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 
@@ -18,29 +18,21 @@ const Menu = () => {
 
     const menuItems: menuItem[] = [
         {
-            display: 'Lista de Compras',
-            route: routes.SHOPPING_LIST
-        },
-        {
-            display: 'Registrar Compra',
-            route: routes.PURCHASE_FORM
+            display: 'Compras',
+            route: routes.PURCHASES_SECTION
         },
         {
             display: 'Lugares',
-            route: routes.PLACES
-        },
-        {
-            display: 'Categoria (Lugares)',
-            route: routes.PLACES_CATEGORIES
+            route: routes.PLACES_SECTION
         },
         {
             display: 'Produtos',
-            route: routes.PRODUCTS
+            route: routes.PRODUCTS_SECTION
         },
-        {
-            display: 'Categoria (Produtos)',
-            route: routes.PRODUCTS_CATEGORIES
-        },
+        // {
+        //     display: 'Categoria (Produtos)',
+        //     route: routes.PRODUCTS_CATEGORIES
+        // },
         {
             display: 'Marcas',
             route: routes.BRANDS
@@ -51,7 +43,7 @@ const Menu = () => {
         const buttonClass = classNames({
             'button': isMobile,
             'button--regular': !isMobile,
-            'button__selected': item.route === pathname
+            'button__selected': pathname.includes(item.route)
         });
 
         return (

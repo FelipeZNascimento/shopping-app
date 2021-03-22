@@ -38,3 +38,18 @@ $padding: (
         padding: #{$pixels} !important;
     }
 }
+
+@mixin padded($direction, $size) {
+    @if $direction == top {
+        @extend .top-padding-#{$size};
+    } @else if $direction == right {
+        @extend .right-padding-#{$size};
+    } @else if $direction == bottom {
+        @extend .bottom-padding-#{$size};
+    } @else if $direction == left {
+        @extend .left-padding-#{$size};
+    } @else {
+        @extend .padding-#{$size}
+    }
+}
+  

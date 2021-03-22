@@ -22,5 +22,6 @@ export const product = {
     category_id: null,    
     created: '',
     description: '',    
-    id: null
+    id: null,
+    product_id: null
 };

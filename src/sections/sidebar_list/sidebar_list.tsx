@@ -4,11 +4,10 @@ import { isMobile } from "react-device-detect";
 import deleteItem from '../../services/dataDeleters';
 
 // Selectors
-import { getShoppingList } from '../../store/shopping_list/selector';
+import { shoppingList } from '../../store/shopping_list/selector';
 
 // Actions
-import { clearShoppingList, removeFromList } from '../../store/shopping_list/actions';
-import { fetchItems } from '../../services/dataGetters';
+import { getShoppingList, removeFromList } from '../../store/shopping_list/actions';
 
 // Interfaces
 import { IShoppingListItem } from '../../constants/objectInterfaces';
@@ -26,10 +25,10 @@ import { objectTypes } from '../../constants/general';
 
 const SidebarList = () => {
     const dispatch = useDispatch();
-    const shoppingList: IShoppingListItem[] = useSelector(getShoppingList);
+    const list: IShoppingListItem[] = useSelector(shoppingList);
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.shoppingList));
+        dispatch(getShoppingList());
     }, []);
 
     const deleteProduct = (product: IShoppingListItem) => {
@@ -41,7 +40,7 @@ const SidebarList = () => {
         return (
             <div className="shopping-list__container padding-m">
                 <p className="align-center of-green font-size-l">
-                    Lista de Produtos
+                    Lista de Mercado
                 </p>
                 {/* <p className="margin-none">
                     <IconButton
@@ -72,7 +71,7 @@ const SidebarList = () => {
                 </p> */}
                 <Separator />
                 {
-                    shoppingList.map((product: IShoppingListItem) => {
+                    list.map((product: IShoppingListItem) => {
                         return (
                             <div className="bottom-padding-s">
                                 <IconButton
@@ -91,7 +90,7 @@ const SidebarList = () => {
         );
     };
 
-    if (shoppingList.length === 0 || isMobile) {
+    if (list.length === 0 || isMobile) {
         return null;
     }
 

@@ -3,30 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 // Actions
-import { removeFromList } from '../../store/main/actions';
-import { addToList } from '../../store/shopping_list/actions';
-import { convertToPurchase } from '../../store/purchase/actions';
-import { fetchItems } from '../../services/dataGetters';
-import { setItem, setProductToShoppingList } from '../../services/dataSetters';
-import deleteItem from '../../services/dataDeleters';
+import { removeFromList, getProducts } from 'store/main/actions';
+import { addToList } from 'store/shopping_list/actions';
+import { convertToPurchase } from 'store/purchase/actions';
+import { setItem, setProductToShoppingList } from 'services/dataSetters';
+import deleteItem from 'services/dataDeleters';
 
 // Selectors
-import { isLoading, returnItems } from '../../store/main/selector';
-import { getShoppingList } from '../../store/shopping_list/selector';
-import { getPurchaseListLength } from '../../store/purchase/selector';
+import { isLoading, returnItems } from 'store/main/selector';
+import { shoppingList as listShopping } from 'store/shopping_list/selector';
+import { getPurchaseListLength } from 'store/purchase/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
 import { AddCircle as AddIcon, AddShoppingCart } from '@material-ui/icons';
-import { Loading, Table } from '../../components/index';
-import AddProductModal from './components/add_product_modal';
-import DeleteProductModal from './components/delete_product_modal';
+import { Loading, Table } from 'components/index';
+import AddProductModal from 'sections/products_section/list/components/add_product_modal';
+import DeleteProductModal from 'sections/products_section/list/components/delete_product_modal';
 
-import { routes } from '../../constants/routes';
-import { objectTypes } from '../../constants/general';
-import { IProduct } from '../../constants/objectInterfaces';
+import { routes } from 'constants/routes';
+import { objectTypes } from 'constants/general';
+import { IProduct } from 'constants/objectInterfaces';
 
-const ProductsSection = () => {
+const ProductsList = () => {
     const [isAddProductOpen, setIsAddProductOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<IProduct | null>(null);
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
@@ -35,12 +34,12 @@ const ProductsSection = () => {
     const history = useHistory();
 
     const products: IProduct[] = useSelector((state) => returnItems(state, objectTypes.products));
-    const shoppingList: IProduct[] = useSelector(getShoppingList);
+    const shoppingList: IProduct[] = useSelector(listShopping);
     const isProductsLoading: boolean = useSelector(isLoading);
     const purchaseListLength: number = useSelector(getPurchaseListLength);
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.products))
+        dispatch(getProducts())
     }, []);
 
     const headers = [
@@ -78,7 +77,7 @@ const ProductsSection = () => {
     };
 
     const onSortChange = (column: string, direction: string) => {
-        dispatch(fetchItems(objectTypes.products, column, direction));
+        dispatch(getProducts(column, direction));
     };
 
     const onCheckboxClick = (productList: IProduct[]) => {
@@ -149,4 +148,4 @@ const ProductsSection = () => {
     )
 }
 
-export default ProductsSection;
+export default ProductsList;

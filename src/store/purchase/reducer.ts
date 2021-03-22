@@ -1,5 +1,6 @@
 import * as ACTIONTYPES from '../actionTypes';
 import * as objectInterfaces from '../../constants/objectInterfaces';
+import { dynamicSort } from '../../utils/utils'
 
 interface IAction {
     type: string,
@@ -25,7 +26,7 @@ export default function purchaseReducer(
                 purchaseList: [
                     ...state.purchaseList,
                     ...action.purchaseList
-                ]
+                ].sort(dynamicSort('description'))
             };
         case ACTIONTYPES.REMOVE_ITEM_FROM_PURCHASE:
             return {
@@ -35,11 +36,16 @@ export default function purchaseReducer(
         case ACTIONTYPES.UPDATE_PURCHASE_ITEM:
             return {
                 ...state,
-                purchaseList: action.purchaseList
+                purchaseList: action.purchaseList.sort(dynamicSort('description'))
             };
         case ACTIONTYPES.CLEAR_PURCHASE:
             return {
                 ...initialState
+            }
+        case ACTIONTYPES.SAVING_PURCHASE_LIST:
+            return {
+                ...initialState,
+                loading: true
             }
 
         default:

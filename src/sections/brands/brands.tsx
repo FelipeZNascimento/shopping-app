@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { removeFromList } from '../../store/main/actions';
-import { fetchItems } from '../../services/dataGetters';
+import { getBrands, removeFromList } from '../../store/main/actions';
 import { setItem } from '../../services/dataSetters';
 import deleteItem from '../../services/dataDeleters';
 
@@ -29,7 +28,7 @@ const BrandsSection = () => {
     const isBrandsLoading: boolean = useSelector(isLoading);
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.brands))
+        dispatch(getBrands())
     }, []);
 
     const headers = [
@@ -55,7 +54,7 @@ const BrandsSection = () => {
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(fetchItems(objectTypes.brands, column, direction));        
+        dispatch(getBrands(column, direction));        
     };
 
     return (

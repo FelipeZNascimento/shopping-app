@@ -2,41 +2,42 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { fetchItems } from '../../../services/dataGetters';
+import { fetchItems } from 'services/dataGetters';
 
 // Selectors
-import { returnItems } from '../../../store/main/selector';
+import { returnItems } from 'store/main/selector';
 
 import { TextField } from '@material-ui/core';
-import { FormDialog, Autocomplete } from '../../../components/index';
+import { FormDialog, Autocomplete } from 'components/index';
 import {
-    place as placeModel
-} from '../../../constants/objectModels';
+    product as productModel
+} from 'constants/objectModels';
 
 import {
-    IPlace,
+    IProduct,
     ICategory
-} from '../../../constants/objectInterfaces';
-import { objectTypes } from '../../../constants/general';
+} from 'constants/objectInterfaces';
+
+import { objectTypes } from 'constants/general';
 
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (object: IPlace) => void;
+    onConfirm: (object: IProduct) => void;
 }
 
-const AddPlaceModal = ({
+const AddProductModal = ({
     isOpen,
     onClose,
     onConfirm
 }: IProps) => {
-    const categories: ICategory[] = useSelector((state) => returnItems(state, objectTypes.placesCategories));
-    const [selectedItem, setSelectedItem] = useState<IPlace | null>(null);
+    const categories: ICategory[] = useSelector((state) => returnItems(state, objectTypes.productsCategories));
+    const [selectedItem, setSelectedItem] = useState<IProduct>(productModel);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.placesCategories));
+        dispatch(fetchItems(objectTypes.productsCategories));
     }, []);
 
     const onDescriptionChange = (event: any) => {
@@ -45,11 +46,7 @@ const AddPlaceModal = ({
         if (value) {
             setSelectedItem({
                 ...selectedItem,
-                created: selectedItem?.created || '',
-                category_id: selectedItem?.category_id,
-                category_description: selectedItem?.category_description || '',
-                description: value,
-                id: selectedItem?.id
+                description: value
             });
         }
     };
@@ -61,11 +58,7 @@ const AddPlaceModal = ({
         if (object) {
             setSelectedItem({
                 ...selectedItem,
-                created: selectedItem?.created || '',
-                category_id: object.id,
-                category_description: selectedItem?.category_description || '',
-                description: selectedItem?.description || '',
-                id: selectedItem?.id
+                category_id: object.id
             });
         }
     };
@@ -75,6 +68,7 @@ const AddPlaceModal = ({
             <TextField
                 autoFocus
                 fullWidth
+                classes={{ root: 'of-white' }}
                 id="description"
                 label="Nome"
                 type="text"
@@ -94,12 +88,12 @@ const AddPlaceModal = ({
         <FormDialog
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={() => selectedItem ? onConfirm(selectedItem) : null}
-            title='Adicionar Novo Lugar'
+            onConfirm={() => onConfirm(selectedItem)}
+            title='Adicionar Novo Produto'
         >
             {renderAddDialogForm()}
         </FormDialog>
     );
 };
 
-export default AddPlaceModal;
+export default AddProductModal;

@@ -2,6 +2,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { isMobile } from "react-device-detect";
+import classNames from 'classnames';
 
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
@@ -25,15 +27,18 @@ import './App.scss';
 
 import {
     BrandsSection,
-    CategoriesSection,
     Menu,
     PlacesSection,
+    PlacesList,
+    PlacesCategoriesList,
     ProductsSection,
+    ProductsList,
+    ProductsCategoriesList,
     SidebarList,
     ShoppingList,
-    PurchaseForm
+    PurchaseList,
+    PurchaseSection    
 } from './sections/index';
-
 
 import { Notification } from './components/index';
 
@@ -73,6 +78,22 @@ const theme = createMuiTheme({
         }
     },
     overrides: {
+        MuiAvatar: {
+            root: {
+                fontSize: '12px'
+            },
+            colorDefault: {
+                backgroundColor: '#7a8288',
+                color: '#FFFFFF'
+            }
+        },
+        MuiCard: {
+            root: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+            }
+        },
         MuiPickersToolbar: {
             toolbar: {
                 backgroundColor: '#59b8c4'
@@ -138,11 +159,20 @@ const theme = createMuiTheme({
             root: {
                 color: '#ffffff'
             }
+        },
+        MuiTypography: {
+            colorTextSecondary: {
+                color: '#97a1a8'
+            }
         }
     }
 });
 
 // const theme = createMuiTheme();
+const containerClass = classNames({
+    'index-container--mobile': isMobile,
+    'index-container--regular': !isMobile,
+});
 
 render(
     <Provider store={store}>
@@ -151,29 +181,32 @@ render(
                 <Menu />
                 <SidebarList />
                 <Notification />
-                <div className="index--container">
+                <div className={containerClass}>
                     <Switch>
-                        <Route path={routes.SHOPPING_LIST}>
+                        <Route path={routes.PURCHASES_SECTION}>
+                            <Route path={routes.PURCHASES_SECTION} component={PurchaseSection} exact />
+                            <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
+                            <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
+                        </Route>
+                        {/* <Route path={routes.SHOPPING_LIST}>
                             <ShoppingList />
+                        </Route> */}
+                        <Route path={routes.PLACES_SECTION}>
+                            <Route path={routes.PLACES_SECTION} component={PlacesSection} exact />
+                            <Route path={routes.PLACES_CATEGORIES} component={PlacesCategoriesList} />
+                            <Route path={routes.PLACES_LIST} component={PlacesList} />
                         </Route>
-                        <Route path={routes.PLACES}>
-                            <PlacesSection />
-                        </Route>
-                        <Route path={routes.PRODUCTS}>
-                            <ProductsSection />
+                        <Route path={routes.PRODUCTS_SECTION}>
+                            <Route path={routes.PRODUCTS_SECTION} component={ProductsSection} exact />
+                            <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategoriesList} />
+                            <Route path={routes.PRODUCTS_LIST} component={ProductsList} />
                         </Route>
                         <Route path={routes.BRANDS}>
                             <BrandsSection />
                         </Route>
-                        <Route path={routes.PRODUCTS_CATEGORIES}>
+                        {/* <Route path={routes.PRODUCTS_CATEGORIES}>
                             <CategoriesSection />
-                        </Route>
-                        <Route path={routes.PLACES_CATEGORIES}>
-                            <CategoriesSection />
-                        </Route>
-                        <Route path={routes.PURCHASE_FORM}>
-                            <PurchaseForm />
-                        </Route>
+                        </Route> */}
                         <Route exact path={routes.HOME}>
                             <ProductsSection />
                         </Route>

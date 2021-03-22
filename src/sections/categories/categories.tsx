@@ -1,87 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from "react-router-dom";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // Actions
-import { removeFromList } from '../../store/main/actions';
-import { fetchItems } from '../../services/dataGetters';
-import { setItem } from '../../services/dataSetters';
-import deleteItem from '../../services/dataDeleters';
+// import { removeFromList } from 'store/main/actions';
+// import { fetchItems } from 'services/dataGetters';
+// import { setItem } from 'services/dataSetters';
+// import deleteItem from 'services/dataDeleters';
 
 // Selectors
-import { isLoading, returnItems } from '../../store/main/selector';
+import { isLoading } from 'store/main/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
 import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, Table } from '../../components/index';
+import { Loading, Table } from 'components/index';
 import AddCategoryModal from './components/add_category_modal';
 import DeleteCategoryModal from './components/delete_category_modal';
 
-import { objectTypes } from '../../constants/general';
-import { ICategory } from '../../constants/objectInterfaces';
+import { ICategory } from 'constants/objectInterfaces';
 
-const CategoriesSection = () => {
-    const [objectType, setObjectType] = useState<number | null>(null);
+type TProps = {
+    bodyColumns: ICategory[];
+    color: string;
+    headerColumns: {
+        key: string;
+        value: string;
+        sortable: boolean;
+    };
+    onAddNewCategory: (categoryName: string) => void;
+    onDeleteCategory: (category: ICategory) => void;
+    onSortChange: (column: string, direction: string) => void;
+}
+
+const CategoriesSection = ({
+    bodyColumns,
+    color,
+    headerColumns,
+    onAddNewCategory,
+    onDeleteCategory,
+    onSortChange
+}: TProps) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<ICategory | null>(null);
 
     const isCategoriesLoading = useSelector(isLoading);
-    const categories: ICategory[] = useSelector((state) => returnItems(state, objectType));
-
-    const dispatch = useDispatch();
-    const { pathname } = useLocation();
-
-    useEffect(() => {
-        const type = pathname.search('products_categories') !== -1
-            ? objectTypes.productsCategories
-            : objectTypes.placesCategories;
-
-        console.log("New type: " + type);
-        setObjectType(type);
-        dispatch(fetchItems(type));
-    }, [pathname]);
-
-    const productCategoriesHeaders = [
-        {
-            key: 'description',
-            value: 'Categoria de Produtos',
-            sortable: true
-        }
-    ];
-
-    const placeCategoriesHeaders = [
-        {
-            key: 'description',
-            value: 'Categoria de Lugares',
-            sortable: true
-        }
-    ];
-
-    const headers = objectType === objectTypes.productsCategories
-        ? productCategoriesHeaders
-        : placeCategoriesHeaders;
-
-    const color = objectType === objectTypes.productsCategories
-        ? 'blue'
-        : 'orange';
 
     const deleteCategory = () => {
-        if (toBeDeleted && objectType) {
-            dispatch(deleteItem(toBeDeleted?.id, objectType));
-            dispatch(removeFromList(toBeDeleted, objectType));
+        if (toBeDeleted) {
+            onDeleteCategory(toBeDeleted);
         }
         setToBeDeleted(null);
     }
 
-    const addNewCategory = (product: ICategory) => {
-        dispatch(setItem([product], objectType));
+    const addNewCategory = (categoryName: string) => {
+        onAddNewCategory(categoryName);
         setIsAddModalOpen(false);
-    };
-
-    const onSortChange = (column: string, direction: string) => {
-        console.log('Sorting by: ' + column + direction);
-        dispatch(fetchItems(objectType, column, direction));
     };
 
     return (
@@ -97,11 +70,11 @@ const CategoriesSection = () => {
                 Nova categoria
             </Fab>
             <Table
-                bodyColumns={categories}
+                bodyColumns={bodyColumns}
                 color={color}
-                headerColumns={headers}
-                onSecondaryAction={(brand: ICategory) => setToBeDeleted(brand)}
-                onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
+                headerColumns={[headerColumns]}
+                onSecondaryAction={setToBeDeleted}
+                onSortChange={onSortChange}
             />
             {isCategoriesLoading && <Loading />}
             <AddCategoryModal

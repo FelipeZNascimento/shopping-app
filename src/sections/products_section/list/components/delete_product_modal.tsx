@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { TextField } from '@material-ui/core';
-import { IProduct } from '../../../constants/objectInterfaces';
+import { IProduct } from 'constants/objectInterfaces';
 
-import ConfirmationDialog from '../../../components/dialogs/confirmation_dialog';
+import ConfirmationDialog from 'components/dialogs/confirmation_dialog';
 
 interface IProps {
     product: IProduct | null;

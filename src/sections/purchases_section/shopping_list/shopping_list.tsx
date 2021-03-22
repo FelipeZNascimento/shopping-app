@@ -3,30 +3,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 // Selectors
-import { getShoppingList, isLoading } from '../../store/shopping_list/selector';
-import { getPurchaseListLength } from '../../store/purchase/selector';
+import { shoppingList, isLoading } from 'store/shopping_list/selector';
+import { getPurchaseListLength } from 'store/purchase/selector';
 
 // Actions
-import { removeFromList } from '../../store/shopping_list/actions';
-import { convertToPurchase } from '../../store/purchase/actions';
-import { fetchItems } from '../../services/dataGetters';
-import deleteItem from '../../services/dataDeleters';
+import { getShoppingList, removeFromList } from 'store/shopping_list/actions';
+import { convertToPurchase } from 'store/purchase/actions';
+import deleteItem from 'services/dataDeleters';
 
 // Interfaces
-import { IShoppingListItem, IProduct } from '../../constants/objectInterfaces';
+import { IShoppingListItem, IProduct } from 'constants/objectInterfaces';
 
 // Components
-import { Loading, Table } from '../../components/index';
+import { Loading, Table } from 'components/index';
 import { AddShoppingCart } from '@material-ui/icons';
 import { Fab } from '@material-ui/core';
 
-import { objectTypes } from '../../constants/general';
-import { routes } from '../../constants/routes';
+import { objectTypes } from 'constants/general';
+import { routes } from 'constants/routes';
 
 const ShoppingList = () => {
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
 
-    const shoppingList: IShoppingListItem[] = useSelector(getShoppingList);
+    const list: IShoppingListItem[] = useSelector(shoppingList);
     const isListLoading: boolean = useSelector(isLoading);
     const purchaseListLength: number = useSelector(getPurchaseListLength);
     const dispatch = useDispatch();
@@ -46,7 +45,7 @@ const ShoppingList = () => {
     ];
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.shoppingList));
+        dispatch(getShoppingList());
     }, []);
 
     if (shoppingList.length === 0) {
@@ -60,7 +59,7 @@ const ShoppingList = () => {
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(fetchItems(objectTypes.shoppingList, column, direction));
+        dispatch(getShoppingList(column, direction));
     };
 
     const onCheckboxClick = (productList: IProduct[]) => {
@@ -89,7 +88,7 @@ const ShoppingList = () => {
 
             {isListLoading && <Loading />}
             <Table
-                bodyColumns={shoppingList}
+                bodyColumns={list}
                 color="green"
                 headerColumns={headers}
                 onCheckboxAction={onCheckboxClick}

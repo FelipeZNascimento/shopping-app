@@ -38,3 +38,18 @@ $margin: (
         margin: #{$pixels} !important;
     }
 }
+
+@mixin marged($direction, $size) {
+    @if $direction == top {
+        @extend .top-margin-#{$size};
+    } @else if $direction == right {
+        @extend .right-margin-#{$size};
+    } @else if $direction == bottom {
+        @extend .bottom-margin-#{$size};
+    } @else if $direction == left {
+        @extend .left-margin-#{$size};
+    } @else {
+        @extend .margin-#{$size}
+    }
+}
+  

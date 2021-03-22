@@ -134,13 +134,25 @@ export default function appReducer(state = initialState, action) {
 
         case ACTIONTYPES.SAVING_BRANDS_SUCCESS:
         case ACTIONTYPES.SAVING_PLACES_SUCCESS:
-        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
         case ACTIONTYPES.SAVING_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                saving: false,
+                error: false,
+            };
         case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS:
             return {
                 ...state,
                 saving: false,
                 error: false,
+                productsCategories: [action.newCategory, ...state.productsCategories]
+            };
+        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                saving: false,
+                error: false,
+                placesCategories: [action.newCategory, ...state.placesCategories]
             };
 
         case ACTIONTYPES.SAVING_BRANDS_ERROR:

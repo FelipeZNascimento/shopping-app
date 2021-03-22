@@ -26,5 +26,13 @@ module.exports = {
         // disable the rule for all files
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "react-hooks/exhaustive-deps": 'off'
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "moduleDirectory": ["node_modules", "src/"]
+            }
+        }
     }
+
 };

@@ -1,5 +1,5 @@
-// export const apiBaseUrl = 'http://localhost:8081/shopping/';
-export const apiBaseUrl = 'https://omega-cors.herokuapp.com/shopping/';
+export const apiBaseUrl = 'http://localhost:8081/shopping/';
+// export const apiBaseUrl = 'https://omega-cors.herokuapp.com/shopping/';
 
 export const objectTypes = Object.freeze({
     brands: 1,

@@ -1,0 +1,68 @@
+@import "../../style/colors.scss";
+@import "../../style/alignments.scss";
+@import "../../style/font-sizes.scss";
+@import "../../style/paddings.scss";
+@import "../../style/margins.scss";
+
+.container {
+    @include flex-aligned(center, center);
+
+    display: flex;
+    flex: 1 1;
+    flex-basis: 0px;
+}
+
+.card {
+    @include bg-colored($of-grey3);
+    @include flex-aligned(center, center);
+    @include font-sized(xl);
+    @include marged(all, xl);
+    @include padded(all, l);
+
+    cursor: pointer;
+    flex: 1;
+    height: 300px;
+    width: 200px;
+    opacity: 0.8;
+    transition: 0.5s;
+}
+
+.blue {
+    composes: card;
+    &:hover {
+        @include bg-rgba-colored($of-blue, 0.5);
+        opacity: 1;
+    }
+}
+
+.cyan {
+    composes: card;
+    &:hover {
+        @include bg-rgba-colored($of-cyan, 0.5);
+        opacity: 1;
+    }
+}
+
+.green {
+    composes: card;
+    &:hover {
+        @include bg-rgba-colored($of-green, 0.5);
+        opacity: 1;
+    }
+}
+
+.orange {
+    composes: card;
+    &:hover {
+        @include bg-rgba-colored($of-orange, 0.5);
+        opacity: 1;
+    }
+}
+
+.yellow {
+    composes: card;
+    &:hover {
+        @include bg-rgba-colored($of-yellow, 0.5);
+        opacity: 1;
+    }
+}

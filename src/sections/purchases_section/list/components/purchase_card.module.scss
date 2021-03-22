@@ -1,0 +1,77 @@
+@import "../../../../style/alignments.scss";
+@import "../../../../style/colors.scss";
+@import "../../../../style/font-sizes.scss";
+@import "../../../../style/paddings.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .card:nth-child(even) {
+        @include bg-colored($of-grey4);
+    }
+    .card:nth-child(odd) {
+        @include bg-colored($of-grey5);
+    }
+}
+
+.card {
+    margin: 5px;
+    min-width: 330px;
+}
+
+.totalCard {
+    @extend .card;
+    @include bg-colored($of-grey3);
+    overflow-y: auto !important;
+    max-height: 347px;
+}
+
+.cardElementContainer {
+    display: flex;
+    margin-bottom: 10px;
+}
+.cardElement {
+    flex: 1;
+}
+
+.cardElement:not(:last-child) {
+    margin-right: 5px;
+}
+.cardElement:last-child {
+    margin-left: 5px;
+}
+
+.title {
+    @include font-colored($of-white);
+    @include font-sized(l);
+}
+
+.subtitle {
+    @include font-colored($of-grey1);
+}
+
+.totalPriceAvatar {
+    @include bg-colored($of-cyan);
+    @include font-colored($of-black);
+    @include font-sized(s);
+}
+
+.flexCenter {
+    @include flex-aligned(center, center);
+}
+
+.footer {
+    @include bg-rgba-colored($of-black, 0.2);
+    @include font-colored($of-grey2);
+    @include flex-aligned(center, center);
+}
+
+.redBorder {
+    border-bottom: 1px solid $of-red;
+}
+
+.greenBorder {
+    box-shadow: 0px 2px 1px -1px rgba($of-green, 0.2), 0px 1px 1px 0px rgba($of-green,0.14), 0px 1px 3px 0px rgba($of-green,0.12) !important;
+}

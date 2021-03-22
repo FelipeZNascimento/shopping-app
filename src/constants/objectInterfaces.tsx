@@ -18,6 +18,7 @@ export interface IProduct {
     created: string;
     description: string;
     id: number | null;
+    product_id: number | null;
 }
 
 export interface IShoppingListItem {
@@ -25,12 +26,12 @@ export interface IShoppingListItem {
     category_id: number | null;
     created: string;
     description: string;
-    product_id: number | null;
     id: number | null;
+    product_id: number | null;
 }
 
 export interface ICategory {
-    id: number;
+    id: number | undefined;
     description: string;
 }
 
@@ -46,7 +47,8 @@ export interface IPurchaseItem {
     product_id: number | null;
 
     quantity: number;
-    unity: number;
+    unit: number;
     price: number;
     total_price: number;
+    promotion?: boolean;
 }

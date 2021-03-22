@@ -1,8 +1,13 @@
 export { default as BrandsSection } from './brands/brands';
 export { default as CategoriesSection } from './categories/categories';
 export { default as Menu } from './menu/menu';
-export { default as PlacesSection } from './places/places';
-export { default as ProductsSection } from './products/products';
+export { default as PlacesSection } from './places_section/places_section';
+export { default as PlacesCategoriesList } from './places_section/categories_list/categories_list';
+export { default as PlacesList } from './places_section/list/places';
+export { default as ProductsSection } from './products_section/products_section';
+export { default as ProductsList } from './products_section/list/products';
+export { default as ProductsCategoriesList } from './products_section/categories_list/categories_list';
 export { default as SidebarList } from './sidebar_list/sidebar_list';
-export { default as ShoppingList } from './shopping_list/shopping_list';
-export { default as PurchaseForm } from './purchase_form/purchase_form';
+export { default as ShoppingList } from './purchases_section/shopping_list/shopping_list';
+export { default as PurchaseList } from './purchases_section/list/list';
+export { default as PurchaseSection } from './purchases_section/purchases_section';
