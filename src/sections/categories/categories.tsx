@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-// Actions
-// import { removeFromList } from 'store/main/actions';
-// import { fetchItems } from 'services/dataGetters';
-// import { setItem } from 'services/dataSetters';
-// import deleteItem from 'services/dataDeleters';
-
 // Selectors
 import { isLoading } from 'store/main/selector';
 

@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { fetchItems } from '../../../../services/dataGetters';
+import { getPlacesCategories } from 'store/main/actions';
 
 // Selectors
-import { returnItems } from '../../../../store/main/selector';
+import { returnItems } from 'store/main/selector';
 
 import { TextField } from '@material-ui/core';
-import { FormDialog, Autocomplete } from '../../../../components/index';
+import { FormDialog, Autocomplete } from 'components/index';
 
 import {
     IPlace,
     ICategory
-} from '../../../../constants/objectInterfaces';
-import { objectTypes } from '../../../../constants/general';
+} from 'constants/objectInterfaces';
+import { objectTypes } from 'constants/general';
 
 interface IProps {
     isOpen: boolean;
@@ -33,7 +33,7 @@ const AddPlaceModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.placesCategories));
+        dispatch(getPlacesCategories());
     }, []);
 
     const onDescriptionChange = (event: any) => {

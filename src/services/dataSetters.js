@@ -1,5 +1,5 @@
 import * as ACTIONTYPES from '../store/actionTypes';
-import { fetchItems } from './dataGetters';
+// import { fetchItems } from './dataGetters';
 
 import {
     apiBaseUrl,

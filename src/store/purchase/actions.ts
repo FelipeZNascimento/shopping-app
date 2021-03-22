@@ -1,9 +1,4 @@
-import { Dispatch } from 'react';
 import * as ACTIONTYPES from 'store/actionTypes';
-import { objectTypes } from 'constants/general';
-
-import { fetchItems } from 'services/dataGetters';
-// import { setPurchase } from 'services/dataSetters';
 
 import {
     IProduct,
@@ -11,14 +6,6 @@ import {
 } from '../../constants/objectInterfaces';
 import { productUnits } from 'constants/products';
 
-type GetListAction = {
-    readonly type: typeof ACTIONTYPES.FETCHING_PLACES
-    | typeof ACTIONTYPES.FETCHING_PLACES_SUCCESS
-    | typeof ACTIONTYPES.FETCHING_PLACES_ERROR
-    | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly response?: IProduct[];
-    readonly errorMessage?: string;
-};
 
 export function convertToPurchase(productsList: IProduct[], purchaseListLength: number) {
     const purchaseList: IPurchaseItem[] = productsList.map((product, index) => ({
@@ -64,30 +51,6 @@ export function clearList() {
         type: ACTIONTYPES.CLEAR_PURCHASE
     }
 }
-
-// export const getList = () => async (
-//     dispatch: Dispatch<GetListAction>
-// ) => {
-//     dispatch({ type: ACTIONTYPES.FETCHING_PLACES } as const);
-
-//     try {
-//         const response = await fetchItems(objectTypes.places);
-//         response().then((list) => {
-//             return dispatch({
-//                 type: ACTIONTYPES.FETCHING_PLACES_SUCCESS,
-//                 response: list
-//             });
-//         })
-//     } catch (error) {
-//         let errorMessage;
-
-//         dispatch({
-//             type: ACTIONTYPES.FETCHING_PLACES_ERROR,
-//             errorMessage
-//         });
-//         return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
-//     }
-// };
 
 export function saveList() {
     return {

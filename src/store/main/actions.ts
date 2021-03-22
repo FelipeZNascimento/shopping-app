@@ -98,9 +98,9 @@ export const getPlaces = (
     orderBy = 'description',
     sort = 'ASC'
 ) => async (dispatch: Dispatch<GetPlacesAction>) => {
+    const response = await fetchItems(objectTypes.places, orderBy, sort);
     dispatch({ type: ACTIONTYPES.FETCHING_PLACES } as const);
 
-    const response = await fetchItems(objectTypes.places, orderBy, sort);
     response()
         .then((list) => {
             return dispatch({
@@ -166,9 +166,9 @@ export const getProducts = (
     orderBy = 'description',
     sort = 'ASC'
 ) => async (dispatch: Dispatch<GetProductsAction>) => {
+    const response = await fetchItems(objectTypes.products, orderBy, sort);
     dispatch({ type: ACTIONTYPES.FETCHING_PRODUCTS } as const);
 
-    const response = await fetchItems(objectTypes.products, orderBy, sort);
     response()
         .then((list) => {
             return dispatch({
@@ -234,9 +234,9 @@ export const getBrands = (
     orderBy = 'description',
     sort = 'ASC'
 ) => async (dispatch: Dispatch<GetBrandsAction>) => {
+    const response = await fetchItems(objectTypes.brands, orderBy, sort);
     dispatch({ type: ACTIONTYPES.FETCHING_BRANDS } as const);
 
-    const response = await fetchItems(objectTypes.brands, orderBy, sort);
     response()
         .then((list) => {
             return dispatch({

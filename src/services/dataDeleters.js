@@ -1,5 +1,4 @@
 import * as ACTIONTYPES from '../store/actionTypes';
-import { fetchItems } from './dataGetters';
 
 import {
     apiBaseUrl,
@@ -36,9 +35,7 @@ const deleteItem = (objectId, objectType) => async function (dispatch) {
                     type: ACTIONTYPES[`DELETING_${dispatchTarget}_SUCCESS`],
                     response: json,
                 });
-
-                // return dispatch(fetchItems(objectType));
-            }) // Error
+           }) // Error
             .catch((err) => {
                 let errorMessage;
                 if (err.errno === 1451) {

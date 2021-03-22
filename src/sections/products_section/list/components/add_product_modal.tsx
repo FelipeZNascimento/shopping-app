@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { fetchItems } from 'services/dataGetters';
+import { getProductsCategories } from 'store/main/actions';
 
 // Selectors
 import { returnItems } from 'store/main/selector';
@@ -37,7 +37,7 @@ const AddProductModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchItems(objectTypes.productsCategories));
+        dispatch(getProductsCategories());
     }, []);
 
     const onDescriptionChange = (event: any) => {
