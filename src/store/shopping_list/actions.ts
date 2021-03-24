@@ -11,7 +11,7 @@ import {
     IProduct
 } from 'constants/objectInterfaces';
 
-type GetShoppingListAction = {
+type fetchShoppingListAction = {
     readonly type: typeof ACTIONTYPES.FETCHING_SHOPPING_LIST
     | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS
     | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR
@@ -70,13 +70,17 @@ export function clearShoppingList() {
     }
 }
 
-export const getShoppingList = (
+export const fetchShoppingList = (
     currentPage = 0,
-    orderBy = 'description',
-    sort = 'ASC'
-) => async (dispatch: Dispatch<GetShoppingListAction>) => {
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
+) => async (dispatch: Dispatch<fetchShoppingListAction>) => {
+    const { orderBy, sort } = sortState;
+    const response = await fetchItems(objectTypes.shoppingList, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_SHOPPING_LIST } as const);
-    const response = await fetchItems(objectTypes.shoppingList, currentPage, orderBy, sort);
 
     response()
         .then((list) => {

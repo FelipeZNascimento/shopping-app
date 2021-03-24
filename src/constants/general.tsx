@@ -11,7 +11,9 @@ export const objectTypes = Object.freeze({
     shoppingList: 6,
     productNames: 7,
     productCategoryNames: 8,
-    brandNames: 9
+    brandNames: 9,
+    placeNames: 9,
+    placeCategoryNames: 10
 });
 
 export const objectTypeInfo = Object.freeze({
@@ -68,5 +70,17 @@ export const objectTypeInfo = Object.freeze({
         description: 'Nomes de Marcas',
         dispatch: 'BRAND_NAMES',
         apiCall: 'brand_names/',
+    },
+    [objectTypes.placeNames]: {
+        modelId: 'placeNames',
+        description: 'Nomes de Lugares',
+        dispatch: 'PLACE_NAMES',
+        apiCall: 'place_names/',
+    },
+    [objectTypes.placeCategoryNames]: {
+        modelId: 'placeCategoryNames',
+        description: 'Nomes de Categorias Lugares',
+        dispatch: 'PLACE_CATEGORY_NAMES',
+        apiCall: 'place_category_names/',
     }
 });

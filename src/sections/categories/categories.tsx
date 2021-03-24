@@ -11,7 +11,7 @@ import { Loading, Table } from 'components/index';
 import AddCategoryModal from './components/add_category_modal';
 import DeleteCategoryModal from './components/delete_category_modal';
 
-import { ICategory } from 'constants/objectInterfaces';
+import { ICategory, ISortingState } from 'constants/objectInterfaces';
 
 type TProps = {
     bodyColumns: ICategory[];
@@ -21,15 +21,22 @@ type TProps = {
         value: string;
         sortable: boolean;
     };
+    sortState: ISortingState;
     onAddNewCategory: (categoryName: string) => void;
     onDeleteCategory: (category: ICategory) => void;
     onSortChange: (column: string, direction: string) => void;
-}
+};
+
+const defaultSortState = {
+    orderBy: 'description',
+    sort: 'ASC'
+};
 
 const CategoriesSection = ({
     bodyColumns,
     color,
     headerColumns,
+    sortState = defaultSortState,
     onAddNewCategory,
     onDeleteCategory,
     onSortChange
@@ -67,6 +74,7 @@ const CategoriesSection = ({
                 bodyColumns={bodyColumns}
                 color={color}
                 headerColumns={[headerColumns]}
+                sortState={sortState}
                 onSecondaryAction={setToBeDeleted}
                 onSortChange={onSortChange}
             />

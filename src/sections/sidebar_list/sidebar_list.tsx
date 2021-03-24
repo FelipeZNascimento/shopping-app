@@ -8,7 +8,7 @@ import { routes } from 'constants/routes';
 import { shoppingList } from 'store/shopping_list/selector';
 
 // Actions
-import { getShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
+import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
 
 // Interfaces
 import { IShoppingListItem } from 'constants/objectInterfaces';
@@ -28,7 +28,7 @@ const SidebarList = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        dispatch(getShoppingList());
+        dispatch(fetchShoppingList());
     }, []);
 
     const deleteProduct = (product: IShoppingListItem) => {

@@ -30,7 +30,7 @@ import styles from './list.module.scss';
 
 const PurchaseList = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
-    const [selectedPlaceId, setSelectedPlaceId] = useState<number | undefined>(undefined);
+    const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
 
     const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);

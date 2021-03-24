@@ -24,7 +24,7 @@ const AddBrandModal = ({
 
     const onDialogConfirm = () => {
         const newBrand: IBrand = {
-            id: undefined,
+            id: null,
             created: '',
             description: brandName
         };

@@ -48,13 +48,13 @@ const ProductsCategories = () => {
 
     const color = 'orange';
 
-    const deleteCategory = (category: ICategory) => {
+    const onDeleteCategory = (category: ICategory) => {
         dispatch(deleteProductCategory(category));
     }
 
-    const addNewCategory = (categoryName: string) => {
+    const onAddNewCategory = (categoryName: string) => {
         const newCategory: ICategory = {
-            id: undefined,
+            id: null,
             description: categoryName
         }
 
@@ -106,8 +106,9 @@ const ProductsCategories = () => {
                 bodyColumns={categories}
                 color={color}
                 headerColumns={headers}
-                onAddNewCategory={addNewCategory}
-                onDeleteCategory={deleteCategory}
+                sortState={currentSortState}
+                onAddNewCategory={onAddNewCategory}
+                onDeleteCategory={onDeleteCategory}
                 onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
             />
             <div className="top-padding-l">

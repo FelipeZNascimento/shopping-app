@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { getPlacesCategories } from 'store/main/actions';
+import { fetchPlaceCategories } from 'store/place/actions';
 
 // Selectors
-import { returnItems } from 'store/main/selector';
+import { getPlaceCategories } from 'store/place/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -14,6 +14,10 @@ import {
     IPlace,
     ICategory
 } from 'constants/objectInterfaces';
+import {
+    place as placeModel
+} from 'constants/objectModels';
+
 import { objectTypes } from 'constants/general';
 
 interface IProps {
@@ -27,13 +31,13 @@ const AddPlaceModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const categories: ICategory[] = useSelector((state) => returnItems(state, objectTypes.placesCategories));
-    const [selectedItem, setSelectedItem] = useState<IPlace | null>(null);
+    const [selectedItem, setSelectedItem] = useState<IPlace>(placeModel);
+    const categories: ICategory[] = useSelector(getPlaceCategories);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getPlacesCategories());
+        dispatch(fetchPlaceCategories());
     }, []);
 
     const onDescriptionChange = (event: any) => {
@@ -52,19 +56,25 @@ const AddPlaceModal = ({
     };
 
     const onCategoryChange = (
-        event: any,
-        object: any = null
+        description: any = null
     ) => {
-        if (object) {
-            setSelectedItem({
-                ...selectedItem,
-                created: selectedItem?.created || '',
-                category_id: object.id,
-                category_description: selectedItem?.category_description || '',
-                description: selectedItem?.description || '',
-                id: selectedItem?.id
-            });
+        let category_id = null;
+        let category_description = '';
+
+        if (description) {
+            const categoryObject = categories.find((category) => category.description === description);
+
+            if (categoryObject !== undefined && categoryObject.id) {
+                category_id = categoryObject.id;
+                category_description = categoryObject.description;
+            }
         }
+
+        setSelectedItem({
+            ...selectedItem,
+            category_id,
+            category_description
+        });
     };
 
     const renderAddDialogForm = () => (
@@ -89,6 +99,7 @@ const AddPlaceModal = ({
 
     return (
         <FormDialog
+            isEnable={selectedItem.description !== '' && selectedItem.category_id !== null}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => selectedItem ? onConfirm(selectedItem) : null}

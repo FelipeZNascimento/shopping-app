@@ -46,6 +46,7 @@ import { Notification } from './components/index';
 import appReducer from './store/main/reducer';
 import brandReducer from './store/brand/reducer';
 import shoppingListReducer from './store/shopping_list/reducer';
+import placeReducer from './store/place/reducer';
 import productReducer from './store/product/reducer';
 import purchaseReducer from './store/purchase/reducer';
 
@@ -61,6 +62,7 @@ const store = createStore(
         appReducer,
         brandReducer,
         shoppingListReducer,
+        placeReducer,
         productReducer,
         purchaseReducer
     }),

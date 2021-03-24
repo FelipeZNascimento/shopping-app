@@ -1,15 +1,15 @@
 export interface IBrand {
     created: string;
     description: string;
-    id: number | undefined;
+    id: number | null;
 }
 
 export interface IPlace {
     category_description: string;
-    category_id: number | undefined;
+    category_id: number | null;
     created: string;
     description: string;
-    id: number | undefined;
+    id: number | null;
 }
 
 export interface IProduct {
@@ -41,7 +41,7 @@ export interface IShoppingListItem {
 }
 
 export interface ICategory {
-    id: number | undefined;
+    id: number | null;
     description: string;
 }
 

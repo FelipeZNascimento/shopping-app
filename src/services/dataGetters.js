@@ -10,7 +10,7 @@ const fetchItems = (
     currentPage = 0,
     orderBy = 'description',
     sort = 'ASC',
-    searchField
+    searchField = ''
 ) => async function () {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     let response;
