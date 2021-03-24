@@ -7,7 +7,7 @@ import { shoppingList, isLoading } from 'store/shopping_list/selector';
 import { getPurchaseListLength } from 'store/purchase/selector';
 
 // Actions
-import { getShoppingList, removeFromList } from 'store/shopping_list/actions';
+import { getShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
 import { convertToPurchase } from 'store/purchase/actions';
 import deleteItem from 'services/dataDeleters';
 
@@ -24,6 +24,7 @@ import { routes } from 'constants/routes';
 
 const ShoppingList = () => {
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(0);
 
     const list: IShoppingListItem[] = useSelector(shoppingList);
     const isListLoading: boolean = useSelector(isLoading);
@@ -45,7 +46,7 @@ const ShoppingList = () => {
     ];
 
     useEffect(() => {
-        dispatch(getShoppingList());
+        dispatch(getShoppingList(currentPage));
     }, []);
 
     if (shoppingList.length === 0) {
@@ -54,12 +55,12 @@ const ShoppingList = () => {
 
     const deleteProduct = (product: IShoppingListItem) => {
         dispatch(deleteItem(product?.product_id, objectTypes.shoppingList));
-        dispatch(removeFromList(product));
+        dispatch(deleteFromShoppingList(product));
     };
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(getShoppingList(column, direction));
+        dispatch(getShoppingList(currentPage, column, direction));
     };
 
     const onCheckboxClick = (productList: IProduct[]) => {

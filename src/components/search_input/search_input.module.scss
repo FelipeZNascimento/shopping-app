@@ -1,0 +1,12 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/paddings.scss";
+
+.searchContainer {
+    @include flex-aligned(center, center);
+    @include padded(all, m);
+
+    display: flex;
+    min-width: 300px;
+}

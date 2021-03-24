@@ -1,13 +1,17 @@
 export const apiBaseUrl = 'http://localhost:8081/shopping/';
 // export const apiBaseUrl = 'https://omega-cors.herokuapp.com/shopping/';
 
+export const resultsPerPage = 20;
 export const objectTypes = Object.freeze({
     brands: 1,
     products: 2,
     places: 3,
     placesCategories: 4,
-    productsCategories: 5,
+    productCategories: 5,
     shoppingList: 6,
+    productNames: 7,
+    productCategoryNames: 8,
+    brandNames: 9
 });
 
 export const objectTypeInfo = Object.freeze({
@@ -35,7 +39,7 @@ export const objectTypeInfo = Object.freeze({
         dispatch: 'PLACES_CATEGORIES',
         apiCall: 'places_categories/',
     },
-    [objectTypes.productsCategories]: {
+    [objectTypes.productCategories]: {
         modelId: 'productCategory',
         description: 'Categorias (Produtos)',
         dispatch: 'PRODUCTS_CATEGORIES',
@@ -47,4 +51,22 @@ export const objectTypeInfo = Object.freeze({
         dispatch: 'SHOPPING_LIST',
         apiCall: 'shopping_list/',
     },
+    [objectTypes.productNames]: {
+        modelId: 'productNames',
+        description: 'Nomes de Produtos',
+        dispatch: 'PRODUCT_NAMES',
+        apiCall: 'product_names/',
+    },
+    [objectTypes.productCategoryNames]: {
+        modelId: 'productCategoryNames',
+        description: 'Nomes de Categories Produtos',
+        dispatch: 'PRODUCT_CATEGORY_NAMES',
+        apiCall: 'product_category_names/',
+    },
+    [objectTypes.brandNames]: {
+        modelId: 'brandNames',
+        description: 'Nomes de Marcas',
+        dispatch: 'BRAND_NAMES',
+        apiCall: 'brand_names/',
+    }
 });

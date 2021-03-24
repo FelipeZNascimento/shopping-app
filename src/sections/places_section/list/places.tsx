@@ -20,6 +20,7 @@ import { objectTypes } from 'constants/general';
 import { IPlace } from 'constants/objectInterfaces';
 
 const PlacesList = () => {
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<IPlace | null>(null);
 
@@ -28,7 +29,7 @@ const PlacesList = () => {
     const isPlacesLoading: boolean = useSelector(isLoading);
 
     useEffect(() => {
-        dispatch(getPlaces());
+        dispatch(getPlaces(currentPage));
     }, []);
 
     const headers = [
@@ -59,7 +60,7 @@ const PlacesList = () => {
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(getPlaces(column, direction));        
+        dispatch(getPlaces(currentPage, column, direction));        
     };
 
     return (

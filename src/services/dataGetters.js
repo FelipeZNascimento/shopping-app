@@ -1,24 +1,28 @@
-import * as ACTIONTYPES from '../store/actionTypes';
 import {
     apiBaseUrl,
-    objectTypes,
     objectTypeInfo,
 } from 'constants/general';
 
 import { http } from './utilities';
 
-export const fetchItems = (
+const fetchItems = (
     objectType,
+    currentPage = 0,
     orderBy = 'description',
-    sort = 'ASC'
+    sort = 'ASC',
+    searchField
 ) => async function () {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     let response;
 
     const requestObject = new Request(
-        `${apiBaseUrl}${apiCallTarget}?orderBy=${orderBy}&sort=${sort}`,
+        `${apiBaseUrl}${apiCallTarget}?page=${currentPage}&orderBy=${orderBy}&sort=${sort}&searchField=${searchField}`,
         {
-            method: "get"
+            method: "get",
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'Content-Type',
+            },
         }
     );
 
@@ -30,14 +34,4 @@ export const fetchItems = (
     }
 };
 
-export const fetchCategories = ((objectType) => {
-    switch (objectType) {
-        case objectTypes.products:
-            return fetchItems(objectTypes.productsCategories);
-        case objectTypes.places:
-            return fetchItems(objectTypes.placesCategories);
-        default:
-            return null;
-    }
-});
-
+export default fetchItems;

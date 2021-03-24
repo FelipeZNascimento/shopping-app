@@ -12,7 +12,10 @@ import {
     Delete as DeleteIcon,
 } from '@material-ui/icons';
 
-import { IProduct } from '../../constants/objectInterfaces';
+import {
+    IProduct,
+    ISortingState
+} from 'constants/objectInterfaces';
 
 type IHeaderColumn = {
     key: string;
@@ -22,29 +25,33 @@ type IHeaderColumn = {
 
 interface IProps {
     bodyColumns?: any[];
+    checkedProducts?: IProduct[];
     color?: string;
     headerColumns: IHeaderColumn[];
+    sortState?: ISortingState;
     onCheckboxAction?: null | ((item: any) => void);
     onMainAction?: null | ((item: any) => void);
     onSecondaryAction?: null | ((item: any) => void);
     onSortChange?: null | ((column: string, direction: string) => void);
 }
 
+const defaultSortingState = {
+    orderBy: 'description',
+    sort: 'ASC'
+};
+
 const Table = ({
     bodyColumns = [],
     color = 'green',
     headerColumns,
+    sortState = defaultSortingState,
+    checkedProducts = [],
     onCheckboxAction = null,
     onMainAction = null,
     onSecondaryAction = null,
     onSortChange = null
 }: IProps) => {
-    const state = {
-        column: 'description',
-        direction: 'ASC'
-    };
-    const [sortState, setSortState] = useState(state);
-    const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
+    // const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
 
     const checkboxClick = (item: any) => {
         if (onCheckboxAction === null) {
@@ -58,11 +65,11 @@ const Table = ({
                 ...checkedProducts,
                 item
             ];
-            setCheckedProducts(updatedCheckedProducts);
+            // setCheckedProducts(updatedCheckedProducts);
         } else {
             const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
             updatedCheckedProducts = [...filteredProducts];
-            setCheckedProducts(updatedCheckedProducts);
+            // setCheckedProducts(updatedCheckedProducts);
         }
 
         onCheckboxAction(updatedCheckedProducts);
@@ -72,10 +79,10 @@ const Table = ({
 
     const setSortingState = (key: string) => {
         let newDirection = 'ASC';
-        if (key === sortState.column) {
-            newDirection = sortState.direction === 'ASC' ? 'DESC' : 'ASC';
+        if (key === sortState.orderBy) {
+            newDirection = sortState.sort === 'ASC' ? 'DESC' : 'ASC';
         }
-        setSortState({ column: key, direction: newDirection });
+        // setSortState({ column: key, direction: newDirection });
         if (onSortChange !== null) {
             onSortChange(key, newDirection);
         }
@@ -86,11 +93,11 @@ const Table = ({
             return;
         }
 
-        if (key !== sortState.column) {
+        if (key !== sortState.orderBy) {
             return <ArrowDropDownIcon classes={{ root: 'invisible' }} />;
         }
 
-        if (sortState.direction === 'ASC') {
+        if (sortState.sort === 'ASC') {
             return <ArrowDropDownIcon classes={{ root: 'of-black' }} />;
         }
 
@@ -158,6 +165,7 @@ const Table = ({
                         {onCheckboxAction !== null
                             && <td>
                                 <Checkbox
+                                    checked={isChecked(item)}
                                     size="small"
                                     inputProps={{ 'aria-label': 'checkbox with small size' }}
                                     onClick={() => checkboxClick(item)}

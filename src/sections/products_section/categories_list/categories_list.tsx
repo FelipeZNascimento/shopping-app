@@ -1,27 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { setProductsCategories, getProductsCategories, removeFromList } from 'store/main/actions';
-import deleteItem from 'services/dataDeleters';
+import {
+    deleteProductCategory,
+    fetchProductCategories,
+    saveProductCategory
+} from 'store/product/actions';
 
 // Selectors
-import { returnItems } from 'store/main/selector';
+import { getProductCategories, getProductCategoriesCount } from 'store/product/selector';
 
 // Components
 import CategoriesSection from 'sections/categories/categories';
+import { SearchInput } from 'components/index';
+import { Pagination } from '@material-ui/lab';
 
-import { objectTypes } from 'constants/general';
-import { ICategory } from 'constants/objectInterfaces';
+// Types, Constants, Misc
+import { resultsPerPage } from 'constants/general';
+import { IAutocompleteItem } from 'components/autocomplete/types';
+import { ICategory, ISortingState } from 'constants/objectInterfaces';
+import { invertSort } from 'utils/utils';
+
+const defaultSortState = {
+    orderBy: 'description',
+    sort: 'ASC'
+};
 
 const ProductsCategories = () => {
-    const objectType = objectTypes.productsCategories;
-    const categories: ICategory[] = useSelector((state) => returnItems(state, objectType));
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [searchField, setSearchField] = useState<string>('');
+    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
+    const categories: ICategory[] = useSelector(getProductCategories);
+    const totalCount: number = useSelector(getProductCategoriesCount);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProductsCategories());
+        dispatch(fetchProductCategories(currentPage - 1));
     }, []);
 
     const headers = {
@@ -33,8 +49,7 @@ const ProductsCategories = () => {
     const color = 'orange';
 
     const deleteCategory = (category: ICategory) => {
-        dispatch(deleteItem(category.id, objectType));
-        dispatch(removeFromList(category, objectType));
+        dispatch(deleteProductCategory(category));
     }
 
     const addNewCategory = (categoryName: string) => {
@@ -42,23 +57,71 @@ const ProductsCategories = () => {
             id: undefined,
             description: categoryName
         }
-        dispatch(setProductsCategories(newCategory));
+
+        dispatch(saveProductCategory(newCategory));
     };
 
-    const onSortChange = (column: string, direction: string) => {
-        console.log('Sorting by: ' + column + direction);
-        dispatch(getProductsCategories(column, direction));
+    const onSortChange = (orderBy: string, sort: string) => {
+        const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
+
+        setCurrentSortState({ orderBy, sort: newSort });
+        dispatch(fetchProductCategories(currentPage - 1, { orderBy, sort: newSort }, searchField));
+    };
+
+    const onSearch = (item: IAutocompleteItem | string | null) => {
+        let newSearchInput = '';
+        if (item !== null) {
+            newSearchInput = typeof (item) === 'string' ? item : item.description;
+        }
+
+        setSearchField(newSearchInput);
+        if (newSearchInput.length >= 2 || newSearchInput.length === 0) {
+            dispatch(fetchProductCategories(0, currentSortState, newSearchInput));
+        }
+    };
+
+    const onPageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        dispatch(fetchProductCategories(newPage - 1, currentSortState, searchField));
     };
 
     return (
-        <CategoriesSection
-            bodyColumns={categories}
-            color={color}
-            headerColumns={headers}
-            onAddNewCategory={addNewCategory}
-            onDeleteCategory={deleteCategory}
-            onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
-        />
+        <>
+            <SearchInput
+                options={categories}
+                onSearch={onSearch}
+            />
+            <div className="bottom-padding-l">
+                <Pagination
+                    color="primary"
+                    count={Math.ceil(totalCount / resultsPerPage)}
+                    page={currentPage}
+                    size="large"
+                    shape="rounded"
+                    variant="outlined"
+                    onChange={(event, newPage) => onPageChange(newPage)}
+                />
+            </div>
+            <CategoriesSection
+                bodyColumns={categories}
+                color={color}
+                headerColumns={headers}
+                onAddNewCategory={addNewCategory}
+                onDeleteCategory={deleteCategory}
+                onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
+            />
+            <div className="top-padding-l">
+                <Pagination
+                    color="primary"
+                    count={Math.ceil(totalCount / resultsPerPage)}
+                    page={currentPage}
+                    size="large"
+                    shape="rounded"
+                    variant="outlined"
+                    onChange={(event, newPage) => onPageChange(newPage)}
+                />
+            </div>
+        </>
     );
 }
 

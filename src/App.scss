@@ -1,11 +1,11 @@
-@import "./style/colors.scss";
-@import "./style/columns.scss";
-@import "./style/font-sizes.scss";
-@import "./style/margins.scss";
-@import "./style/paddings.scss";
-@import "./style/globals.scss";
-@import "./components/index.scss";
-@import "./sections/index.scss";
+@import "style/colors.scss";
+@import "style/columns.scss";
+@import "style/font-sizes.scss";
+@import "style/margins.scss";
+@import "style/paddings.scss";
+@import "style/globals.scss";
+@import "components/index.scss";
+@import "sections/index.scss";
 
 body {
     margin: 0;
@@ -29,7 +29,7 @@ code {
 
     &--regular {
         @extend .index-container;
-        padding: 20px calc(#{$sidebar-width} + 20px);
+        padding: 20px calc(#{$sidebar-width} + 20px) 80px calc(#{$sidebar-width} + 20px);
     }
 
     &--mobile {

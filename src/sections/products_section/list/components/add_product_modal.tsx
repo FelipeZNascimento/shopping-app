@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { getProductsCategories } from 'store/main/actions';
+import { fetchProductCategories } from 'store/product/actions';
 
 // Selectors
-import { returnItems } from 'store/main/selector';
+import { getProductCategories } from 'store/product/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -18,7 +18,7 @@ import {
     ICategory
 } from 'constants/objectInterfaces';
 
-import { objectTypes } from 'constants/general';
+// import { objectTypes } from 'constants/general';
 
 interface IProps {
     isOpen: boolean;
@@ -31,36 +31,42 @@ const AddProductModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const categories: ICategory[] = useSelector((state) => returnItems(state, objectTypes.productsCategories));
     const [selectedItem, setSelectedItem] = useState<IProduct>(productModel);
+    const categories: ICategory[] = useSelector(getProductCategories);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getProductsCategories());
+        dispatch(fetchProductCategories());
     }, []);
 
     const onDescriptionChange = (event: any) => {
-        const value = event.target.value;
-
-        if (value) {
-            setSelectedItem({
-                ...selectedItem,
-                description: value
-            });
-        }
+        setSelectedItem({
+            ...selectedItem,
+            description: event.target.value
+        });
     };
 
     const onCategoryChange = (
-        event: any,
-        object: any = null
+        description: any = null
     ) => {
-        if (object) {
-            setSelectedItem({
-                ...selectedItem,
-                category_id: object.id
-            });
+        let category_id = null;
+        let category_description = '';
+
+        if (description) {
+            const categoryObject = categories.find((category) => category.description === description);
+
+            if (categoryObject !== undefined && categoryObject.id) {
+                category_id = categoryObject.id;
+                category_description = categoryObject.description;
+            }
         }
+
+        setSelectedItem({
+            ...selectedItem,
+            category_id,
+            category_description
+        });
     };
 
     const renderAddDialogForm = () => (
@@ -86,6 +92,7 @@ const AddProductModal = ({
 
     return (
         <FormDialog
+            isEnable={selectedItem.description !== '' && selectedItem.category_id !== null}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => onConfirm(selectedItem)}

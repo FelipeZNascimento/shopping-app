@@ -12,3 +12,11 @@ export const dynamicSort = (property: string) => {
         return result * sortOrder;
     }
 }
+
+export const invertSort = (sort: string) => {
+    if (sort === 'ASC') {
+        return 'DESC';
+    }
+
+    return 'ASC';
+}

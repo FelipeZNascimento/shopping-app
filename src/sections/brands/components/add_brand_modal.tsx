@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 
 import { TextField } from '@material-ui/core';
-import { FormDialog } from '../../../components/index';
-import {
-    brand as brandModel
-} from '../../../constants/objectModels';
-
-import { IBrand } from '../../../constants/objectInterfaces';
+import { FormDialog } from 'components/index';
+import { IBrand } from 'constants/objectInterfaces';
 
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (object: IBrand) => void;
+    onConfirm: (newBrand: IBrand) => void;
 }
 
 const AddBrandModal = ({
@@ -19,30 +15,29 @@ const AddBrandModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const [selectedItem, setSelectedItem] = useState<IBrand | null>(null);
+    const [brandName, setBrandName] = useState<string>('');
 
     const onDescriptionChange = (event: any) => {
         const value = event.target.value;
-
-        if (value && selectedItem) {
-            setSelectedItem({
-                ...selectedItem,
-                description: value
-            });
-        }
+        setBrandName(value);
     };
 
-    const onFormConfirm = () => {
-        if (selectedItem) {
-            onConfirm(selectedItem);
-        }
-    };
+    const onDialogConfirm = () => {
+        const newBrand: IBrand = {
+            id: undefined,
+            created: '',
+            description: brandName
+        };
+
+        onConfirm(newBrand);
+    }
 
     return (
         <FormDialog
+            isEnable={brandName !== ''}
             isOpen={isOpen}
             onClose={onClose}
-            onConfirm={onFormConfirm}
+            onConfirm={onDialogConfirm}
             title='Adicionar Nova Marca'
         >
             <TextField

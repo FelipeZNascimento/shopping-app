@@ -20,18 +20,18 @@ export function errorMessage(state) {
     return state.appReducer.errorMessage;
 }
 
+export function getBrands(state) {
+    return state.appReducer.brands;
+}
+
 export function returnItems(state, objectType) {
     switch (objectType) {
     case objectTypes.brands:
         return state.appReducer.brands;
-    case objectTypes.products:
-        return state.appReducer.products;
     case objectTypes.places:
         return state.appReducer.places;
     case objectTypes.placesCategories:
         return state.appReducer.placesCategories;
-    case objectTypes.productsCategories:
-        return state.appReducer.productsCategories;
     default:
         return [];
     }

@@ -10,13 +10,15 @@ import {
 
 interface IProps {
     children: JSX.Element;
-    onClose: () => void;
-    onConfirm: () => void;
+    isEnable?: boolean;
     isOpen: boolean;
     title: string;
+    onClose: () => void;
+    onConfirm: () => void;
 }
 
 const FormDialog = ({
+    isEnable = false,
     children,
     onClose,
     onConfirm,
@@ -44,6 +46,7 @@ const FormDialog = ({
             </Button>
             <Button
                 disableElevation
+                disabled={!isEnable}
                 classes={{ root: 'flex-grow of-grey4-bg of-green' }}
                 onClick={onConfirm}
             >

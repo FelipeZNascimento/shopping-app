@@ -44,7 +44,9 @@ import { Notification } from './components/index';
 
 // REDUCERS
 import appReducer from './store/main/reducer';
+import brandReducer from './store/brand/reducer';
 import shoppingListReducer from './store/shopping_list/reducer';
+import productReducer from './store/product/reducer';
 import purchaseReducer from './store/purchase/reducer';
 
 import registerServiceWorker from './serviceWorker';
@@ -57,7 +59,9 @@ const middlewares = [thunk];
 const store = createStore(
     combineReducers({
         appReducer,
+        brandReducer,
         shoppingListReducer,
+        productReducer,
         purchaseReducer
     }),
     composeWithDevTools(

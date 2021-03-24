@@ -1,0 +1,30 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/paddings.scss";
+
+$sidebar-width: 250px;
+
+.container {
+    @include padded(all, m);
+    min-width: $sidebar-width;
+}
+
+.title {
+    @include aligned(center);
+    @include font-colored($of-green);
+    @include font-sized(l);
+    cursor: pointer;
+    transition: 0.5s;
+    opacity: 0.8;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.item {
+    @include font-colored($of-white);
+    @include font-sized(m);
+    @include padded(left, xs);
+}

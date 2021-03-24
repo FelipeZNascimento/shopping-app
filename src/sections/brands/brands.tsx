@@ -2,33 +2,62 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
-import { getBrands, removeFromList } from '../../store/main/actions';
-import { setItem } from '../../services/dataSetters';
-import deleteItem from '../../services/dataDeleters';
+import {
+    fetchBrandNames,
+    fetchBrands,
+    saveBrand,
+    deleteBrand
+} from 'store/brand/actions';
 
 // Selectors
-import { isLoading, returnItems } from '../../store/main/selector';
+import {
+    getBrands,
+    getBrandsCount,
+    getBrandNames,
+    getIsLoading
+} from 'store/brand/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, Table } from '../../components/index';
+import { Loading, SearchInput, Table } from 'components/index';
 import AddBrandModal from './components/add_brand_modal';
 import DeleteBrandModal from './components/delete_brand_modal';
 
-import { objectTypes } from '../../constants/general';
-import { IBrand } from '../../constants/objectInterfaces';
+// Types, Constants, Misc
+import { resultsPerPage } from 'constants/general';
+import { IAutocompleteItem } from 'components/autocomplete/types';
+import {
+    IBrand,
+    IItemName,
+    ISortingState
+} from 'constants/objectInterfaces';
+import { invertSort } from 'utils/utils';
+
+const defaultSortState = {
+    orderBy: 'description',
+    sort: 'ASC'
+};
 
 const BrandsSection = () => {
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [searchField, setSearchField] = useState<string>('');
     const [toBeDeleted, setToBeDeleted] = useState<IBrand | null>(null);
 
     const dispatch = useDispatch();
-    const brands: IBrand[] = useSelector((state) => returnItems(state, objectTypes.brands));
-    const isBrandsLoading: boolean = useSelector(isLoading);
+    const brands: IBrand[] = useSelector(getBrands);
+    const brandNames: IItemName[] = useSelector(getBrandNames);
+    const totalCount: number = useSelector(getBrandsCount);
+    const isLoading: boolean = useSelector(getIsLoading);
 
     useEffect(() => {
-        dispatch(getBrands())
+        dispatch(fetchBrands(currentPage - 1));
+        if (brandNames.length === 0) {
+            dispatch(fetchBrandNames());
+        }
     }, []);
 
     const headers = [
@@ -39,28 +68,46 @@ const BrandsSection = () => {
         }
     ];
 
-    const deleteBrand = () => {
+    const onDeleteBrand = () => {
         if (toBeDeleted) {
-            dispatch(deleteItem(toBeDeleted.id, objectTypes.brands));
-            dispatch(removeFromList(toBeDeleted, objectTypes.brands));
+            dispatch(deleteBrand(toBeDeleted));
         }
         setToBeDeleted(null);
     }
 
-    const addNewBrand = (product: IBrand) => {
-        dispatch(setItem([product], objectTypes.brands));
+    const onAddNewBrand = (newBrand: IBrand) => {
+        dispatch(saveBrand(newBrand));
         setIsAddModalOpen(false);
     };
 
-    const onSortChange = (column: string, direction: string) => {
-        console.log('Sorting by: ' + column + direction);
-        dispatch(getBrands(column, direction));        
+    const onSearch = (item: IAutocompleteItem | string | null) => {
+        let newSearchInput = '';
+        if (item !== null) {
+            newSearchInput = typeof (item) === 'string' ? item : item.description;
+        }
+
+        setSearchField(newSearchInput);
+        if (newSearchInput.length >= 2 || newSearchInput.length === 0) {
+            dispatch(fetchBrands(0, currentSortState, newSearchInput));
+        }
+    };
+
+    const onSortChange = (orderBy: string, sort: string) => {
+        const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
+
+        setCurrentSortState({ orderBy, sort: newSort });
+        dispatch(fetchBrands(currentPage - 1, { orderBy, sort: newSort }, searchField));
+    };
+
+    const onPageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        dispatch(fetchBrands(newPage - 1, currentSortState, searchField));
     };
 
     return (
         <>
             <Fab
-                classes={{root: 'of-pink-bg'}}
+                classes={{ root: 'of-pink-bg' }}
                 className="fab-bottom"
                 size="large"
                 variant="extended"
@@ -69,6 +116,21 @@ const BrandsSection = () => {
                 <AddIcon />&nbsp;
                 Nova marca
             </Fab>
+            <SearchInput
+                options={brandNames}
+                onSearch={onSearch}
+            />
+            <div className="bottom-padding-l">
+                <Pagination
+                    color="primary"
+                    count={Math.ceil(totalCount / resultsPerPage)}
+                    page={currentPage}
+                    size="large"
+                    shape="rounded"
+                    variant="outlined"
+                    onChange={(event, newPage) => onPageChange(newPage)}
+                />
+            </div>
             <Table
                 bodyColumns={brands}
                 color="pink"
@@ -76,17 +138,29 @@ const BrandsSection = () => {
                 onSecondaryAction={(brand: IBrand) => setToBeDeleted(brand)}
                 onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
             />
-            {isBrandsLoading && <Loading />}
+            {isLoading && <Loading />}
             <AddBrandModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
-                onConfirm={addNewBrand}
+                onConfirm={onAddNewBrand}
             />
             <DeleteBrandModal
                 brand={toBeDeleted}
                 onClose={() => setToBeDeleted(null)}
-                onConfirm={deleteBrand}
+                onConfirm={onDeleteBrand}
             />
+            <div className="top-padding-l">
+                <Pagination
+                    color="primary"
+                    count={Math.ceil(totalCount / resultsPerPage)}
+                    page={currentPage}
+                    size="large"
+                    shape="rounded"
+                    variant="outlined"
+                    onChange={(event, newPage) => onPageChange(newPage)}
+                />
+            </div>
+
         </>
 
     )

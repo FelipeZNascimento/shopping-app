@@ -28,6 +28,7 @@ const AddCategoryModal = ({
 
     return (
         <FormDialog
+            isEnable={newCategory !== ''}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => onConfirm(newCategory)}

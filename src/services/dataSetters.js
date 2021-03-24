@@ -115,7 +115,7 @@ export const setItem = (
 // };
 
 export const updateItems = (items, objectType) => async function (dispatch) {
-    const apiCallTarget = objectTypeInfo[objectType].apiCall;
+    // const apiCallTarget = objectTypeInfo[objectType].apiCall;
     const dispatchTarget = objectTypeInfo[objectType].dispatch;
 
     dispatch({ type: ACTIONTYPES[`UPDATING_${dispatchTarget}`] });

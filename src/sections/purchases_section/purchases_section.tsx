@@ -1,6 +1,6 @@
 import React from 'react';
-import { SectionCards } from '../../components/index';
-import { routes } from '../../constants/routes';
+import { SectionCards } from 'components/index';
+import { routes } from 'constants/routes';
 
 const PurchaseSection = () => {
     const cards = [

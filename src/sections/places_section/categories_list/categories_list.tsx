@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions
@@ -15,13 +15,15 @@ import { objectTypes } from 'constants/general';
 import { ICategory } from 'constants/objectInterfaces';
 
 const PlacesCategories = () => {
+    const [currentPage, setCurrentPage] = useState<number>(0);
+
     const objectType = objectTypes.placesCategories;
     const categories: ICategory[] = useSelector((state) => returnItems(state, objectType));
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getPlacesCategories());
+        dispatch(getPlacesCategories(currentPage));
     }, []);
 
     const headers = {
@@ -47,7 +49,7 @@ const PlacesCategories = () => {
 
     const onSortChange = (column: string, direction: string) => {
         console.log('Sorting by: ' + column + direction);
-        dispatch(getPlacesCategories(column, direction));
+        dispatch(getPlacesCategories(currentPage, column, direction));
     };
 
     return (

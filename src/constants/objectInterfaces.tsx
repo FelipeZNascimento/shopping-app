@@ -1,7 +1,7 @@
 export interface IBrand {
     created: string;
     description: string;
-    id: number;
+    id: number | undefined;
 }
 
 export interface IPlace {
@@ -21,6 +21,16 @@ export interface IProduct {
     product_id: number | null;
 }
 
+export interface IProductsObject {
+    totalCount: number,
+    data: IProduct[]
+}
+
+export interface IItemName {
+    description: string,
+    id: number
+}
+
 export interface IShoppingListItem {
     category_description: string;
     category_id: number | null;
@@ -33,6 +43,11 @@ export interface IShoppingListItem {
 export interface ICategory {
     id: number | undefined;
     description: string;
+}
+
+export interface ICategoriesObject {
+    totalCount: number,
+    data: ICategory[]
 }
 
 export interface IPurchaseItem {
@@ -51,4 +66,9 @@ export interface IPurchaseItem {
     price: number;
     total_price: number;
     promotion?: boolean;
+}
+
+export interface ISortingState {
+    orderBy: string;
+    sort: string
 }
