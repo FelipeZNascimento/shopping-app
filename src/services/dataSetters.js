@@ -65,55 +65,6 @@ export const setItem = (
     }
 };
 
-// export const setItem = (item, objectType) => async function (dispatch) {
-//     const apiCallTarget = objectTypeInfo[objectType].apiCall;
-//     const dispatchTarget = objectTypeInfo[objectType].dispatch;
-
-//     dispatch({ type: ACTIONTYPES[`SAVING_${dispatchTarget}`] });
-
-//     try {
-//         await fetch(`${apiBaseUrl}${apiCallTarget}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Access-Control-Allow-Origin': 'Content-Type',
-//             },
-//             body: JSON.stringify({ item }),
-//         })
-//             .then((response) => {
-//                 dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
-
-//                 if (response.status === 200) {
-//                     return Promise.resolve(response);
-//                 }
-
-//                 return Promise.resolve(response.json())
-//                     .then((responseInJson) => Promise.reject(responseInJson));
-//             }) // Success
-//             .then((json) => {
-//                 dispatch({
-//                     type: ACTIONTYPES[`SAVING_${dispatchTarget}_SUCCESS`],
-//                     response: json,
-//                 });
-
-//                 return dispatch(fetchItems(objectType));
-//             }) // Error
-//             .catch((err) => {
-//                 const errorMessage = err.sqlMessage ? err.sqlMessage : 'Tente novamente mais tarde.';
-//                 dispatch({
-//                     type: ACTIONTYPES[`SAVING_${dispatchTarget}_ERROR`],
-//                     response: errorMessage,
-//                 });
-//             });
-//     } catch (error) {
-//         dispatch({
-//             type: ACTIONTYPES[`SAVING_${dispatchTarget}_ERROR`],
-//             response: error,
-//         });
-//         dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
-//     }
-// };
-
 export const updateItems = (items, objectType) => async function (dispatch) {
     // const apiCallTarget = objectTypeInfo[objectType].apiCall;
     const dispatchTarget = objectTypeInfo[objectType].dispatch;
