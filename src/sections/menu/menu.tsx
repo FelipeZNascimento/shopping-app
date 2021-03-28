@@ -6,21 +6,9 @@ import classNames from 'classnames';
 import { routes } from 'constants/routes';
 import { Button, Drawer } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
+import { TMenuItem } from './types';
 
 import styles from './menu.module.scss';
-
-type TMenuDropdown = {
-    display: string;
-    path: string;
-}
-
-type TMenuItem = {
-    id: number;
-    display: string;
-    route: string;
-    hasDropdown: boolean;
-    dropdownOptions?: TMenuDropdown[];
-}
 
 const Menu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
