@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 
 import { TextField } from '@material-ui/core';
-import { FormDialog } from '../../../components/index';
-import {
-    category as categoryModel
-} from '../../../constants/objectModels';
-
-import { ICategory } from '../../../constants/objectInterfaces';
+import { FormDialog } from 'components/index';
 
 interface IProps {
     isOpen: boolean;

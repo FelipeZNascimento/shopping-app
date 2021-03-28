@@ -1,5 +1,3 @@
-import { objectTypes } from 'constants/general';
-
 /** assumes array elements are primitive types
 * check whether 2 arrays are equal sets.
 * @param  {} a1 is an array

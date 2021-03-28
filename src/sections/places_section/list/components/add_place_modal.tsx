@@ -18,8 +18,6 @@ import {
     place as placeModel
 } from 'constants/objectModels';
 
-import { objectTypes } from 'constants/general';
-
 interface IProps {
     isOpen: boolean;
     onClose: () => void;

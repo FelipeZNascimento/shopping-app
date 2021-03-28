@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
     Checkbox,
@@ -51,8 +51,6 @@ const Table = ({
     onSecondaryAction = null,
     onSortChange = null
 }: IProps) => {
-    // const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
-
     const checkboxClick = (item: any) => {
         if (onCheckboxAction === null) {
             return;
@@ -65,11 +63,9 @@ const Table = ({
                 ...checkedProducts,
                 item
             ];
-            // setCheckedProducts(updatedCheckedProducts);
         } else {
             const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
             updatedCheckedProducts = [...filteredProducts];
-            // setCheckedProducts(updatedCheckedProducts);
         }
 
         onCheckboxAction(updatedCheckedProducts);
@@ -82,7 +78,6 @@ const Table = ({
         if (key === sortState.orderBy) {
             newDirection = sortState.sort === 'ASC' ? 'DESC' : 'ASC';
         }
-        // setSortState({ column: key, direction: newDirection });
         if (onSortChange !== null) {
             onSortChange(key, newDirection);
         }
@@ -157,7 +152,6 @@ const Table = ({
     };
 
     const renderBody = () => {
-        // .sort((a, b) => a.description.localeCompare(b.description))
         return bodyColumns
             .map((item) => {
                 return (

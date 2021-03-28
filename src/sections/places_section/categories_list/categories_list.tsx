@@ -7,8 +7,6 @@ import {
     fetchPlaceCategories,
     savePlaceCategory
 } from 'store/place/actions';
-import { setPlacesCategories, getPlacesCategories, removeFromList } from 'store/main/actions';
-import deleteItem from 'services/dataDeleters';
 
 // Selectors
 import {
