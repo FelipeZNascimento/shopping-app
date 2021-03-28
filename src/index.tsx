@@ -151,8 +151,7 @@ const theme = createMuiTheme({
         MuiDrawer: {
             paper: {
                 backgroundColor: '#1f2225',
-                borderLeft: '1px solid black',
-                top: '62px'
+                borderLeft: '1px solid black'
             }
         },
         MuiDialog: {

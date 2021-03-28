@@ -1,0 +1,121 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/globals.scss";
+@import "style/paddings.scss";
+@import "style/margins.scss";
+
+.container {
+    @include bg-rgba-colored($of-black, 0.6);
+    @include font-colored($of-white);
+    @include flex-aligned(center, center);
+
+    border-bottom: 1px solid black;
+    display: block;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+
+    &--regular {
+        @extend .container;
+        padding: 0 $sidebar-width;
+    }
+
+    &--mobile {
+        @extend .container;
+        @include padded(all, s);
+    }
+}
+
+.buttons-container {
+    @include flex-aligned(center, center);
+
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.button {
+    @include font-sized(l);
+    @include padded(all, l);
+
+    cursor: pointer;
+    flex: 1;
+
+    &--regular {
+        @include padded(all, l);
+        @include aligned(center);
+        @extend .button;
+
+        height: 100%;
+        position: relative;
+    }
+
+    &__selected {
+        @include bg-rgba-colored($of-white, 0.2);
+    }
+
+    &:hover {
+        @include bg-rgba-colored($of-white, 0.1);
+    }
+}
+
+.submenu {
+    p {
+        @include font-sized(m);
+        @include marged(all, none);
+        @include padded(all, m);
+
+        cursor: pointer;
+        &:hover {
+            @include bg-rgba-colored($of-white, 0.1);
+        }
+    }
+}
+
+.dropdown {
+    @include font-sized(l);
+    @include padded(all, l);
+    @include aligned(center);
+    cursor: pointer;
+    position: relative;
+
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+
+    &__selected {
+        @include bg-rgba-colored($of-white, 0.2);
+    }
+
+    &--hovered {
+        position: absolute;
+        max-height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        transition: max-height 1s;
+    }
+
+    &:hover &--hovered {
+        @extend .submenu;
+        @include bg-rgba-colored($of-black, 0.7);
+
+        visibility: visible;
+        position: absolute;
+        top: 100%;
+        left: -30%;
+        right: -30%;
+        margin: 0 auto;
+        transition: max-height 1s;
+        max-height: 500px;
+    }
+}
+
+.drawer-container {
+    @include font-sized(l);
+    @include font-colored($of-white);
+
+    .button {
+        padding: 10px 0;
+    }
+}
