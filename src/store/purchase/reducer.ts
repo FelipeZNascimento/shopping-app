@@ -1,16 +1,18 @@
 import * as ACTIONTYPES from '../actionTypes';
-import * as objectInterfaces from '../../constants/objectInterfaces';
+import { IPurchaseItem, IShoppingListItem } from '../../constants/objectInterfaces';
 import { dynamicSort } from '../../utils/utils'
 
 interface IAction {
     type: string,
-    purchaseList: objectInterfaces.IPurchaseItem[],
+    purchaseList: IPurchaseItem[],
     itemId: number,
-    response: objectInterfaces.IShoppingListItem
+    response: IShoppingListItem,
+    errorMessage: string
 }
 
 const initialState = {
     error: false,
+    errorMessage: '',
     loading: false,
     purchaseList: []
 };
@@ -31,7 +33,7 @@ export default function purchaseReducer(
         case ACTIONTYPES.REMOVE_ITEM_FROM_PURCHASE:
             return {
                 ...state,
-                purchaseList: state.purchaseList.filter((item: objectInterfaces.IPurchaseItem) => item.id !== action.itemId)
+                purchaseList: state.purchaseList.filter((item: IPurchaseItem) => item.id !== action.itemId)
             };
         case ACTIONTYPES.UPDATE_PURCHASE_ITEM:
             return {
@@ -44,8 +46,22 @@ export default function purchaseReducer(
             }
         case ACTIONTYPES.SAVING_PURCHASE_LIST:
             return {
-                ...initialState,
+                ...state,
                 loading: true
+            }
+        case ACTIONTYPES.SAVING_PURCHASE_LIST_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: false,
+                purchaseList: []
+            }
+        case ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: true,
+                errorMessage: action.errorMessage,
             }
 
         default:

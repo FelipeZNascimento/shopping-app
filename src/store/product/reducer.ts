@@ -20,6 +20,7 @@ interface IAction {
 
 const initialState = {
     error: false,
+    errorMessage: '',
     loading: false,
     products: {
         count: 0,

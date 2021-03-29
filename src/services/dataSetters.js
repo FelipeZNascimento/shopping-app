@@ -9,12 +9,22 @@ import {
 
 import { http } from './utilities';
 
-export const setPurchase = (purchase, date, placeId) => async function (dispatch) {
-    dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST });
+export const setPurchase = (
+    purchase,
+    date,
+    placeId
+) => async function () {
+    let response;
+    console.log(JSON.stringify({
+        purchase,
+        date,
+        placeId,
+    }));
 
-    try {
-        const response = await fetch(`${apiBaseUrl}purchases`, {
-            method: 'POST',
+    const requestObject = new Request(
+        `${apiBaseUrl}purchases`,
+        {
+            method: "post",
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': 'Content-Type',
@@ -24,16 +34,14 @@ export const setPurchase = (purchase, date, placeId) => async function (dispatch
                 date,
                 placeId,
             }),
-        });
+        }
+    );
 
-        const responseJSON = await response.json();
-
-        return dispatch({
-            type: ACTIONTYPES.SAVING_PURCHASE_LIST_SUCCESS,
-            response: responseJSON,
-        });
-    } catch (error) {
-        return dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR, response: error });
+    try {
+        response = await http(requestObject);
+        return response.parsedBody;
+    } catch (response) {
+        console.log("Error", response);
     }
 };
 

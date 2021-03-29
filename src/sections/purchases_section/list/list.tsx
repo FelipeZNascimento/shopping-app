@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 // Actions
 import { fetchPlaces } from 'store/place/actions';
-import { removeFromList, updateList } from 'store/purchase/actions';
-import { setPurchase } from 'services/dataSetters';
+import { savePurchaseList, removeFromList, updateList } from 'store/purchase/actions';
 
 // Selectors
-import { getPurchaseList } from 'store/purchase/selector';
+import { 
+    getPurchaseList,
+    hasError,
+    isLoading
+} from 'store/purchase/selector';
 import { getPlaces } from 'store/place/selector';
-import { isLoading } from 'store/main/selector';
-
-// Interfaces, Constants
-import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
 
 // Components
 import { Fab } from '@material-ui/core';
@@ -26,25 +26,43 @@ import {
 } from 'components/index';
 import PurchaseCard from './components/purchase_card';
 import TotalPurchaseCard from './components/total_purchase_card';
-import styles from './list.module.scss';
 import { IAutocompleteItem } from 'components/autocomplete/types';
+
+// Interfaces, Constants
+import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
+import { routes } from 'constants/routes';
+
+import styles from './list.module.scss';
 
 const PurchaseList = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
     const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
+    const [isPurchaseSaved, setIsPurchaseSaved] = useState<boolean>(false);
 
     const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
     const places: IPlace[] = useSelector(getPlaces);
-    const isFormLoading: boolean = useSelector(isLoading);
+    const formIsLoading: boolean = useSelector(isLoading);
+    const formHasError: boolean = useSelector(hasError);
     const dispatch = useDispatch();
-
+    const history = useHistory();
+  
     useEffect(() => {
         dispatch(fetchPlaces());
     }, []);
 
+    useEffect(() => {
+        if(!formIsLoading && !formHasError && isPurchaseSaved) {
+            setIsPurchaseSaved(false);
+            setPurchaseTotal(0);
+            setSelectedPlaceId(null);
+            history.push(routes.SHOPPING_LIST);
+        }
+    }, [formHasError, formIsLoading]);
+
     const onSavePurchase = () => {
-        dispatch(setPurchase(purchaseList, selectedDate, selectedPlaceId));
+        dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId));
+        setIsPurchaseSaved(true);
     };
 
     const getSum = (total: number, item: IPurchaseItem) => {
@@ -96,7 +114,7 @@ const PurchaseList = () => {
 
     };
 
-    if (isFormLoading) {
+    if (formIsLoading) {
         return <Loading />;
     }
 

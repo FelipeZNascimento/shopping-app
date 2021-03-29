@@ -19,6 +19,7 @@ interface IProps {
 interface ICategoryCount {
     description: string;
     count: number;
+    total: number;
 }
 
 const TotalPurchaseCard = ({
@@ -31,22 +32,24 @@ const TotalPurchaseCard = ({
         if (foundIndex <= -1) {
             allCategories.push({
                 description: item.category_description,
-                count: 1
+                count: 1,
+                total: Math.round(item.price * item.quantity * 100) / 100
             });
         } else {
             allCategories[foundIndex].count++;
+            allCategories[foundIndex].total+= Math.round(item.price * item.quantity * 100) / 100;
         }
         return null;
     });
 
     const renderCategory = (item: ICategoryCount) => {
         return (
-            <div className={styles.cardElementContainer}>
-                <div className={styles.cardElement}>
-                    {item.description}
+            <div className={`${styles.cardElementContainer} ${styles.dottedBorder}`}>
+                <div className={`${styles.cardElement} ${styles.leftAlign}`}>
+                    [{item.count}] {item.description}
                 </div>
-                <div className={styles.cardElement}>
-                    {item.count}
+                <div className={`${styles.cardElement} ${styles.rightAlign}`}>
+                    €{item.total}
                 </div>
             </div>
         )

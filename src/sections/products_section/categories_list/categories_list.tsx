@@ -46,7 +46,7 @@ const ProductsCategories = () => {
         sortable: true
     };
 
-    const color = 'orange';
+    const color = 'green';
 
     const onDeleteCategory = (category: ICategory) => {
         dispatch(deleteProductCategory(category));

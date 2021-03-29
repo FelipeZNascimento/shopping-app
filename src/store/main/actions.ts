@@ -12,11 +12,17 @@ export type TGetAction = {
     readonly errorMessage?: string;
 };
 
+type TToggleNotification = {
+    readonly type: typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly status: boolean;
+};
+
 type GetPlacesAction = TGetAction & {
     readonly type: typeof ACTIONTYPES.FETCHING_PLACES
     | typeof ACTIONTYPES.FETCHING_PLACES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly status?: boolean;
 };
 
 type GetBrandsAction = TGetAction & {
@@ -147,10 +153,11 @@ export const getBrands = (
 
     response()
         .then((list) => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.FETCHING_BRANDS_SUCCESS,
                 response: list
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
         .catch((error) => {
             dispatch({
@@ -159,4 +166,10 @@ export const getBrands = (
             });
             return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
+};
+
+export const toggleNotification = (
+    status = false
+) => async (dispatch: Dispatch<TToggleNotification>) => {
+    dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, status } as const);
 };
