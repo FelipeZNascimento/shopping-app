@@ -23,7 +23,7 @@
 
 .totalCard {
     @extend .card;
-    @include bg-colored($of-grey3);
+    @include bg-rgba-colored($of-cyan, 0.5);
     overflow-y: auto !important;
     max-height: 347px;
 }
@@ -32,6 +32,20 @@
     display: flex;
     margin-bottom: 10px;
 }
+
+.leftAlign {
+    @include aligned(left);
+    flex: 2 !important;
+}
+
+.rightAlign {
+    @include aligned(right);
+}
+
+.dottedBorder {
+    border-bottom: 1px dotted black;
+}
+
 .cardElement {
     flex: 1;
 }
@@ -66,6 +80,8 @@
     @include bg-rgba-colored($of-black, 0.2);
     @include font-colored($of-grey2);
     @include flex-aligned(center, center);
+
+    font-weight: bold;
 }
 
 .redBorder {

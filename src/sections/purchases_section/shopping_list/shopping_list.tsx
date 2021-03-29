@@ -142,7 +142,7 @@ const ShoppingList = () => {
             {!isListLoading && <Table
                 bodyColumns={list}
                 checkedProducts={checkedProducts}
-                color="green"
+                color="cyan"
                 headerColumns={headers}
                 sortState={currentSortState}
                 onCheckboxAction={onCheckboxClick}

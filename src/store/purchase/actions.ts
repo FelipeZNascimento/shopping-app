@@ -1,11 +1,13 @@
+import { Dispatch } from 'react';
 import * as ACTIONTYPES from 'store/actionTypes';
 
+import { setPurchase } from 'services/dataSetters';
+import { TSavePurchaseList } from './types';
 import {
     IProduct,
     IPurchaseItem
-} from '../../constants/objectInterfaces';
+} from 'constants/objectInterfaces';
 import { productUnits } from 'constants/products';
-
 
 export function convertToPurchase(productsList: IProduct[], purchaseListLength: number) {
     const purchaseList: IPurchaseItem[] = productsList.map((product, index) => ({
@@ -57,3 +59,27 @@ export function saveList() {
         type: ACTIONTYPES.SAVING_PURCHASE_LIST
     }
 }
+
+export const savePurchaseList = (
+    newPurchase: IPurchaseItem[],
+    date: string,
+    placeId: number | null
+) => async (dispatch: Dispatch<TSavePurchaseList>) => {
+    const response = await setPurchase(newPurchase, date, placeId);
+    dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST } as const);
+
+    response()
+        .then(() => {
+            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, status: true });
+            return dispatch({
+                type: ACTIONTYPES.SAVING_PURCHASE_LIST_SUCCESS
+            });
+        })
+        .catch((error) => {
+            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, status: true });
+            return dispatch({
+                type: ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR,
+                errorMessage: error
+            });
+        })
+};

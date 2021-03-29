@@ -49,7 +49,7 @@ const PlacesCategories = () => {
         sortable: true
     };
 
-    const color = 'orange';
+    const color = 'yellow';
 
     const onDeleteCategory = (category: ICategory) => {
         dispatch(deletePlaceCategory(category));
