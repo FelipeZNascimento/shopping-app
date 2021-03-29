@@ -1,20 +1,24 @@
 import * as ACTIONTYPES from '../actionTypes';
-import * as objectInterfaces from '../../constants/objectInterfaces';
+import { IShoppingListItem, IProduct } from 'constants/objectInterfaces';
 
 interface IAction {
     errorMessage: string,
     type: string,
-    toBeDeleted: objectInterfaces.IProduct,
-    newProduct: objectInterfaces.IProduct,
+    toBeDeleted: IProduct,
+    newProduct: IProduct,
     productId: number,
-    response: objectInterfaces.IShoppingListItem
+    products: IShoppingListItem
 }
 
 const initialState = {
     error: false,
     errorMessage: '',
     loading: false,
-    shoppingList: []
+    shoppingList: {
+        count: 0,
+        totalCount: 0,
+        data: []
+    }
 };
 
 export default function shoppingListReducer(
@@ -44,19 +48,28 @@ export default function shoppingListReducer(
                 ...state,
                 loading: false,
                 error: false,
-                shoppingList: action.response
+                shoppingList: action.products
             };
         case ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: false,
-                shoppingList: [action.newProduct, ...state.shoppingList]
+                shoppingList: {
+                    ...state.shoppingList,
+                    data: [action.newProduct, ...state.shoppingList.data],
+                    count: state.shoppingList.count + 1,
+                    totalCount: state.shoppingList.totalCount + 1 
+                }
             };
         case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS:
             return {
                 ...state,
-                shoppingList: state.shoppingList.filter((item: objectInterfaces.IShoppingListItem) => item.id !== action.toBeDeleted.id)
+                shoppingList: {
+                    data: state.shoppingList.data.filter((product: IProduct) => product.id !== action.toBeDeleted.id),
+                    count: state.shoppingList.count - 1,
+                    totalCount: state.shoppingList.totalCount - 1
+                }
             };
         case ACTIONTYPES.CLEAR_SHOPPING_LIST:
             return {

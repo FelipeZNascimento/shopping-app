@@ -1,4 +1,5 @@
-@import "../../../style/colors.scss";
+@import "style/colors.scss";
+@import "style/alignments.scss";
 @value card from './components/purchase_card.module.scss';
 
 .purchaseFormHeader {
@@ -12,6 +13,7 @@
 }
 
 .purchaseCardContainer {
+    @include flex-aligned(center, top);
     display: flex;
     width: 100%;
 
