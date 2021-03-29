@@ -15,9 +15,8 @@ import { Remove as RemoveIcon } from '@material-ui/icons';
 
 import { Autocomplete } from 'components/index';
 
-import { returnItems } from 'store/main/selector';
-import { getBrands } from 'store/main/actions';
-import { objectTypes } from 'constants/general';
+import { getBrands } from 'store/brand/selector';
+import { fetchBrands } from 'store/brand/actions';
 import styles from './purchase_card.module.scss';
 
 import {
@@ -42,11 +41,11 @@ const PurchaseCard = ({
     const [currentUnit, setCurrentUnit] = useState(productUnits[0]);
     const dispatch = useDispatch();
 
-    const brands: IBrand[] = useSelector((state) => returnItems(state, objectTypes.brands));
+    const brands: IBrand[] = useSelector(getBrands);
 
     useEffect(() => {
         if (brands.length === 0) {
-            dispatch(getBrands())
+            dispatch(fetchBrands())
         }
     }, []);
 

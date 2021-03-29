@@ -9,22 +9,25 @@ interface IProps {
     freeSolo?: boolean;
     selected?: IAutocompleteItem | null;
     options: IAutocompleteItem[];
-    onChange: (item: IAutocompleteItem) => void;
+    onChange: (selectedOption: IAutocompleteItem | string) => void;
     title?: string;
 }
 
 const Autocomplete = ({
     disabled = false,
     freeSolo = false,
-    options,
+    options = [],
     selected = null,
     title = 'Selecione uma opção',
     onChange
 }: IProps) => {
-    const handleChange = (evt: any, object: any) => {
-        console.log(evt);
-        console.log(object);
-        onChange(object);
+    const handleChange = (evt: any, selectedOption: string | null) => {
+        if (selectedOption === null) {
+            onChange('');
+        } else {
+            const selectedObject = options.find((option) => option.description === selectedOption);
+            onChange(selectedObject || selectedOption);
+        }
     };
 
     return (
@@ -41,6 +44,7 @@ const Autocomplete = ({
                 />
             )}
             style={{ flex: 1 }}
+            value={selected?.description}
             onChange={handleChange}
         />
     );

@@ -16,7 +16,7 @@ type fetchShoppingListAction = {
     | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS
     | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly response?: IProduct[];
+    readonly products?: IProduct[];
     readonly errorMessage?: string;
 };
 
@@ -86,7 +86,7 @@ export const fetchShoppingList = (
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS,
-                response: list
+                products: list
             });
         })
         .catch((error) => {

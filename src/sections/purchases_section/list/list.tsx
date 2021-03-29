@@ -4,17 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 // Actions
-import { getPlaces } from 'store/main/actions';
+import { fetchPlaces } from 'store/place/actions';
 import { removeFromList, updateList } from 'store/purchase/actions';
 import { setPurchase } from 'services/dataSetters';
 
 // Selectors
 import { getPurchaseList } from 'store/purchase/selector';
-import { isLoading, returnItems } from 'store/main/selector';
+import { getPlaces } from 'store/place/selector';
+import { isLoading } from 'store/main/selector';
 
 // Interfaces, Constants
 import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
-import { objectTypes } from 'constants/general';
 
 // Components
 import { Fab } from '@material-ui/core';
@@ -27,6 +27,7 @@ import {
 import PurchaseCard from './components/purchase_card';
 import TotalPurchaseCard from './components/total_purchase_card';
 import styles from './list.module.scss';
+import { IAutocompleteItem } from 'components/autocomplete/types';
 
 const PurchaseList = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
@@ -34,12 +35,12 @@ const PurchaseList = () => {
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
 
     const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
-    const places: IPlace[] = useSelector((state) => returnItems(state, objectTypes.places));
+    const places: IPlace[] = useSelector(getPlaces);
     const isFormLoading: boolean = useSelector(isLoading);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getPlaces());
+        dispatch(fetchPlaces());
     }, []);
 
     const onSavePurchase = () => {
@@ -85,6 +86,16 @@ const PurchaseList = () => {
         dispatch(updateList(updatedPurchaseList));
     };
 
+    const onPlaceChange = (placeInput: IAutocompleteItem | string) => {
+        console.log(placeInput);
+        if (typeof placeInput === 'string') {
+            setSelectedPlaceId(null);
+        } else {
+            setSelectedPlaceId(placeInput.id);
+        }
+
+    };
+
     if (isFormLoading) {
         return <Loading />;
     }
@@ -105,9 +116,10 @@ const PurchaseList = () => {
             </Fab>
             <div className={`${styles.purchaseFormHeader} bottom-padding-l`}>
                 <Autocomplete
+                    freeSolo={false}
                     options={places}
                     title="Onde?"
-                    onChange={(place) => setSelectedPlaceId(place.id)}
+                    onChange={onPlaceChange}
                 />
                 <Datepicker onChange={setSelectedDate} />
             </div>

@@ -1,8 +1,8 @@
-import * as objectInterfaces from '../../constants/objectInterfaces';
+import { TProductsObject } from 'store/product/types';
 
 interface IState {
     isLoading: boolean,
-    shoppingList: objectInterfaces.IProduct[]
+    shoppingList: TProductsObject
 }
 
 export function isLoading(state: { shoppingListReducer: IState }) {
@@ -10,5 +10,5 @@ export function isLoading(state: { shoppingListReducer: IState }) {
 }
 
 export function shoppingList(state: { shoppingListReducer: IState }) {
-    return state.shoppingListReducer.shoppingList;
+    return state.shoppingListReducer.shoppingList.data;
 }

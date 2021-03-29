@@ -36,7 +36,7 @@ const defaultSortState = {
 
 const ShoppingList = () => {
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
     const [searchField, setSearchField] = useState<string>('');
 
@@ -60,7 +60,7 @@ const ShoppingList = () => {
     ];
 
     useEffect(() => {
-        dispatch(fetchShoppingList(currentPage));
+        dispatch(fetchShoppingList(currentPage - 1));
     }, []);
 
     if (shoppingList.length === 0) {
@@ -72,10 +72,6 @@ const ShoppingList = () => {
         dispatch(deleteFromShoppingList(product));
     };
 
-    // const onSortChange = (column: string, direction: string) => {
-    //     console.log('Sorting by: ' + column + direction);
-    //     dispatch(fetchShoppingList(currentPage, column, direction));
-    // };
     const onSortChange = (orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
@@ -97,13 +93,17 @@ const ShoppingList = () => {
         dispatch(fetchShoppingList(newPage - 1, currentSortState, searchField));
     };
 
-    const onSearch = (item: IAutocompleteItem | string | null) => {
-        let newSearchInput = '';
-        if (item !== null) {
-            newSearchInput = typeof (item) === 'string' ? item : item.description;
+    const onSearch = (item: IAutocompleteItem | string) => {
+        let newSearchInput;
+
+        if (typeof item === 'string') {
+            newSearchInput = item;
+        } else {
+            newSearchInput = item.description;
         }
 
         setSearchField(newSearchInput);
+
         if (newSearchInput.length >= 2 || newSearchInput.length === 0) {
             dispatch(fetchShoppingList(0, currentSortState, newSearchInput));
         }
