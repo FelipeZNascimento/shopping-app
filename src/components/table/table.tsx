@@ -17,6 +17,8 @@ import {
     ISortingState
 } from 'constants/objectInterfaces';
 
+import styles from './table.module.scss';
+
 type IHeaderColumn = {
     key: string;
     value: string;
@@ -28,6 +30,7 @@ interface IProps {
     checkedProducts?: IProduct[];
     color?: string;
     headerColumns: IHeaderColumn[];
+    isLoading?: boolean;
     sortState?: ISortingState;
     onCheckboxAction?: null | ((item: any) => void);
     onMainAction?: null | ((item: any) => void);
@@ -42,10 +45,11 @@ const defaultSortingState = {
 
 const Table = ({
     bodyColumns = [],
+    checkedProducts = [],
     color = 'green',
     headerColumns,
+    isLoading = false,
     sortState = defaultSortingState,
-    checkedProducts = [],
     onCheckboxAction = null,
     onMainAction = null,
     onSecondaryAction = null,
@@ -152,6 +156,13 @@ const Table = ({
     };
 
     const renderBody = () => {
+        if (bodyColumns.length === 0 && !isLoading) {
+            return (
+                <tr>
+                    <td className={styles.notFound} colSpan={20}><p>Nenhum resultado encontrado</p></td>
+                </tr>
+            );
+        }
         return bodyColumns
             .map((item) => {
                 return (
@@ -193,8 +204,8 @@ const Table = ({
     };
 
     return (
-        <table className="table">
-            <thead className={`of-${color}-bg`}>
+        <table className={styles.table}>
+            <thead className={styles[`${color}-bg`]}>
                 <tr>
                     {renderHeader()}
                 </tr>

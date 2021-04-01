@@ -10,12 +10,9 @@ import {
     savePlace
 } from 'store/place/actions';
 
-// import { setItem } from 'services/dataSetters';
-// import deleteItem from 'services/dataDeleters';
-
 // Selectors
 import {
-    isLoading,
+    getIsLoading,
     getPlaces,
     getPlaceNames,
     getPlaceCategoryNames,
@@ -60,7 +57,7 @@ const PlacesList = () => {
     const places: IPlace[] = useSelector(getPlaces);
     const totalCount = useSelector(getPlacesCount);
 
-    const isPlacesLoading: boolean = useSelector(isLoading);
+    const isPlacesLoading: boolean = useSelector(getIsLoading);
 
     useEffect(() => {
         dispatch(fetchPlaces(currentPage - 1));
@@ -153,6 +150,7 @@ const PlacesList = () => {
                 bodyColumns={places}
                 color="yellow"
                 headerColumns={headers}
+                isLoading={isPlacesLoading}
                 sortState={currentSortState}
                 onSecondaryAction={(product: IPlace) => setToBeDeleted(product)}
                 onSortChange={(column: string, direction: string) => onSortChange(column, direction)}

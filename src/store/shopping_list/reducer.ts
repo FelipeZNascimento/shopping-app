@@ -1,5 +1,6 @@
 import * as ACTIONTYPES from '../actionTypes';
 import { IShoppingListItem, IProduct } from 'constants/objectInterfaces';
+import { TState } from './types';
 
 interface IAction {
     errorMessage: string,
@@ -10,7 +11,7 @@ interface IAction {
     products: IShoppingListItem
 }
 
-const initialState = {
+const initialState: TState = {
     error: false,
     errorMessage: '',
     loading: false,

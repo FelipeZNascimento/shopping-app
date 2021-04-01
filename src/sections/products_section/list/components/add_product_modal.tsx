@@ -18,8 +18,6 @@ import {
     ICategory
 } from 'constants/objectInterfaces';
 
-// import { objectTypes } from 'constants/general';
-
 interface IProps {
     isOpen: boolean;
     onClose: () => void;

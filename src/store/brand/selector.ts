@@ -1,27 +1,21 @@
-// import * as objectInterfaces from '../../constants/objectInterfaces';
-import { TBrandsObject } from './types';
-import { ICategory, IItemName } from 'constants/objectInterfaces';
+import { TState } from './types';
 
-interface IState {
-    isLoading: boolean,
-    categories: ICategory[],
-    brandNames: IItemName[],
-    brands: TBrandsObject,
-    type: string
+export function getIsLoading(state: { brandReducer: TState }) {
+    return state.brandReducer.loading;
 }
 
-export function getIsLoading(state: { brandReducer: IState }) {
-    return state.brandReducer.isLoading;
+export function getIsLoadingNames(state: { brandReducer: TState }) {
+    return state.brandReducer.loadingNames;
 }
 
-export function getBrands(state: { brandReducer: IState }) {
+export function getBrands(state: { brandReducer: TState }) {
     return state.brandReducer.brands.data;
 }
 
-export function getBrandsCount(state: { brandReducer: IState }) {
+export function getBrandsCount(state: { brandReducer: TState }) {
     return state.brandReducer.brands.totalCount;
 }
 
-export function getBrandNames(state: { brandReducer: IState }) {
+export function getBrandNames(state: { brandReducer: TState }) {
     return state.brandReducer.brandNames;
 }

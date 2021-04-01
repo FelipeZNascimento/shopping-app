@@ -1,6 +1,8 @@
 import * as ACTIONTYPES from '../actionTypes';
-import { IPurchaseItem, IShoppingListItem } from '../../constants/objectInterfaces';
-import { dynamicSort } from '../../utils/utils'
+import { IPurchaseItem, IShoppingListItem } from 'constants/objectInterfaces';
+import { TState } from './types';
+
+import { dynamicSort } from 'utils/utils'
 
 interface IAction {
     type: string,
@@ -10,7 +12,7 @@ interface IAction {
     errorMessage: string
 }
 
-const initialState = {
+const initialState: TState = {
     error: false,
     errorMessage: '',
     loading: false,

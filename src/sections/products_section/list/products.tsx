@@ -20,7 +20,7 @@ import {
     getProductCategoryNames,
     getProducts,
     getProductsCount,
-    isLoading
+    getIsLoading
 } from 'store/product/selector';
 import { shoppingList as listShopping } from 'store/shopping_list/selector';
 import { getPurchaseListLength } from 'store/purchase/selector';
@@ -63,7 +63,7 @@ const ProductsList = () => {
     const products: IProduct[] = useSelector(getProducts);
     const totalCount = useSelector(getProductsCount);
     const shoppingList: IProduct[] = useSelector(listShopping);
-    const isProductsLoading: boolean = useSelector(isLoading);
+    const isProductsLoading: boolean = useSelector(getIsLoading);
     const purchaseListLength: number = useSelector(getPurchaseListLength);
 
     useEffect(() => {
@@ -190,17 +190,18 @@ const ProductsList = () => {
                     onChange={(event, newPage) => onPageChange(newPage)}
                 />
             </div>
-            {!isProductsLoading && <Table
-                bodyColumns={products}
+            <Table
+                bodyColumns={isProductsLoading ? [] : products}
                 checkedProducts={checkedProducts}
                 color="green"
                 headerColumns={headers}
+                isLoading={isProductsLoading}
                 sortState={currentSortState}
                 onCheckboxAction={onCheckboxClick}
                 onMainAction={onAddToShoppingList}
                 onSecondaryAction={setToBeDeleted}
                 onSortChange={onSortChange}
-            />}
+            />
             {isProductsLoading && <Loading />}
             <AddProductModal
                 isOpen={isAddProductOpen}

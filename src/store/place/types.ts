@@ -6,6 +6,18 @@ type TAction = {
     readonly errorMessage?: string;
 };
 
+export type TState = {
+    error: boolean,
+    loading: boolean,
+    loadingCategories: boolean,
+    loadingCategoryNames: boolean,
+    loadingNames: boolean,
+    placeNames: IItemName[],
+    placeCategoryNames: IItemName[],
+    places: TPlacesObject,
+    placeCategories: TCategoriesObject
+}
+
 export type TFetchPlaceNames = TAction & {
     readonly names?: IItemName[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACE_NAMES
