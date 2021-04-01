@@ -9,7 +9,11 @@ import {
 } from 'store/product/actions';
 
 // Selectors
-import { getProductCategories, getProductCategoriesCount } from 'store/product/selector';
+import { 
+    getProductCategories,
+    getProductCategoriesCount,
+    getIsLoadingCategories
+} from 'store/product/selector';
 
 // Components
 import CategoriesSection from 'sections/categories/categories';
@@ -33,6 +37,7 @@ const ProductsCategories = () => {
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
     const categories: ICategory[] = useSelector(getProductCategories);
+    const isCategoriesLoading: boolean = useSelector(getIsLoadingCategories);
     const totalCount: number = useSelector(getProductCategoriesCount);
     const dispatch = useDispatch();
 
@@ -106,6 +111,7 @@ const ProductsCategories = () => {
                 bodyColumns={categories}
                 color={color}
                 headerColumns={headers}
+                isLoading={isCategoriesLoading}
                 sortState={currentSortState}
                 onAddNewCategory={onAddNewCategory}
                 onDeleteCategory={onDeleteCategory}

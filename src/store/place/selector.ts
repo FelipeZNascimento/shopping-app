@@ -1,40 +1,32 @@
-// import * as objectInterfaces from '../../constants/objectInterfaces';
-import { TCategoriesObject, TPlacesObject } from './types';
-import { ICategory, IItemName } from 'constants/objectInterfaces';
+import { TState } from './types';
 
-interface IState {
-    isLoading: boolean,
-    categories: ICategory[],
-    placeNames: IItemName[],
-    placeCategoryNames: IItemName[],
-    places: TPlacesObject,
-    placeCategories: TCategoriesObject
-    type: string
+export function getIsLoading(state: { placeReducer: TState }) {
+    return state.placeReducer.loading;
 }
 
-export function isLoading(state: { placeReducer: IState }) {
-    return state.placeReducer.isLoading;
+export function getIsLoadingCategories(state: { placeReducer: TState }) {
+    return state.placeReducer.loadingCategories;
 }
 
-export function getPlaces(state: { placeReducer: IState }) {
+export function getPlaces(state: { placeReducer: TState }) {
     return state.placeReducer.places.data;
 }
 
-export function getPlacesCount(state: { placeReducer: IState }) {
+export function getPlacesCount(state: { placeReducer: TState }) {
     return state.placeReducer.places.totalCount;
 }
 
-export function getPlaceCategories(state: { placeReducer: IState }) {
+export function getPlaceCategories(state: { placeReducer: TState }) {
     return state.placeReducer.placeCategories.data;
 }
-export function getPlaceCategoriesCount(state: { placeReducer: IState }) {
+export function getPlaceCategoriesCount(state: { placeReducer: TState }) {
     return state.placeReducer.placeCategories.totalCount;
 }
 
-export function getPlaceNames(state: { placeReducer: IState }) {
+export function getPlaceNames(state: { placeReducer: TState }) {
     return state.placeReducer.placeNames;
 }
 
-export function getPlaceCategoryNames(state: { placeReducer: IState }) {
+export function getPlaceCategoryNames(state: { placeReducer: TState }) {
     return state.placeReducer.placeCategoryNames;
 }

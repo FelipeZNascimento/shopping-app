@@ -1,0 +1,42 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/globals.scss";
+@import "style/paddings.scss";
+
+.loading {
+    @include flex-aligned(center, center);
+    @include padded(all, l);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.fullscrenLoading {
+    @include flex-aligned(center, center);
+    @include bg-rgba-colored($of-black, 0.4);
+
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: $z-index-top-max;
+}
+
+.spinner {
+    @include bg-rgba-colored($of-grey2, 0.5);
+    @include padded(all, l);
+
+    border: 4px solid $of-green;
+    border-radius: 100px;
+    height: 200px;
+    width: auto;
+}
+
+.text {
+    @include font-colored($of-white);
+
+    font-variant: small-caps;
+}

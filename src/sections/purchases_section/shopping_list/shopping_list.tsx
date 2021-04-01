@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 // Selectors
-import { shoppingList, isLoading } from 'store/shopping_list/selector';
+import { shoppingList, getIsLoading } from 'store/shopping_list/selector';
 import { getPurchaseListLength } from 'store/purchase/selector';
 
 // Actions
@@ -41,7 +41,7 @@ const ShoppingList = () => {
     const [searchField, setSearchField] = useState<string>('');
 
     const list: IShoppingListItem[] = useSelector(shoppingList);
-    const isListLoading: boolean = useSelector(isLoading);
+    const isListLoading: boolean = useSelector(getIsLoading);
     const purchaseListLength: number = useSelector(getPurchaseListLength);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -138,17 +138,18 @@ const ShoppingList = () => {
                     onChange={(event, newPage) => onPageChange(newPage)}
                 />
             </div>
-            {isListLoading && <Loading />}
-            {!isListLoading && <Table
-                bodyColumns={list}
+            <Table
+                bodyColumns={isListLoading ? [] : list}
                 checkedProducts={checkedProducts}
                 color="cyan"
                 headerColumns={headers}
+                isLoading={isListLoading}
                 sortState={currentSortState}
                 onCheckboxAction={onCheckboxClick}
                 onSecondaryAction={(product: IShoppingListItem) => deleteProduct(product)}
                 onSortChange={onSortChange}
-            />}
+            />
+            {isListLoading && <Loading />}
             <div className="top-padding-l">
                 <Pagination
                     color="primary"

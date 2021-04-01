@@ -1,10 +1,23 @@
 import * as ACTIONTYPES from 'store/actionTypes';
-import { ICategory, IProduct } from 'constants/objectInterfaces';
+import { ICategory, IItemName, IProduct } from 'constants/objectInterfaces';
 
 type TAction = {
     readonly response?: IProduct[] | ICategory[];
     readonly errorMessage?: string;
 };
+
+export type TState = {
+    error: boolean,
+    errorMessage: string,
+    loading: boolean,
+    loadingCategories: boolean,
+    loadingCategoryNames: boolean,
+    loadingNames: boolean,
+    productNames: IItemName[],
+    productCategoryNames: IItemName[],
+    products: TProductsObject,
+    productCategories: TCategoriesObject
+}
 
 export type TFetchProductNames = TAction & {
     readonly names?: string[];

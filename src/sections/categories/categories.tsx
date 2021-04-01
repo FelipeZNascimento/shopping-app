@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-
-// Selectors
-import { isLoading } from 'store/main/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
@@ -21,6 +17,7 @@ type TProps = {
         value: string;
         sortable: boolean;
     };
+    isLoading?: boolean;
     sortState: ISortingState;
     onAddNewCategory: (categoryName: string) => void;
     onDeleteCategory: (category: ICategory) => void;
@@ -36,6 +33,7 @@ const CategoriesSection = ({
     bodyColumns,
     color,
     headerColumns,
+    isLoading = false,
     sortState = defaultSortState,
     onAddNewCategory,
     onDeleteCategory,
@@ -43,8 +41,6 @@ const CategoriesSection = ({
 }: TProps) => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<ICategory | null>(null);
-
-    const isCategoriesLoading = useSelector(isLoading);
 
     const deleteCategory = () => {
         if (toBeDeleted) {
@@ -71,14 +67,15 @@ const CategoriesSection = ({
                 Nova categoria
             </Fab>
             <Table
-                bodyColumns={bodyColumns}
+                bodyColumns={isLoading ? [] : bodyColumns}
                 color={color}
                 headerColumns={[headerColumns]}
+                isLoading={isLoading}
                 sortState={sortState}
                 onSecondaryAction={setToBeDeleted}
                 onSortChange={onSortChange}
             />
-            {isCategoriesLoading && <Loading />}
+            {isLoading && <Loading />}
             <AddCategoryModal
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}

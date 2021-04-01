@@ -132,9 +132,10 @@ const BrandsSection = () => {
                 />
             </div>
             <Table
-                bodyColumns={brands}
+                bodyColumns={isLoading ? [] : brands}
                 color="pink"
                 headerColumns={headers}
+                isLoading={isLoading}
                 onSecondaryAction={(brand: IBrand) => setToBeDeleted(brand)}
                 onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
             />

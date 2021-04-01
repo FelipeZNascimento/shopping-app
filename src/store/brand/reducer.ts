@@ -1,6 +1,6 @@
 import * as ACTIONTYPES from '../actionTypes';
 
-import { TBrandsObject } from './types';
+import { TBrandsObject, TState } from './types';
 import { IBrand } from 'constants/objectInterfaces';
 
 interface IAction {
@@ -13,15 +13,16 @@ interface IAction {
     type: string
 }
 
-const initialState = {
+const initialState: TState = {
     error: false,
     loading: false,
+    loadingNames: false,
     brands: {
         count: 0,
         totalCount: 0,
         data: []
     },
-    brandNames: [],
+    brandNames: []
 };
 
 export default function brandReducer(
@@ -30,10 +31,15 @@ export default function brandReducer(
 ) {
     switch (action.type) {
         case ACTIONTYPES.FETCHING_BRANDS:
-        case ACTIONTYPES.FETCHING_BRAND_NAMES:
             return {
                 ...state,
                 loading: true,
+                error: false
+            };
+        case ACTIONTYPES.FETCHING_BRAND_NAMES:
+            return {
+                ...state,
+                loadingNames: true,
                 error: false
             };
         case ACTIONTYPES.FETCHING_BRANDS_SUCCESS:
@@ -47,8 +53,15 @@ export default function brandReducer(
             return {
                 ...state,
                 error: false,
-                loading: false,
+                loadingNames: false,
                 brandNames: action.names
+            };
+        case ACTIONTYPES.FETCHING_BRAND_NAMES_ERROR:
+            return {
+                ...state,
+                loadingNames: false,
+                error: true,
+                errorMessage: action.errorMessage,
             };
         case ACTIONTYPES.FETCHING_BRANDS_ERROR:
             return {

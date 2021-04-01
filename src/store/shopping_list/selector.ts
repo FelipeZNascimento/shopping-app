@@ -1,14 +1,9 @@
-import { TProductsObject } from 'store/product/types';
+import { TState } from './types';
 
-interface IState {
-    isLoading: boolean,
-    shoppingList: TProductsObject
+export function getIsLoading(state: { shoppingListReducer: TState }) {
+    return state.shoppingListReducer.loading;
 }
 
-export function isLoading(state: { shoppingListReducer: IState }) {
-    return state.shoppingListReducer.isLoading;
-}
-
-export function shoppingList(state: { shoppingListReducer: IState }) {
+export function shoppingList(state: { shoppingListReducer: TState }) {
     return state.shoppingListReducer.shoppingList.data;
 }
