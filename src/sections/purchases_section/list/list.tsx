@@ -118,7 +118,8 @@ const PurchaseList = () => {
         return <Loading />;
     }
 
-    const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0;
+    const hasInvalidItem = purchaseList.find((item) => item.total_price <= 0) !== undefined;
+    const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
     return (
         <>
             <Fab

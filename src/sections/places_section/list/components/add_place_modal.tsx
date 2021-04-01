@@ -17,6 +17,7 @@ import {
 import {
     place as placeModel
 } from 'constants/objectModels';
+import { IAutocompleteItem } from 'components/autocomplete/types';
 
 interface IProps {
     isOpen: boolean;
@@ -54,25 +55,15 @@ const AddPlaceModal = ({
     };
 
     const onCategoryChange = (
-        description: any = null
+        category: IAutocompleteItem | string
     ) => {
-        let category_id = null;
-        let category_description = '';
-
-        if (description) {
-            const categoryObject = categories.find((category) => category.description === description);
-
-            if (categoryObject !== undefined && categoryObject.id) {
-                category_id = categoryObject.id;
-                category_description = categoryObject.description;
-            }
+        if (typeof category !== 'string') {
+            setSelectedItem({
+                ...selectedItem,
+                category_id: category.id,
+                category_description: category.description
+            })
         }
-
-        setSelectedItem({
-            ...selectedItem,
-            category_id,
-            category_description
-        });
     };
 
     const renderAddDialogForm = () => (
