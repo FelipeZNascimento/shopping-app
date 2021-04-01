@@ -17,6 +17,12 @@ const Menu = () => {
     const menuItems: TMenuItem[] = [
         {
             id: 0,
+            display: 'Home',
+            hasDropdown: false,
+            route: routes.HOME
+        },
+        {
+            id: 1,
             display: 'Compras',
             hasDropdown: true,
             route: routes.PURCHASES_SECTION,
@@ -32,7 +38,7 @@ const Menu = () => {
             ]
         },
         {
-            id: 1,
+            id: 2,
             display: 'Lugares',
             hasDropdown: true,
             route: routes.PLACES_SECTION,
@@ -48,7 +54,7 @@ const Menu = () => {
             ]
         },
         {
-            id: 2,
+            id: 3,
             display: 'Produtos',
             hasDropdown: true,
             route: routes.PRODUCTS_SECTION,
@@ -65,7 +71,7 @@ const Menu = () => {
 
         },
         {
-            id: 3,
+            id: 4,
             display: 'Marcas',
             hasDropdown: false,
             route: routes.BRANDS
@@ -75,7 +81,7 @@ const Menu = () => {
     const renderMobileButton = (item: TMenuItem) => {
         const buttonClass = classNames(
             [styles.button], {
-            [styles['button__selected']]: pathname.includes(item.route)
+            [styles['button__selected']]: pathname === item.route
         });
 
         if (!item.hasDropdown) {
@@ -101,7 +107,7 @@ const Menu = () => {
     const renderButton = (item: TMenuItem) => {
         const buttonClass = classNames(
             [styles['button--regular']], {
-            [styles['button__selected']]: pathname.includes(item.route)
+            [styles['button__selected']]: pathname === item.route
         });
 
         if (!item.hasDropdown) {
