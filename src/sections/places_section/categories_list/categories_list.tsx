@@ -10,6 +10,7 @@ import {
 
 // Selectors
 import {
+    getIsLoadingCategories,
     getPlaceCategories,
     getPlaceCategoriesCount
 } from 'store/place/selector';
@@ -36,6 +37,7 @@ const PlacesCategories = () => {
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
     const categories: ICategory[] = useSelector(getPlaceCategories);
+    const isCategoriesLoading: boolean = useSelector(getIsLoadingCategories);
     const totalCount: number = useSelector(getPlaceCategoriesCount);
     const dispatch = useDispatch();
 
@@ -110,6 +112,7 @@ const PlacesCategories = () => {
                 bodyColumns={categories}
                 color={color}
                 headerColumns={headers}
+                isLoading={isCategoriesLoading}
                 sortState={currentSortState}
                 onAddNewCategory={onAddNewCategory}
                 onDeleteCategory={onDeleteCategory}

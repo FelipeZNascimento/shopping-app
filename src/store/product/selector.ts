@@ -1,40 +1,32 @@
-// import * as objectInterfaces from '../../constants/objectInterfaces';
-import { TCategoriesObject, TProductsObject } from './types';
-import { ICategory, IItemName } from 'constants/objectInterfaces';
+import { TState } from './types';
 
-interface IState {
-    isLoading: boolean,
-    categories: ICategory[],
-    productNames: IItemName[],
-    productCategoryNames: IItemName[],
-    products: TProductsObject,
-    productCategories: TCategoriesObject
-    type: string
+export function getIsLoading(state: { productReducer: TState }) {
+    return state.productReducer.loading;
 }
 
-export function isLoading(state: { productReducer: IState }) {
-    return state.productReducer.isLoading;
+export function getIsLoadingCategories(state: { productReducer: TState }) {
+    return state.productReducer.loadingCategories;
 }
 
-export function getProducts(state: { productReducer: IState }) {
+export function getProducts(state: { productReducer: TState }) {
     return state.productReducer.products.data;
 }
 
-export function getProductsCount(state: { productReducer: IState }) {
+export function getProductsCount(state: { productReducer: TState }) {
     return state.productReducer.products.totalCount;
 }
 
-export function getProductCategories(state: { productReducer: IState }) {
+export function getProductCategories(state: { productReducer: TState }) {
     return state.productReducer.productCategories.data;
 }
-export function getProductCategoriesCount(state: { productReducer: IState }) {
+export function getProductCategoriesCount(state: { productReducer: TState }) {
     return state.productReducer.productCategories.totalCount;
 }
 
-export function getProductNames(state: { productReducer: IState }) {
+export function getProductNames(state: { productReducer: TState }) {
     return state.productReducer.productNames;
 }
 
-export function getProductCategoryNames(state: { productReducer: IState }) {
+export function getProductCategoryNames(state: { productReducer: TState }) {
     return state.productReducer.productCategoryNames;
 }

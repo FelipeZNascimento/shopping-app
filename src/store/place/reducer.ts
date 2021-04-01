@@ -1,9 +1,11 @@
 import * as ACTIONTYPES from '../actionTypes';
-// import * as objectInterfaces from 'constants/objectInterfaces';
 
-import { TPlacesObject, TCategoriesObject } from './types';
+import {
+    TCategoriesObject,
+    TPlacesObject,
+    TState
+} from './types';
 import { ICategory, IPlace } from 'constants/objectInterfaces';
-// import { dynamicSort } from 'utils/utils'
 
 interface IAction {
     categories: ICategory[],
@@ -18,9 +20,12 @@ interface IAction {
     type: string
 }
 
-const initialState = {
+const initialState: TState = {
     error: false,
     loading: false,
+    loadingCategories: false,
+    loadingCategoryNames: false,
+    loadingNames: false,
     places: {
         count: 0,
         totalCount: 0,
@@ -41,13 +46,30 @@ export default function placeReducer(
 ) {
     switch (action.type) {
         case ACTIONTYPES.FETCHING_PLACES:
-        case ACTIONTYPES.FETCHING_PLACE_NAMES:
-        case ACTIONTYPES.FETCHING_PLACES_CATEGORIES:
             return {
                 ...state,
                 loading: true,
                 error: false
             };
+        case ACTIONTYPES.FETCHING_PLACE_NAMES:
+            return {
+                ...state,
+                loadingNames: true,
+                error: false
+            };
+        case ACTIONTYPES.FETCHING_PLACES_CATEGORIES:
+            return {
+                ...state,
+                loadingCategories: true,
+                error: false
+            };
+        case ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES:
+            return {
+                ...state,
+                loadingCategoryNames: true,
+                error: false
+            };
+
         case ACTIONTYPES.FETCHING_PLACES_SUCCESS:
             return {
                 ...state,
@@ -59,37 +81,47 @@ export default function placeReducer(
             return {
                 ...state,
                 error: false,
-                loading: false,
+                loadingNames: false,
                 placeNames: action.names
             };
         case ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_SUCCESS:
             return {
                 ...state,
                 error: false,
-                loading: false,
+                loadingCategoryNames: false,
                 placeCategoryNames: action.names
             };
         case ACTIONTYPES.FETCHING_PLACES_CATEGORIES_SUCCESS:
             return {
                 ...state,
                 error: false,
-                loading: false,
+                loadingCategories: false,
                 placeCategories: action.categories
             };
         case ACTIONTYPES.FETCHING_PLACES_ERROR:
-        case ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR:
             return {
                 ...state,
                 loading: false,
                 error: true,
                 errorMessage: action.errorMessage,
             };
+        case ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR:
+            return {
+                ...state,
+                loadingCategories: false,
+                error: true,
+                errorMessage: action.errorMessage,
+            };
 
         case ACTIONTYPES.SAVING_PLACES:
-        case ACTIONTYPES.SAVING_PLACES_CATEGORIES:
             return {
                 ...state,
                 loading: true
+            };
+        case ACTIONTYPES.SAVING_PLACES_CATEGORIES:
+            return {
+                ...state,
+                loadingCategories: true
             };
         case ACTIONTYPES.SAVING_PLACES_SUCCESS:
             return {
@@ -100,12 +132,11 @@ export default function placeReducer(
                     ...state.places,
                     data: [action.newPlace, ...state.places.data]
                 }
-
             };
         case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
             return {
                 ...state,
-                loading: false,
+                loadingCategories: false,
                 error: false,
                 placeCategories: {
                     ...state.placeCategories,
@@ -113,18 +144,28 @@ export default function placeReducer(
                 }
             };
         case ACTIONTYPES.SAVING_PLACES_ERROR:
-        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR:
             return {
                 ...state,
                 error: true,
                 errorMessage: action.errorMessage,
                 loading: false
             };
+        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR:
+            return {
+                ...state,
+                error: true,
+                errorMessage: action.errorMessage,
+                loadingCategories: false
+            };
         case ACTIONTYPES.DELETING_PLACES:
-        case ACTIONTYPES.DELETING_PLACE_CATEGORY:
             return {
                 ...state,
                 loading: true,
+            };
+        case ACTIONTYPES.DELETING_PLACE_CATEGORY:
+            return {
+                ...state,
+                loadingCategories: true,
             };
 
         case ACTIONTYPES.DELETING_PLACES_SUCCESS:
@@ -141,7 +182,7 @@ export default function placeReducer(
         case ACTIONTYPES.DELETING_PLACE_CATEGORY_SUCCESS:
             return {
                 ...state,
-                loading: false,
+                loadingCategories: false,
                 error: false,
                 placeCategories: {
                     data: state.placeCategories.data.filter((category: ICategory) => category.id !== action.toBeDeleted.id),
@@ -150,14 +191,19 @@ export default function placeReducer(
                 }
             };
         case ACTIONTYPES.DELETING_PLACES_ERROR:
-        case ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR:
             return {
                 ...state,
                 error: true,
                 errorMessage: action.errorMessage,
                 loading: false,
             };
-
+        case ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR:
+            return {
+                ...state,
+                error: true,
+                errorMessage: action.errorMessage,
+                loadingCategories: false,
+            };
 
         default:
             return state;

@@ -1,24 +1,17 @@
-import * as objectInterfaces from '../../constants/objectInterfaces';
+import { TState } from './types';
 
-interface IState {
-    error: boolean,
-    errorMessage: string,
-    loading: boolean,
-    purchaseList: objectInterfaces.IPurchaseItem[]
-}
-
-export function isLoading(state: { purchaseReducer: IState }) {
+export function isLoading(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.loading;
 }
 
-export function hasError(state: { purchaseReducer: IState }) {
+export function hasError(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.error;
 }
 
-export function getPurchaseList(state: { purchaseReducer: IState }) {
+export function getPurchaseList(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseList;
 }
 
-export function getPurchaseListLength(state: { purchaseReducer: IState }) {
+export function getPurchaseListLength(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseList.length;
 }

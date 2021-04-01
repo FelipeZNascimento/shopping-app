@@ -1,5 +1,6 @@
 export { default as BrandsSection } from './brands/brands';
 export { default as CategoriesSection } from './categories/categories';
+export { default as HomeSection } from './home/home';
 export { default as Menu } from './menu/menu';
 export { default as PlacesSection } from './places_section/places_section';
 export { default as PlacesCategoriesList } from './places_section/categories_list/categories_list';

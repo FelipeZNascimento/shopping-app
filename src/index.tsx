@@ -28,6 +28,7 @@ import './App.scss';
 import {
     BrandsSection,
     Menu,
+    HomeSection,
     PlacesSection,
     PlacesList,
     PlacesCategoriesList,
@@ -213,10 +214,10 @@ render(
                             <CategoriesSection />
                         </Route> */}
                         <Route exact path={routes.HOME}>
-                            <ProductsSection />
+                            <HomeSection />
                         </Route>
                         <Route>
-                            <ProductsSection />
+                            <HomeSection />
                         </Route>
                     </Switch>
                 </div>
