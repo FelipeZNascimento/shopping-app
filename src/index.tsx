@@ -29,16 +29,13 @@ import {
     BrandsSection,
     Menu,
     HomeSection,
-    PlacesSection,
     PlacesList,
     PlacesCategoriesList,
-    ProductsSection,
     ProductsList,
-    ProductsCategoriesList,
+    ProductsCategories,
     SidebarList,
     ShoppingList,
     PurchaseList,
-    PurchaseSection    
 } from './sections/index';
 
 import { Notification } from './components/index';
@@ -190,29 +187,20 @@ render(
                 <div className={containerClass}>
                     <Switch>
                         <Route path={routes.PURCHASES_SECTION}>
-                            <Route path={routes.PURCHASES_SECTION} component={PurchaseSection} exact />
                             <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
                             <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
                         </Route>
-                        {/* <Route path={routes.SHOPPING_LIST}>
-                            <ShoppingList />
-                        </Route> */}
                         <Route path={routes.PLACES_SECTION}>
-                            <Route path={routes.PLACES_SECTION} component={PlacesSection} exact />
                             <Route path={routes.PLACES_CATEGORIES} component={PlacesCategoriesList} />
                             <Route path={routes.PLACES_LIST} component={PlacesList} />
                         </Route>
                         <Route path={routes.PRODUCTS_SECTION}>
-                            <Route path={routes.PRODUCTS_SECTION} component={ProductsSection} exact />
-                            <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategoriesList} />
+                            <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategories} />
                             <Route path={routes.PRODUCTS_LIST} component={ProductsList} />
                         </Route>
                         <Route path={routes.BRANDS}>
                             <BrandsSection />
                         </Route>
-                        {/* <Route path={routes.PRODUCTS_CATEGORIES}>
-                            <CategoriesSection />
-                        </Route> */}
                         <Route exact path={routes.HOME}>
                             <HomeSection />
                         </Route>

@@ -12,7 +12,6 @@ import {
 } from 'store/product/actions';
 import { addToShoppingList } from 'store/shopping_list/actions';
 import { convertToPurchase } from 'store/purchase/actions';
-// import { setProductToShoppingList } from 'services/dataSetters';
 
 // Selectors
 import {
@@ -30,8 +29,8 @@ import { Fab } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { AddCircle as AddIcon, AddShoppingCart } from '@material-ui/icons';
 import { Loading, SearchInput, Table } from 'components/index';
-import AddProductModal from 'sections/products_section/list/components/add_product_modal';
-import DeleteProductModal from 'sections/products_section/list/components/delete_product_modal';
+import AddProductModal from 'sections/products/list/components/add_product_modal';
+import DeleteProductModal from 'sections/products/list/components/delete_product_modal';
 
 import { routes } from 'constants/routes';
 import { resultsPerPage } from 'constants/general';
