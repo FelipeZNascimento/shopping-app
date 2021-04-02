@@ -12,7 +12,7 @@ import { savePurchaseList, removeFromList, updateList } from 'store/purchase/act
 import { 
     getPurchaseList,
     hasError,
-    isLoading
+    selectIsLoading
 } from 'store/purchase/selector';
 import { getPlaces } from 'store/place/selector';
 
@@ -24,7 +24,7 @@ import {
     Datepicker,
     Loading
 } from 'components/index';
-import PurchaseCard from './components/purchase_card';
+import ProductCard from './components/product_card';
 import TotalPurchaseCard from './components/total_purchase_card';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
@@ -32,7 +32,7 @@ import { IAutocompleteItem } from 'components/autocomplete/types';
 import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
 
-import styles from './list.module.scss';
+import styles from './purchases.module.scss';
 
 const PurchaseList = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
@@ -42,7 +42,7 @@ const PurchaseList = () => {
 
     const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
     const places: IPlace[] = useSelector(getPlaces);
-    const formIsLoading: boolean = useSelector(isLoading);
+    const formIsLoading: boolean = useSelector(selectIsLoading);
     const formHasError: boolean = useSelector(hasError);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -56,12 +56,12 @@ const PurchaseList = () => {
             setIsPurchaseSaved(false);
             setPurchaseTotal(0);
             setSelectedPlaceId(null);
-            history.push(routes.SHOPPING_LIST);
+            history.push(routes.PURCHASE_HISTORY);
         }
     }, [formHasError, formIsLoading]);
 
     const onSavePurchase = () => {
-        dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId));
+        dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId, purchaseTotal));
         setIsPurchaseSaved(true);
     };
 
@@ -148,7 +148,7 @@ const PurchaseList = () => {
                     total={purchaseTotal}
                 />
                 {purchaseList.map((item) =>
-                    <PurchaseCard
+                    <ProductCard
                         item={item}
                         onDelete={removeItem}
                         onUpdate={onUpdate}

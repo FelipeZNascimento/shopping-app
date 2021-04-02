@@ -34,6 +34,10 @@ const Menu = () => {
                 {
                     display: 'Nova Compra',
                     path: routes.PURCHASE_FORM
+                },
+                {
+                    display: 'Histórico',
+                    path: routes.PURCHASE_HISTORY
                 }
             ]
         },

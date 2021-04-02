@@ -17,7 +17,7 @@ import { Autocomplete } from 'components/index';
 
 import { getBrands } from 'store/brand/selector';
 import { fetchBrands } from 'store/brand/actions';
-import styles from './purchase_card.module.scss';
+import styles from './product_card.module.scss';
 
 import {
     IBrand,
@@ -32,7 +32,7 @@ interface IProps {
     onUpdate: (item: IPurchaseItem) => void;
 }
 
-const PurchaseCard = ({
+const ProductCard = ({
     item,
     onDelete,
     onUpdate
@@ -153,4 +153,4 @@ const PurchaseCard = ({
     );
 };
 
-export default PurchaseCard;
+export default ProductCard;

@@ -1,11 +1,16 @@
 import * as ACTIONTYPES from '../actionTypes';
-import { IPurchaseItem, IShoppingListItem } from 'constants/objectInterfaces';
+import {
+    IPurchase,
+    IPurchaseItem,
+    IShoppingListItem
+} from 'constants/objectInterfaces';
 import { TState } from './types';
 
 import { dynamicSort } from 'utils/utils'
 
 interface IAction {
     type: string,
+    purchaseHistory: IPurchase[],
     purchaseList: IPurchaseItem[],
     itemId: number,
     response: IShoppingListItem,
@@ -16,6 +21,7 @@ const initialState: TState = {
     error: false,
     errorMessage: '',
     loading: false,
+    purchaseHistory: [],
     purchaseList: []
 };
 
@@ -46,6 +52,7 @@ export default function purchaseReducer(
             return {
                 ...initialState
             }
+        case ACTIONTYPES.FETCHING_PURCHASES:
         case ACTIONTYPES.SAVING_PURCHASE_LIST:
             return {
                 ...state,
@@ -58,12 +65,20 @@ export default function purchaseReducer(
                 error: false,
                 purchaseList: []
             }
+        case ACTIONTYPES.FETCHING_PURCHASES_ERROR:
         case ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR:
             return {
                 ...state,
                 loading: false,
                 error: true,
                 errorMessage: action.errorMessage,
+            }
+        case ACTIONTYPES.FETCHING_PURCHASES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: false,
+                purchaseHistory: action.purchaseHistory
             }
 
         default:

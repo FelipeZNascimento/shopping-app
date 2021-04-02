@@ -16,13 +16,15 @@ import { http } from './utilities';
 type TPropsPurchase = {
     purchase: IPurchaseItem[];
     date: string;
-    placeId: number | null
+    placeId: number | null;
+    total: number;
 }
 
 export const setPurchase = ({
     purchase,
     date,
-    placeId
+    placeId,
+    total
 }: TPropsPurchase) => {
     const requestObject = new Request(
         `${apiBaseUrl}purchases`,
@@ -36,6 +38,7 @@ export const setPurchase = ({
                 purchase,
                 date,
                 placeId,
+                total
             }),
         }
     );

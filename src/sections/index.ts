@@ -8,4 +8,5 @@ export { default as ProductsList } from './products/list/products';
 export { default as ProductsCategories } from './products/categories/products_categories';
 export { default as SidebarList } from './sidebar_list/sidebar_list';
 export { default as ShoppingList } from './purchases/shopping_list/shopping_list';
-export { default as PurchaseList } from './purchases/list/list';
+export { default as PurchaseList } from './purchases/list/purchases';
+export { default as PurchaseHistory } from './purchases/history/purchase_history';

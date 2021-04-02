@@ -17,6 +17,7 @@ export const routes = {
     PURCHASES_SECTION: '/purchases',
     PURCHASE_FORM: '/purchases/form',
     SHOPPING_LIST: '/purchases/list',
+    PURCHASE_HISTORY: '/purchases/history',
 };
 
 export default routes;

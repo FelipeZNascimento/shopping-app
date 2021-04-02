@@ -15,6 +15,11 @@ const HomeSection = () => {
             color: 'cyan'
         },
         {
+            title: 'Histórico de Compras',
+            route: routes.PURCHASE_HISTORY,
+            color: 'cyan'
+        },
+        {
             title: 'Lista de Lugares',
             route: routes.PLACES_LIST,
             color: 'yellow'
