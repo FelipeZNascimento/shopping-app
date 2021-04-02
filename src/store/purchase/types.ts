@@ -1,5 +1,9 @@
 import * as ACTIONTYPES from 'store/actionTypes';
-import { IProduct, IPurchaseItem } from 'constants/objectInterfaces';
+import {
+    IProduct,
+    IPurchase,
+    IPurchaseItem
+} from 'constants/objectInterfaces';
 
 type TAction = {
     readonly response?: IProduct[];
@@ -10,6 +14,7 @@ export type TState = {
     error: boolean,
     errorMessage: string,
     loading: boolean,
+    purchaseHistory: IPurchase[],
     purchaseList: IPurchaseItem[]
 }
 
@@ -20,3 +25,13 @@ export type TSavePurchaseList = TAction & {
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
     readonly status?: boolean;
 };
+
+export type TFetchPurchases = TAction & {
+    readonly type: typeof ACTIONTYPES.FETCHING_PURCHASES
+    | typeof ACTIONTYPES.FETCHING_PURCHASES_SUCCESS
+    | typeof ACTIONTYPES.FETCHING_PURCHASES_ERROR
+    | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly purchaseHistory?: IPurchase[];
+    readonly errorMessage?: string;
+
+}

@@ -36,6 +36,7 @@ import {
     SidebarList,
     ShoppingList,
     PurchaseList,
+    PurchaseHistory
 } from './sections/index';
 
 import { Notification } from './components/index';
@@ -189,6 +190,7 @@ render(
                         <Route path={routes.PURCHASES_SECTION}>
                             <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
                             <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
+                            <Route path={routes.PURCHASE_HISTORY} component={PurchaseHistory} />
                         </Route>
                         <Route path={routes.PLACES_SECTION}>
                             <Route path={routes.PLACES_CATEGORIES} component={PlacesCategoriesList} />

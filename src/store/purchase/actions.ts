@@ -2,12 +2,19 @@ import { Dispatch } from 'react';
 import * as ACTIONTYPES from 'store/actionTypes';
 
 import { setPurchase } from 'services/dataSetters';
-import { TSavePurchaseList } from './types';
+import fetchItems from 'services/dataGetters';
+
+import {
+    TFetchPurchases,
+    TSavePurchaseList
+} from './types';
+
 import {
     IProduct,
     IPurchaseItem
 } from 'constants/objectInterfaces';
 import { productUnits } from 'constants/products';
+import { objectTypes } from 'constants/general';
 
 export function convertToPurchase(productsList: IProduct[], purchaseListLength: number) {
     const purchaseList: IPurchaseItem[] = productsList.map((product, index) => ({
@@ -31,6 +38,30 @@ export function convertToPurchase(productsList: IProduct[], purchaseListLength: 
         purchaseList
     }
 }
+
+export const fetchPurchases = () => async (dispatch: Dispatch<TFetchPurchases>) => {
+    dispatch({ type: ACTIONTYPES.FETCHING_PURCHASES } as const);
+
+    fetchItems({
+        objectType: objectTypes.purchases
+    })
+        .then((list) => {
+            return dispatch({
+                type: ACTIONTYPES.FETCHING_PURCHASES_SUCCESS,
+                purchaseHistory: list
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTIONTYPES.FETCHING_PURCHASES_ERROR,
+                errorMessage: error
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
+        })
+};
 
 export function removeFromList(item: IPurchaseItem) {
     const itemId = item.id;
@@ -63,14 +94,16 @@ export function saveList() {
 export const savePurchaseList = (
     newPurchase: IPurchaseItem[],
     date: string,
-    placeId: number | null
+    placeId: number | null,
+    total: number
 ) => async (dispatch: Dispatch<TSavePurchaseList>) => {
     dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST } as const);
 
     setPurchase({
         purchase: newPurchase,
         date: date,
-        placeId: placeId
+        placeId: placeId,
+        total: total
     })
         .then(() => {
             dispatch({
@@ -81,7 +114,7 @@ export const savePurchaseList = (
             });
         })
         .catch((error) => {
-            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, errorMessage: error});
+            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, errorMessage: error });
             return dispatch({
                 type: ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR,
                 errorMessage: error

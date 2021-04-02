@@ -50,6 +50,14 @@ export interface ICategoriesObject {
     data: ICategory[]
 }
 
+export interface IPurchase {
+    id: number;
+    date: string;
+    total: number;
+    description: string;
+    items: number;
+}
+
 export interface IPurchaseItem {
     id: number;
     brand_description: string;

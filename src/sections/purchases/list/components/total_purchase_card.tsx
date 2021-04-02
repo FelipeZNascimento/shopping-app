@@ -7,7 +7,7 @@ import {
     CardHeader,
 } from '@material-ui/core';
 
-import styles from './purchase_card.module.scss';
+import styles from './product_card.module.scss';
 
 import { IPurchaseItem } from 'constants/objectInterfaces';
 
