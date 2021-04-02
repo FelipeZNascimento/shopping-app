@@ -49,18 +49,25 @@ export function arrayOfObjectsAreEqual(x, y) {
     return areEqual;
 }
 
-export async function http(request) {
-    const response = await fetch(request);
-
-    try {
-        // may error if there is no body
-        response.parsedBody = await response.json();
-    } catch (ex) {
-        console.log(ex)
-    }
-
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response;
+export function http(request) {
+    return fetch(request)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                let error;
+                if (response.status === 409) {
+                    error = new Error('Conflito: esse item está sendo usado em outro lugar e não pode ser alterado.');
+                }
+                error.status = response.status;
+                throw error;
+            }
+        })
+        .then((data) => {
+            return data;
+        })
+        .catch(function (error) {
+            throw error;
+        });
 }
+

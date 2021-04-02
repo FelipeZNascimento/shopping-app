@@ -15,10 +15,9 @@ import { IBrand } from 'constants/objectInterfaces';
 import { objectTypes } from 'constants/general';
 
 export const fetchBrandNames = () => async (dispatch: Dispatch<TFetchBrandNames>) => {
-    const response = await fetchItems(objectTypes.brandNames);
     dispatch({ type: ACTIONTYPES.FETCHING_BRAND_NAMES } as const);
 
-    response()
+    fetchItems({ objectType: objectTypes.brandNames })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_BRAND_NAMES_SUCCESS,
@@ -30,7 +29,10 @@ export const fetchBrandNames = () => async (dispatch: Dispatch<TFetchBrandNames>
                 type: ACTIONTYPES.FETCHING_BRAND_NAMES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -43,10 +45,15 @@ export const fetchBrands = (
     searchField = ''
 ) => async (dispatch: Dispatch<TFetchBrands>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.brands, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_BRANDS } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.brands,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort,
+        searchField: searchField
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_BRANDS_SUCCESS,
@@ -58,51 +65,70 @@ export const fetchBrands = (
                 type: ACTIONTYPES.FETCHING_BRANDS_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const saveBrand = (
     newBrand: IBrand
 ) => async (dispatch: Dispatch<TSaveBrand>) => {
-    const response = await setItem([newBrand], objectTypes.brands);
     dispatch({ type: ACTIONTYPES.SAVING_BRANDS } as const);
 
-    response()
+    setItem({
+        itemArray: [newBrand],
+        objectType: objectTypes.brands
+    })
         .then((responseBody) => {
             newBrand.id = responseBody.insertId;
 
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_BRANDS_SUCCESS,
                 newBrand: newBrand
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_BRANDS_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deleteBrand = (
     brand: IBrand
 ) => async (dispatch: Dispatch<TDeleteBrand>) => {
-    const response = await deleteItems(brand.id, objectTypes.brands);
+    if (brand.id === null) {
+        return;
+    }
+
     dispatch({ type: ACTIONTYPES.DELETING_BRANDS } as const);
-    response()
+    deleteItems({
+        objectId: brand.id,
+        objectType: objectTypes.brands
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_BRANDS_SUCCESS,
                 toBeDeleted: brand
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_BRANDS_ERROR,
+                errorMessage: error.message
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
 };
