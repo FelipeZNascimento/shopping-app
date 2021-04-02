@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-    errorMessage,
-    isNotificationOpen,
-    hasError,
-} from '../../store/main/selector';
+    selectErrorMessage,
+    selectHasError,
+    isNotificationOpen
+} from 'store/main/selector';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -18,13 +18,15 @@ function Alert(props: any) {
 
 const Notification = () => {
     const dispatch = useDispatch();
-    const isErrorMessage = useSelector(hasError);
     const isOpen = useSelector(isNotificationOpen);
-    const messageError = useSelector(errorMessage);
+    const hasError = useSelector(selectHasError);
+    const errorMessage = useSelector(selectErrorMessage);
 
     const toggleNotification = () => dispatch({
         type: 'TOGGLE_NOTIFICATION',
-        status: false
+        status: false,
+        error: false,
+        errorMessage: ''
     });
 
     const useStyles = makeStyles((theme) => ({
@@ -46,11 +48,11 @@ const Notification = () => {
         toggleNotification();
     };
 
-    const message = isErrorMessage
-        ? messageError
+    const message = hasError
+        ? errorMessage
         : 'Sua ação foi registrada com sucesso!';
 
-    const severity = isErrorMessage
+    const severity = errorMessage
         ? 'error'
         : 'success';
 

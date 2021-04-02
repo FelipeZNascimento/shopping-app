@@ -66,6 +66,8 @@ export default function shoppingListReducer(
         case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS:
             return {
                 ...state,
+                loading: false,
+                error: false,
                 shoppingList: {
                     data: state.shoppingList.data.filter((product: IProduct) => product.id !== action.toBeDeleted.id),
                     count: state.shoppingList.count - 1,

@@ -15,15 +15,16 @@ import {
     TSaveCategory,
     TSavePlace
 } from './types';
-// import { ICategory, IProduct } from 'constants/objectInterfaces';
+
 import { objectTypes } from 'constants/general';
 import { ICategory, IPlace } from 'constants/objectInterfaces';
 
 export const fetchPlaceNames = () => async (dispatch: Dispatch<TFetchPlaceNames>) => {
-    const response = await fetchItems(objectTypes.placeNames);
     dispatch({ type: ACTIONTYPES.FETCHING_PLACE_NAMES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.placeNames,
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PLACE_NAMES_SUCCESS,
@@ -35,15 +36,19 @@ export const fetchPlaceNames = () => async (dispatch: Dispatch<TFetchPlaceNames>
                 type: ACTIONTYPES.FETCHING_PLACE_NAMES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const fetchPlaceCategoryNames = () => async (dispatch: Dispatch<TFetchPlaceCategoryNames>) => {
-    const response = await fetchItems(objectTypes.placeCategoryNames);
     dispatch({ type: ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.placeCategoryNames,
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_SUCCESS,
@@ -55,7 +60,10 @@ export const fetchPlaceCategoryNames = () => async (dispatch: Dispatch<TFetchPla
                 type: ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -68,10 +76,14 @@ export const fetchPlaces = (
     searchField = ''
 ) => async (dispatch: Dispatch<TFetchPlaces>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.places, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_PLACES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.places,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PLACES_SUCCESS,
@@ -83,7 +95,10 @@ export const fetchPlaces = (
                 type: ACTIONTYPES.FETCHING_PLACES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -96,10 +111,15 @@ export const fetchPlaceCategories = (
     searchField = ''
 ) => async (dispatch: Dispatch<TFetchCategories>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.placesCategories, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_PLACES_CATEGORIES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.placesCategories,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort,
+        searchField: searchField
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PLACES_CATEGORIES_SUCCESS,
@@ -111,47 +131,63 @@ export const fetchPlaceCategories = (
                 type: ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const savePlaceCategory = (
     newCategory: ICategory
 ) => async (dispatch: Dispatch<TSaveCategory>) => {
-    const response = await setItem([newCategory], objectTypes.placesCategories);
     dispatch({ type: ACTIONTYPES.SAVING_PLACES_CATEGORIES } as const);
 
-    response()
+    setItem({
+        itemArray: [newCategory],
+        objectType: objectTypes.placesCategories
+    })
         .then((responseBody) => {
             newCategory.id = responseBody.insertId;
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS,
                 newCategory: newCategory
             });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
+            });
+
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const savePlace = (
     newPlace: IPlace
 ) => async (dispatch: Dispatch<TSavePlace>) => {
-    const response = await setItem([newPlace], objectTypes.places);
     dispatch({ type: ACTIONTYPES.SAVING_PLACES } as const);
 
-    response()
+    setItem({
+        itemArray: [newPlace],
+        objectType: objectTypes.places
+    })
         .then((responseBody) => {
             newPlace.id = responseBody.insertId;
 
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_PLACES_SUCCESS,
                 newPlace: newPlace
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+
         })
         .catch((error) => {
             console.log(error);
@@ -159,48 +195,73 @@ export const savePlace = (
                 type: ACTIONTYPES.SAVING_PLACES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deletePlace = (
     place: IPlace
 ) => async (dispatch: Dispatch<TDeletePlace>) => {
-    const response = await deleteItems(place.id, objectTypes.places);
+    if (place.id === null) {
+        return;
+    }
+
     dispatch({ type: ACTIONTYPES.DELETING_PLACES } as const);
-    response()
+    deleteItems({
+        objectId: place.id,
+        objectType: objectTypes.places
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_PLACES_SUCCESS,
                 toBeDeleted: place
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PLACES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deletePlaceCategory = (
     category: ICategory
 ) => async (dispatch: Dispatch<TDeletePlaceCategory>) => {
-    const response = await deleteItems(category.id, objectTypes.placesCategories);
+    if (category.id === null) {
+        return;
+    }
+
     dispatch({ type: ACTIONTYPES.DELETING_PLACE_CATEGORY } as const);
-    response()
+    deleteItems({
+        objectId: category.id,
+        objectType: objectTypes.placesCategories
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_PLACE_CATEGORY_SUCCESS,
                 toBeDeleted: category
             });
+            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error.message
+            });
         })
 };

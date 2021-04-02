@@ -5,15 +5,22 @@ import {
 
 import { http } from './utilities';
 
-const fetchItems = (
+type TProps = {
+    objectType: number,
+    currentPage?: number,
+    orderBy?: string,
+    sort?: string,
+    searchField?: string
+};
+
+const fetchItems = ({
     objectType,
     currentPage = 0,
     orderBy = 'description',
     sort = 'ASC',
     searchField = ''
-) => async function () {
+}: TProps) => {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
-    let response;
 
     const requestObject = new Request(
         `${apiBaseUrl}${apiCallTarget}?page=${currentPage}&orderBy=${orderBy}&sort=${sort}&searchField=${searchField}`,
@@ -26,12 +33,13 @@ const fetchItems = (
         }
     );
 
-    try {
-        response = await http(requestObject);
-        return response.parsedBody;
-    } catch (response) {
-        console.log("Error", response);
-    }
+    return http(requestObject)
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            throw new Error(error);
+        })
 };
 
 export default fetchItems;

@@ -19,10 +19,11 @@ import { ICategory, IProduct } from 'constants/objectInterfaces';
 import { objectTypes } from 'constants/general';
 
 export const fetchProductNames = () => async (dispatch: Dispatch<TFetchProductNames>) => {
-    const response = await fetchItems(objectTypes.productNames);
     dispatch({ type: ACTIONTYPES.FETCHING_PRODUCT_NAMES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.productNames,
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_NAMES_SUCCESS,
@@ -34,15 +35,19 @@ export const fetchProductNames = () => async (dispatch: Dispatch<TFetchProductNa
                 type: ACTIONTYPES.FETCHING_PRODUCT_NAMES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const fetchProductCategoryNames = () => async (dispatch: Dispatch<TFetchProductCategoryNames>) => {
-    const response = await fetchItems(objectTypes.productCategoryNames);
     dispatch({ type: ACTIONTYPES.FETCHING_PRODUCT_CATEGORY_NAMES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.productCategoryNames,
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_CATEGORY_NAMES_SUCCESS,
@@ -54,7 +59,10 @@ export const fetchProductCategoryNames = () => async (dispatch: Dispatch<TFetchP
                 type: ACTIONTYPES.FETCHING_PRODUCT_CATEGORY_NAMES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -67,10 +75,15 @@ export const fetchProducts = (
     searchField = ''
 ) => async (dispatch: Dispatch<TFetchProducts>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.products, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_PRODUCTS } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.products,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort,
+        searchField: searchField
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS,
@@ -82,7 +95,10 @@ export const fetchProducts = (
                 type: ACTIONTYPES.FETCHING_PRODUCTS_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -95,10 +111,15 @@ export const fetchProductCategories = (
     searchField = ''
 ) => async (dispatch: Dispatch<TFetchCategories>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.productCategories, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.productCategories,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort,
+        searchField: searchField
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES_SUCCESS,
@@ -110,22 +131,30 @@ export const fetchProductCategories = (
                 type: ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const saveProductCategory = (
     newCategory: ICategory
 ) => async (dispatch: Dispatch<TSaveCategory>) => {
-    const response = await setItem([newCategory], objectTypes.productCategories);
     dispatch({ type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES } as const);
 
-    response()
+    setItem({
+        itemArray: [newCategory],
+        objectType: objectTypes.productCategories
+    })
         .then((responseBody) => {
             newCategory.id = responseBody.insertId;
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS,
                 newCategory: newCategory
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
             });
         })
         .catch((error) => {
@@ -133,23 +162,31 @@ export const saveProductCategory = (
                 type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const saveProduct = (
     newProduct: IProduct
 ) => async (dispatch: Dispatch<TSaveProduct>) => {
-    const response = await setItem([newProduct], objectTypes.products);
     dispatch({ type: ACTIONTYPES.SAVING_PRODUCTS } as const);
 
-    response()
+    setItem({
+        itemArray: [newProduct],
+        objectType: objectTypes.products
+    })
         .then((responseBody) => {
             newProduct.id = responseBody.insertId;
 
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_PRODUCTS_SUCCESS,
                 newProduct
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
             });
         })
         .catch((error) => {
@@ -157,48 +194,76 @@ export const saveProduct = (
                 type: ACTIONTYPES.SAVING_PRODUCTS_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deleteProduct = (
     product: IProduct
 ) => async (dispatch: Dispatch<TDeleteProduct>) => {
-    const response = await deleteItems(product.id, objectTypes.products);
+    if (product.id === null) {
+        return;
+    }
+
     dispatch({ type: ACTIONTYPES.DELETING_PRODUCTS } as const);
-    response()
+    deleteItems({
+        objectId: product.id,
+        objectType: objectTypes.products
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCTS_SUCCESS,
                 toBeDeleted: product
             });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
+            });
+
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCTS_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deleteProductCategory = (
     category: ICategory
 ) => async (dispatch: Dispatch<TDeleteProductCategory>) => {
-    const response = await deleteItems(category.id, objectTypes.productCategories);
+    if (category.id === null) {
+        return;
+    }
+
     dispatch({ type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY } as const);
-    response()
+    deleteItems({
+        objectId: category.id,
+        objectType: objectTypes.productCategories
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY_SUCCESS,
                 toBeDeleted: category
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
             });
         })
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error.message
+            });
         })
 };

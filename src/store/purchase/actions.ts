@@ -65,18 +65,23 @@ export const savePurchaseList = (
     date: string,
     placeId: number | null
 ) => async (dispatch: Dispatch<TSavePurchaseList>) => {
-    const response = await setPurchase(newPurchase, date, placeId);
     dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST } as const);
 
-    response()
+    setPurchase({
+        purchase: newPurchase,
+        date: date,
+        placeId: placeId
+    })
         .then(() => {
-            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, status: true });
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.SAVING_PURCHASE_LIST_SUCCESS
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
             });
         })
         .catch((error) => {
-            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, status: true });
+            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, errorMessage: error});
             return dispatch({
                 type: ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR,
                 errorMessage: error

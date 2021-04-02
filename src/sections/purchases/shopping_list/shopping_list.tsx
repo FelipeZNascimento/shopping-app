@@ -9,7 +9,6 @@ import { getPurchaseListLength } from 'store/purchase/selector';
 // Actions
 import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
 import { convertToPurchase } from 'store/purchase/actions';
-import deleteItem from 'services/dataDeleters';
 
 // Interfaces
 import {
@@ -25,7 +24,7 @@ import { AddShoppingCart } from '@material-ui/icons';
 import { Fab } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
-import { objectTypes, resultsPerPage } from 'constants/general';
+import { resultsPerPage } from 'constants/general';
 import { routes } from 'constants/routes';
 import { invertSort } from 'utils/utils';
 
@@ -68,7 +67,6 @@ const ShoppingList = () => {
     }
 
     const deleteProduct = (product: IShoppingListItem) => {
-        dispatch(deleteItem(product?.product_id, objectTypes.shoppingList));
         dispatch(deleteFromShoppingList(product));
     };
 

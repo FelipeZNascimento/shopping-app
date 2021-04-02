@@ -12,8 +12,8 @@ export const objectTypes = Object.freeze({
     productNames: 7,
     productCategoryNames: 8,
     brandNames: 9,
-    placeNames: 9,
-    placeCategoryNames: 10
+    placeNames: 10,
+    placeCategoryNames: 11
 });
 
 export const objectTypeInfo = Object.freeze({

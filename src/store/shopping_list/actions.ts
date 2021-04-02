@@ -23,14 +23,19 @@ type fetchShoppingListAction = {
 export const addToShoppingList = (
     product: IProduct
 ) => async (dispatch: Dispatch<TSaveShoppingList>) => {
-    const response = await setItem([product], objectTypes.shoppingList);
     dispatch({ type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST } as const);
 
-    response()
+    setItem({
+        itemArray: [product],
+        objectType: objectTypes.shoppingList
+    })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS,
                 newProduct: product
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
             });
         })
         .catch((error) => {
@@ -38,21 +43,32 @@ export const addToShoppingList = (
                 type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
 export const deleteFromShoppingList = (
     product: IProduct
 ) => async (dispatch: Dispatch<TDeleteShoppingList>) => {
-    const response = await deleteItems(product.id, objectTypes.shoppingList);
-    dispatch({ type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST } as const);
+    if (product.id === null) {
+        return;
+    }
 
-    response()
+    dispatch({ type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST } as const);
+    deleteItems({
+        objectId: product.id,
+        objectType: objectTypes.shoppingList
+    })
         .then(() => {
             return dispatch({
                 type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS,
                 toBeDeleted: product
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
             });
         })
         .catch((error) => {
@@ -60,7 +76,10 @@ export const deleteFromShoppingList = (
                 type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
 
@@ -79,10 +98,15 @@ export const fetchShoppingList = (
     searchField = ''
 ) => async (dispatch: Dispatch<fetchShoppingListAction>) => {
     const { orderBy, sort } = sortState;
-    const response = await fetchItems(objectTypes.shoppingList, currentPage, orderBy, sort, searchField);
     dispatch({ type: ACTIONTYPES.FETCHING_SHOPPING_LIST } as const);
 
-    response()
+    fetchItems({
+        objectType: objectTypes.shoppingList,
+        currentPage: currentPage,
+        orderBy: orderBy,
+        sort: sort,
+        searchField: searchField
+    })
         .then((list) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS,
@@ -94,6 +118,9 @@ export const fetchShoppingList = (
                 type: ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR,
                 errorMessage: error
             });
-            return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
         })
 };
