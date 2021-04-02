@@ -28,6 +28,7 @@ const deleteItems = (
         return response.parsedBody;
     } catch (response) {
         console.log("Error", response);
+        throw new Error(response.sqlMessage);
     }
 };
 

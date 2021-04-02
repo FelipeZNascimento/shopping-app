@@ -1,0 +1,16 @@
+@import "style/colors.scss";
+@import "style/paddings.scss";
+
+.dropdownSelect {
+    @include bg-colored($of-white);
+
+    border: none;
+    cursor: pointer;
+    margin: 2px 5px;
+    padding: 5px 10px;
+    width: 220px;
+}
+
+.dropdownOption {
+    @include padded(all, m);
+}
