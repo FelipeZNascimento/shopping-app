@@ -12,6 +12,7 @@ interface IAction {
     type: string,
     purchaseHistory: IPurchase[],
     purchaseList: IPurchaseItem[],
+    fullPurchase: IPurchaseItem[],
     itemId: number,
     response: IShoppingListItem,
     errorMessage: string
@@ -22,7 +23,8 @@ const initialState: TState = {
     errorMessage: '',
     loading: false,
     purchaseHistory: [],
-    purchaseList: []
+    purchaseList: [],
+    fullPurchase: []
 };
 
 export default function purchaseReducer(
@@ -52,6 +54,7 @@ export default function purchaseReducer(
             return {
                 ...initialState
             }
+        case ACTIONTYPES.FETCHING_PURCHASE:
         case ACTIONTYPES.FETCHING_PURCHASES:
         case ACTIONTYPES.SAVING_PURCHASE_LIST:
             return {
@@ -65,6 +68,7 @@ export default function purchaseReducer(
                 error: false,
                 purchaseList: []
             }
+        case ACTIONTYPES.FETCHING_PURCHASE_ERROR:
         case ACTIONTYPES.FETCHING_PURCHASES_ERROR:
         case ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR:
             return {
@@ -79,6 +83,14 @@ export default function purchaseReducer(
                 loading: false,
                 error: false,
                 purchaseHistory: action.purchaseHistory
+            }
+
+        case ACTIONTYPES.FETCHING_PURCHASE_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: false,
+                fullPurchase: action.fullPurchase
             }
 
         default:

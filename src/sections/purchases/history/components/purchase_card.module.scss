@@ -1,0 +1,73 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/paddings.scss";
+@import "style/margins.scss";
+
+.card {
+    @include bg-rgba-colored($of-cyan, 0.3);
+    @include marged(all, s);
+
+    border-radius: 4px;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    min-width: 300px;
+    transition: 0.5s;
+
+    &:hover {
+        @include bg-rgba-colored($of-cyan, 0.6);
+        box-shadow: 0px 0px 8px 5px rgba(0, 0, 0, 0.2);
+        opacity: 1;
+    }
+
+    .content {
+        @include padded(all, l);
+        box-sizing: border-box;
+    }
+
+    .place {
+        @include font-sized(xl);
+        @include marged(all, none);
+        @include padded(all, none);
+
+        font-weight: bold;
+    }
+
+    .date {
+        @include font-sized(l);
+        @include marged(all, none);
+        @include padded(all, none);
+    }
+
+    .footer {
+        @include bg-colored($of-grey5);
+        @include font-colored($of-grey2);
+        @include font-sized(m);
+        @include padded(all, m);
+
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        transition: 0.5s;
+
+        div {
+            flex: 1;
+        }
+
+        &:hover {
+            @include font-colored($of-white);
+        }
+    }
+}
+
+.wideCard {
+    @extend .card;
+    @include bg-rgba-colored($of-cyan, 0.6);
+
+    border-radius: 4px;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    cursor: default;
+    opacity: 1;
+}

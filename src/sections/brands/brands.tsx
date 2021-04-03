@@ -161,10 +161,8 @@ const BrandsSection = () => {
                     onChange={(event, newPage) => onPageChange(newPage)}
                 />
             </div>
-
         </>
-
-    )
+    );
 }
 
 export default BrandsSection;

@@ -15,7 +15,8 @@ export type TState = {
     errorMessage: string,
     loading: boolean,
     purchaseHistory: IPurchase[],
-    purchaseList: IPurchaseItem[]
+    purchaseList: IPurchaseItem[],
+    fullPurchase: IPurchaseItem[]
 }
 
 export type TSavePurchaseList = TAction & {
@@ -32,6 +33,15 @@ export type TFetchPurchases = TAction & {
     | typeof ACTIONTYPES.FETCHING_PURCHASES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
     readonly purchaseHistory?: IPurchase[];
+    readonly errorMessage?: string;
+}
+
+export type TFetchPurchase = TAction & {
+    readonly type: typeof ACTIONTYPES.FETCHING_PURCHASE
+    | typeof ACTIONTYPES.FETCHING_PURCHASE_SUCCESS
+    | typeof ACTIONTYPES.FETCHING_PURCHASE_ERROR
+    | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly fullPurchase?: IPurchaseItem[];
     readonly errorMessage?: string;
 
 }

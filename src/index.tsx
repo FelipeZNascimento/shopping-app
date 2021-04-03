@@ -187,11 +187,15 @@ render(
                 <Notification />
                 <div className={containerClass}>
                     <Switch>
+                        <Route exact path={routes.HOME}>
+                            <HomeSection />
+                        </Route>
                         <Route path={routes.PURCHASES_SECTION}>
                             <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
                             <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
                             <Route path={routes.PURCHASE_HISTORY} component={PurchaseHistory} />
                         </Route>
+                        <Route path={routes.PURCHASE + "/:purchaseId"} component={PurchaseHistory} />
                         <Route path={routes.PLACES_SECTION}>
                             <Route path={routes.PLACES_CATEGORIES} component={PlacesCategoriesList} />
                             <Route path={routes.PLACES_LIST} component={PlacesList} />
@@ -200,12 +204,7 @@ render(
                             <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategories} />
                             <Route path={routes.PRODUCTS_LIST} component={ProductsList} />
                         </Route>
-                        <Route path={routes.BRANDS}>
-                            <BrandsSection />
-                        </Route>
-                        <Route exact path={routes.HOME}>
-                            <HomeSection />
-                        </Route>
+                        <Route path={routes.BRANDS} component={BrandsSection} />
                         <Route>
                             <HomeSection />
                         </Route>
