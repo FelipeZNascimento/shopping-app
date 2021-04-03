@@ -18,6 +18,7 @@ export const routes = {
     PURCHASE_FORM: '/purchases/form',
     SHOPPING_LIST: '/purchases/list',
     PURCHASE_HISTORY: '/purchases/history',
+    PURCHASE: '/purchase',
 };
 
 export default routes;

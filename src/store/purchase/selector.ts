@@ -12,6 +12,10 @@ export function selectPurchaseHistory(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseHistory;
 }
 
+export function selectFullPurchase(state: { purchaseReducer: TState }) {
+    return state.purchaseReducer.fullPurchase;
+}
+
 export function getPurchaseList(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseList;
 }

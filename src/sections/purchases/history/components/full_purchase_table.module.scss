@@ -1,0 +1,62 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/globals.scss";
+@import "style/margins.scss";
+@import "style/paddings.scss";
+
+.table {
+    @include aligned(left);
+    @include font-colored($of-white);
+    @include marged(all, s);
+
+    border-spacing: 0;
+    flex: 1;
+
+    thead {
+        @include font-colored($of-black);
+
+        font-weight: bold;
+
+        th:first-child {
+            border-top-left-radius: 4px;
+        }
+        th:last-child {
+            border-top-right-radius: 4px;
+        }
+        th {
+            padding: 10px 20px;
+        }
+    }
+
+    tbody {
+        td {
+            padding: 5px 10px;
+        }
+
+        tr:nth-child(even) {
+            @include bg-colored($of-grey4);
+        }
+
+        tr:nth-child(odd) {
+            @include bg-colored($of-grey5);
+        }
+
+        .checked {
+            @include bg-rgba-colored($of-grey3, 0.5);
+        }
+
+        tr:hover {
+            @include bg-rgba-colored($of-white, 0.01);
+        }
+    }
+}
+
+.cyan-bg {
+    @include bg-rgba-colored($of-cyan, 0.6);
+}
+
+.notFound {
+    @include aligned(center);
+    @include marged(all, m);
+}

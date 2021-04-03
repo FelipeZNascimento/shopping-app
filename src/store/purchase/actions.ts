@@ -5,6 +5,7 @@ import { setPurchase } from 'services/dataSetters';
 import fetchItems from 'services/dataGetters';
 
 import {
+    TFetchPurchase,
     TFetchPurchases,
     TSavePurchaseList
 } from './types';
@@ -54,6 +55,41 @@ export const fetchPurchases = () => async (dispatch: Dispatch<TFetchPurchases>) 
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PURCHASES_ERROR,
+                errorMessage: error
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error
+            });
+        })
+};
+
+export const fetchPurchase = (
+    purchaseId: number,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    }
+) => async (dispatch: Dispatch<TFetchPurchase>) => {
+    const { orderBy, sort } = sortState;
+
+    dispatch({ type: ACTIONTYPES.FETCHING_PURCHASE } as const);
+
+    fetchItems({
+        objectType: objectTypes.fullPurchase,
+        id: purchaseId,
+        orderBy: orderBy,
+        sort: sort
+    })
+        .then((data) => {
+            return dispatch({
+                type: ACTIONTYPES.FETCHING_PURCHASE_SUCCESS,
+                fullPurchase: data
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTIONTYPES.FETCHING_PURCHASE_ERROR,
                 errorMessage: error
             });
             return dispatch({
