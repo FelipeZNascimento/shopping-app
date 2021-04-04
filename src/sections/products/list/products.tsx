@@ -103,7 +103,7 @@ const ProductsList = () => {
     };
 
     const onAddToShoppingList = (product: IProduct) => {
-        if (shoppingList.find((item) => item.id === product.id) === undefined) {
+        if (shoppingList.find((item) => item.product_id === product.id) === undefined) {
             dispatch(addToShoppingList(product));
         }
     };
