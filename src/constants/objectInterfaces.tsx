@@ -74,6 +74,7 @@ export interface IPurchaseItem {
     price: number;
     total_price: number;
     promotion?: boolean;
+    details?: string;
 }
 
 export interface ISortingState {

@@ -145,6 +145,19 @@ const ProductCard = ({
                         />
                     </div>
                 </div>
+                <div className={styles.cardElementContainer}>
+                    <TextField
+                        fullWidth
+                        id="details"
+                        label="Detalhes"
+                        type="text"
+                        onChange={(e) => setItemInfo({
+                            ...itemInfo,
+                            details: e.target.value
+                        })}
+                    />
+                </div>
+
             </CardContent>
             <CardActions className={styles.footer}>
                 €{itemInfo.total_price}
