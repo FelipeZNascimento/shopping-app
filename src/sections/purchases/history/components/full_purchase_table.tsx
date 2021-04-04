@@ -98,6 +98,14 @@ const FullPurchaseTable = ({
         });
     };
 
+    const renderItemDetails = (details: string) => {
+        if (details === '') {
+            return;
+        }
+
+        return <span>({details})</span>;
+    };
+
     const renderBody = () => {
         if (bodyColumns.length === 0 && !isLoading) {
             return (
@@ -113,7 +121,7 @@ const FullPurchaseTable = ({
                     <tr key={item.id}>
                         <td className='align-left'>{item.quantity}</td>
                         <td>{item.category_description}</td>
-                        <td>{item.description}</td>
+                        <td>{item.description} {renderItemDetails(item.details)}</td>
                         <td>{item.brand_description || ''}</td>
                         <td>€ {item.price} / {itemUnit?.description}</td>
                     </tr>
