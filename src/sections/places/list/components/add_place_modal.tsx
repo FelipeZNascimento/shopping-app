@@ -36,7 +36,7 @@ const AddPlaceModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchPlaceCategories());
+        dispatch(fetchPlaceCategories(null));
     }, []);
 
     const onDescriptionChange = (event: any) => {

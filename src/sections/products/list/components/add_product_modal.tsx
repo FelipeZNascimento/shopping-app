@@ -36,13 +36,14 @@ const AddProductModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchProductCategories());
+        dispatch(fetchProductCategories(null));
     }, []);
 
     const onDescriptionChange = (event: any) => {
+        const newDescription = event.target.value;
         setSelectedItem({
             ...selectedItem,
-            description: event.target.value
+            description: newDescription
         });
     };
 

@@ -27,11 +27,11 @@ export const fetchBrandNames = () => async (dispatch: Dispatch<TFetchBrandNames>
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_BRAND_NAMES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -63,11 +63,11 @@ export const fetchBrands = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_BRANDS_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -93,11 +93,11 @@ export const saveBrand = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_BRANDS_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -124,11 +124,11 @@ export const deleteBrand = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_BRANDS_ERROR,
-                errorMessage: error.message
+                errorMessage: error.message.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };

@@ -55,11 +55,11 @@ export const fetchPurchases = () => async (dispatch: Dispatch<TFetchPurchases>) 
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PURCHASES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -90,11 +90,11 @@ export const fetchPurchase = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PURCHASE_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -150,10 +150,10 @@ export const savePurchaseList = (
             });
         })
         .catch((error) => {
-            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, errorMessage: error });
+            dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION, errorMessage: error.message });
             return dispatch({
                 type: ACTIONTYPES.SAVING_PURCHASE_LIST_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };

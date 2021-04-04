@@ -41,11 +41,11 @@ export const addToShoppingList = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -74,11 +74,11 @@ export const deleteFromShoppingList = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -116,11 +116,11 @@ export const fetchShoppingList = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
