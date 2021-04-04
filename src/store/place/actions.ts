@@ -34,11 +34,11 @@ export const fetchPlaceNames = () => async (dispatch: Dispatch<TFetchPlaceNames>
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PLACE_NAMES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -58,11 +58,11 @@ export const fetchPlaceCategoryNames = () => async (dispatch: Dispatch<TFetchPla
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -93,17 +93,17 @@ export const fetchPlaces = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PLACES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
 
 export const fetchPlaceCategories = (
-    currentPage = 0,
+    currentPage: number | null = 0,
     sortState = {
         orderBy: 'description',
         sort: 'ASC'
@@ -129,11 +129,11 @@ export const fetchPlaceCategories = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -161,11 +161,11 @@ export const savePlaceCategory = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -193,11 +193,11 @@ export const savePlace = (
             console.log(error);
             dispatch({
                 type: ACTIONTYPES.SAVING_PLACES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -225,11 +225,11 @@ export const deletePlace = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PLACES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -257,11 +257,11 @@ export const deletePlaceCategory = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error.message
+                errorMessage: error.message.message
             });
         })
 };

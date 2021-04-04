@@ -7,7 +7,7 @@ import { http } from './utilities';
 
 type TProps = {
     objectType: number,
-    currentPage?: number,
+    currentPage?: number | null,
     orderBy?: string,
     sort?: string,
     searchField?: string,

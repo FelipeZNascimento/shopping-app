@@ -33,11 +33,11 @@ export const fetchProductNames = () => async (dispatch: Dispatch<TFetchProductNa
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_NAMES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -57,11 +57,11 @@ export const fetchProductCategoryNames = () => async (dispatch: Dispatch<TFetchP
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_CATEGORY_NAMES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -93,17 +93,17 @@ export const fetchProducts = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
 
 export const fetchProductCategories = (
-    currentPage = 0,
+    currentPage: number | null = 0,
     sortState = {
         orderBy: 'description',
         sort: 'ASC'
@@ -129,11 +129,11 @@ export const fetchProductCategories = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -160,11 +160,11 @@ export const saveProductCategory = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -192,11 +192,11 @@ export const saveProduct = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_PRODUCTS_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -226,11 +226,11 @@ export const deleteProduct = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCTS_ERROR,
-                errorMessage: error
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error
+                errorMessage: error.message
             });
         })
 };
@@ -259,11 +259,11 @@ export const deleteProductCategory = (
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY_ERROR,
-                errorMessage: error.message
+                errorMessage: error.message.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error.message
+                errorMessage: error.message.message
             });
         })
 };
