@@ -29,10 +29,16 @@ export const addToShoppingList = (
         itemArray: [product],
         objectType: objectTypes.shoppingList
     })
-        .then(() => {
+        .then((response) => {
+            const purchaseItem = {
+                ...product,
+                product_id: product.id,
+                id: response.insertId
+            };
+
             dispatch({
                 type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS,
-                newProduct: product
+                newProduct: purchaseItem
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -51,21 +57,21 @@ export const addToShoppingList = (
 };
 
 export const deleteFromShoppingList = (
-    product: IProduct
+    purchaseItem: IProduct
 ) => async (dispatch: Dispatch<TDeleteShoppingList>) => {
-    if (product.id === null) {
+    if (purchaseItem.id === null) {
         return;
     }
 
     dispatch({ type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST } as const);
     deleteItems({
-        objectId: product.id,
+        objectId: purchaseItem.id,
         objectType: objectTypes.shoppingList
     })
         .then(() => {
-            return dispatch({
+            dispatch({
                 type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS,
-                toBeDeleted: product
+                toBeDeleted: purchaseItem
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION

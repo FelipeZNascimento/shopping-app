@@ -66,7 +66,7 @@ const ShoppingList = () => {
         return null;
     }
 
-    const deleteProduct = (product: IShoppingListItem) => {
+    const onDeleteProduct = (product: IShoppingListItem) => {
         dispatch(deleteFromShoppingList(product));
     };
 
@@ -144,7 +144,7 @@ const ShoppingList = () => {
                 isLoading={isListLoading}
                 sortState={currentSortState}
                 onCheckboxAction={onCheckboxClick}
-                onSecondaryAction={(product: IShoppingListItem) => deleteProduct(product)}
+                onSecondaryAction={(product: IShoppingListItem) => onDeleteProduct(product)}
                 onSortChange={onSortChange}
             />
             {isListLoading && <Loading />}
