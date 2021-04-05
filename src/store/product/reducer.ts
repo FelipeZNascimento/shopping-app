@@ -5,7 +5,12 @@ import {
     TProductsObject,
     TState
 } from './types';
-import { ICategory, IProduct } from 'constants/objectInterfaces';
+import {
+    ICategory,
+    IProduct,
+    TProductHistoryItem,
+    TProductInfo
+} from 'constants/objectInterfaces';
 
 interface IAction {
     categories: ICategory[],
@@ -14,6 +19,8 @@ interface IAction {
     names: string[],
     newCategory: ICategory,
     newProduct: IProduct,
+    productHistory: TProductHistoryItem[],
+    productInfo: TProductInfo,
     products: TProductsObject,
     productCategories: TCategoriesObject,
     toBeDeleted: IProduct | ICategory,
@@ -27,6 +34,8 @@ const initialState: TState = {
     loadingCategories: false,
     loadingCategoryNames: false,
     loadingNames: false,
+    productInfo: null,
+    productHistory: [],
     products: {
         count: 0,
         totalCount: 0,
@@ -46,6 +55,7 @@ export default function productReducer(
     action: IAction
 ) {
     switch (action.type) {
+        case ACTIONTYPES.FETCHING_PRODUCT:
         case ACTIONTYPES.FETCHING_PRODUCTS:
             return {
                 ...state,
@@ -69,6 +79,14 @@ export default function productReducer(
                 ...state,
                 loadingCategoryNames: true,
                 error: false
+            };
+        case ACTIONTYPES.FETCHING_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                loading: false,
+                productHistory: action.productHistory,
+                productInfo: action.productInfo
             };
         case ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS:
             return {
@@ -98,6 +116,7 @@ export default function productReducer(
                 loadingCategories: false,
                 productCategories: action.categories,
             };
+        case ACTIONTYPES.FETCHING_PRODUCT_ERROR:
         case ACTIONTYPES.FETCHING_PRODUCTS_ERROR:
             return {
                 ...state,

@@ -31,7 +31,7 @@ export function convertToPurchase(productsList: IProduct[], purchaseListLength: 
         unit: productUnits[0].id,
         price: 0,
         total_price: 0,
-        promotion: false
+        discount: false
     }));
 
     return {

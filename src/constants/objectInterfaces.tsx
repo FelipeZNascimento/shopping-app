@@ -21,6 +21,27 @@ export interface IProduct {
     product_id: number | null;
 }
 
+export type TProductInfo = {
+    id: number;
+    categoryDescription: string;
+    created: number;
+    description: string;
+}
+
+export type TProductHistoryItem = {
+    price: number;
+    discount: boolean;
+    unit: number;
+    brandId: number;
+    placeId: number;
+    productCategoryId: number;
+    description: string;
+    date: string;
+    categoryDescription: string;
+    brandDescription: string;
+    placeDescription: string;
+}
+
 export interface IProductsObject {
     totalCount: number,
     data: IProduct[]
@@ -73,7 +94,7 @@ export interface IPurchaseItem {
     unit: number;
     price: number;
     total_price: number;
-    promotion?: boolean;
+    discount?: boolean;
     details?: string;
 }
 

@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { isMobile } from "react-device-detect";
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 // Selectors
 import {
@@ -14,9 +16,8 @@ import {
 import { fetchPurchases } from 'store/purchase/actions';
 
 // Components
-import PurchaseCard from './components/purchase_card';
 import FullPurchase from './components/full_purchase';
-import { Loading } from 'components/index';
+import { InfoCard, Loading } from 'components/index';
 
 import {
     IPurchase
@@ -52,13 +53,31 @@ const PurchaseHistory = () => {
         history.push(routes.PURCHASE + `/${purchase.id}`);
     };
 
+    const renderFooter = (purchase: IPurchase) => {
+        return (
+            <div className={styles.footer}>
+                <div>{purchase.items} {purchase.items > 1 ? 'itens' : 'item'}</div>
+                <div>€{purchase.total}</div>
+            </div>
+        )
+    };
+
     if (selectedPurchase === null) {
+        if (purchaseHistory.length === 0) {
+            return (
+                <div className={styles.noPurchase}>
+                    <p>Nenhuma compra foi feita ainda!</p>
+                </div>
+            );
+        }
         return (
             <div className={isMobile ? styles.containerMobile : styles.containerDesktop}>
                 {isLoading && <Loading />}
-                {!isLoading && purchaseHistory.map((purchase) => <PurchaseCard
-                    purchase={purchase}
-                    onClick={onClick}
+                {!isLoading && purchaseHistory.map((purchase) => <InfoCard
+                    title={purchase.description}
+                    subtitle={moment(purchase.date).format('DD/MM/YYYY')}
+                    renderFooter={() => renderFooter(purchase)}
+                    onClick={() => onClick(purchase)}
                 />)}
             </div>
         );

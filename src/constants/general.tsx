@@ -15,7 +15,8 @@ export const objectTypes = Object.freeze({
     placeNames: 10,
     placeCategoryNames: 11,
     purchases: 12,
-    fullPurchase: 13
+    fullPurchase: 13,
+    product: 14
 });
 
 export const objectTypeInfo = Object.freeze({
@@ -96,5 +97,11 @@ export const objectTypeInfo = Object.freeze({
         description: 'Compra',
         dispatch: 'PURCHASE',
         apiCall: 'purchase/',
+    },
+    [objectTypes.product]: {
+        modelId: 'product',
+        description: 'Produto',
+        dispatch: 'PRODUCT',
+        apiCall: 'product/',
     }
 });

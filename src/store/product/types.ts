@@ -1,5 +1,11 @@
 import * as ACTIONTYPES from 'store/actionTypes';
-import { ICategory, IItemName, IProduct } from 'constants/objectInterfaces';
+import {
+    ICategory,
+    IItemName,
+    IProduct,
+    TProductHistoryItem,
+    TProductInfo
+} from 'constants/objectInterfaces';
 
 type TAction = {
     readonly response?: IProduct[] | ICategory[];
@@ -15,6 +21,8 @@ export type TState = {
     loadingNames: boolean,
     productNames: IItemName[],
     productCategoryNames: IItemName[],
+    productHistory: TProductHistoryItem[],
+    productInfo: null | TProductInfo,
     products: TProductsObject,
     productCategories: TCategoriesObject
 }
@@ -40,6 +48,15 @@ export type TFetchProducts = TAction & {
     readonly type: typeof ACTIONTYPES.FETCHING_PRODUCTS
     | typeof ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PRODUCTS_ERROR
+    | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+};
+
+export type TFetchProduct = TAction & {
+    readonly productHistory?: TProductHistoryItem[];
+    readonly productInfo?: TProductHistoryItem;
+    readonly type: typeof ACTIONTYPES.FETCHING_PRODUCT
+    | typeof ACTIONTYPES.FETCHING_PRODUCT_SUCCESS
+    | typeof ACTIONTYPES.FETCHING_PRODUCT_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
 };
 

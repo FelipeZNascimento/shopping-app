@@ -13,15 +13,14 @@ html {
 }
 
 a {
-    text-decoration: inherit;
     color: inherit;
-    cursor: auto;
+    cursor: pointer;
 }
 
 .vertical-align-center {
     display: flex;
     align-items: center;
- }
+}
 
 .align-center {
     justify-content: center;
@@ -62,14 +61,13 @@ a {
     &--invalid {
         background-color: lighten($of-red, 50%);
     }
-
 }
 
 .fab-bottom {
     bottom: 20px;
     color: $of-beige !important;
     position: fixed !important;
-};
+}
 
 .no-display {
     display: none;

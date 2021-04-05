@@ -1,11 +1,19 @@
 import { TState } from './types';
 
-export function getIsLoading(state: { productReducer: TState }) {
+export function selectIsLoading(state: { productReducer: TState }) {
     return state.productReducer.loading;
 }
 
 export function getIsLoadingCategories(state: { productReducer: TState }) {
     return state.productReducer.loadingCategories;
+}
+
+export function selectProductHistory(state: { productReducer: TState }) {
+    return state.productReducer.productHistory;
+}
+
+export function selectProductInfo(state: { productReducer: TState }) {
+    return state.productReducer.productInfo;
 }
 
 export function getProducts(state: { productReducer: TState }) {

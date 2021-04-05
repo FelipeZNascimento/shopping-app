@@ -9,6 +9,7 @@ import {
     TDeleteProduct,
     TDeleteProductCategory,
     TFetchCategories,
+    TFetchProduct,
     TFetchProducts,
     TFetchProductNames,
     TFetchProductCategoryNames,
@@ -57,6 +58,41 @@ export const fetchProductCategoryNames = () => async (dispatch: Dispatch<TFetchP
         .catch((error) => {
             dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_CATEGORY_NAMES_ERROR,
+                errorMessage: error.message
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error.message
+            });
+        })
+};
+
+export const fetchProductHistory = (
+    productId: number,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    }
+) => async (dispatch: Dispatch<TFetchProduct>) => {
+    const { orderBy, sort } = sortState;
+    dispatch({ type: ACTIONTYPES.FETCHING_PRODUCT } as const);
+
+    fetchItems({
+        objectType: objectTypes.product,
+        id: productId,
+        orderBy: orderBy,
+        sort: sort
+    })
+        .then((data) => {
+            return dispatch({
+                type: ACTIONTYPES.FETCHING_PRODUCT_SUCCESS,
+                productInfo: data.productInfo[0],
+                productHistory: data.data
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTIONTYPES.FETCHING_PRODUCT_ERROR,
                 errorMessage: error.message
             });
             return dispatch({

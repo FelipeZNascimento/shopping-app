@@ -18,15 +18,20 @@ import {
 } from 'constants/objectInterfaces';
 
 // Components
-import { Loading, SearchInput, Table } from 'components/index';
+import { GenericTable, Loading, SearchInput } from 'components/index';
 import { IAutocompleteItem } from 'components/autocomplete/types';
-import { AddShoppingCart } from '@material-ui/icons';
-import { Fab } from '@material-ui/core';
+import {
+    AddShoppingCart,
+    Delete as DeleteIcon,
+} from '@material-ui/icons';
+import { Checkbox, Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 
 import { resultsPerPage } from 'constants/general';
 import { routes } from 'constants/routes';
 import { invertSort } from 'utils/utils';
+
+import styles from './shopping_list.module.scss';
 
 const defaultSortState = {
     orderBy: 'description',
@@ -47,6 +52,11 @@ const ShoppingList = () => {
 
     const headers = [
         {
+            key: 'checkbox',
+            value: '',
+            sortable: false
+        },
+        {
             key: 'category_description',
             value: 'Categoria',
             sortable: true
@@ -55,6 +65,65 @@ const ShoppingList = () => {
             key: 'description',
             value: 'Produto',
             sortable: true
+        },
+        {
+            key: 'delete',
+            value: '',
+            sortable: false
+        }
+    ];
+
+    const onCheckboxClick = (item: any) => {
+        let updatedCheckedProducts;
+        const index = checkedProducts.findIndex((product: IProduct) => product.id === item.id);
+        if (index === -1) {
+            updatedCheckedProducts = [
+                ...checkedProducts,
+                item
+            ];
+        } else {
+            const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
+            updatedCheckedProducts = [...filteredProducts];
+        }
+
+        setCheckedProducts(updatedCheckedProducts);
+    };
+
+    const isChecked = (item: IProduct) => (checkedProducts.findIndex((product: IProduct) => product.id === item.id) !== -1);
+    const renderCheckbox = (item: IProduct) => (
+        <Checkbox
+            checked={isChecked(item)}
+            size="small"
+            inputProps={{ 'aria-label': 'checkbox with small size' }}
+            onClick={() => onCheckboxClick(item)}
+        />
+    );
+    const renderDeleteIcon = (item: IProduct) => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => dispatch(deleteFromShoppingList(item))}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
+
+    const bodyColumns = [
+        {
+            key: 'checkbox',
+            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>
+        },
+        {
+            key: 'category',
+            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.category_description}</td>
+        },
+        {
+            key: 'description',
+            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.description}</td>
+        },
+        {
+            key: 'delete',
+            renderFunction: (item: IShoppingListItem) => <td>{renderDeleteIcon(item)}</td>
         }
     ];
 
@@ -75,10 +144,6 @@ const ShoppingList = () => {
 
         setCurrentSortState({ orderBy, sort: newSort });
         dispatch(fetchShoppingList(currentPage - 1, { orderBy, sort: newSort }, searchField));
-    };
-
-    const onCheckboxClick = (productList: IProduct[]) => {
-        setCheckedProducts(productList);
     };
 
     const onConvertClick = () => {
@@ -121,45 +186,43 @@ const ShoppingList = () => {
                 <AddShoppingCart />&nbsp;
                 Converter em compra
             </Fab>
-            <SearchInput
-                options={list}
-                onSearch={onSearch}
-            />
-            <div className="bottom-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(list.length / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+            <div className={styles.container}>
+                <SearchInput
+                    options={list}
+                    onSearch={onSearch}
                 />
-            </div>
-            <Table
-                bodyColumns={isListLoading ? [] : list}
-                checkedProducts={checkedProducts}
-                color="cyan"
-                headerColumns={headers}
-                isLoading={isListLoading}
-                sortState={currentSortState}
-                onCheckboxAction={onCheckboxClick}
-                onSecondaryAction={(product: IShoppingListItem) => onDeleteProduct(product)}
-                onSortChange={onSortChange}
-            />
-            {isListLoading && <Loading />}
-            <div className="top-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(list.length / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(list.length / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        variant="outlined"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
+                <GenericTable
+                    bodyColumns={isListLoading ? [] : bodyColumns}
+                    color="cyan"
+                    data={list}
+                    headerColumns={headers}
+                    isLoading={isListLoading}
+                    onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
+                {isListLoading && <Loading />}
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(list.length / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        variant="outlined"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
             </div>
-
         </>
     );
 };

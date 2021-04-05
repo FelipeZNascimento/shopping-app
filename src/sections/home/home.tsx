@@ -1,6 +1,9 @@
 import React from 'react';
-import { SectionCards } from 'components/index';
+import { Link } from 'react-router-dom';
+
+import { InfoCard } from 'components/index';
 import { routes } from 'constants/routes';
+import styles from './home.module.scss';
 
 const HomeSection = () => {
     const cards = [
@@ -47,7 +50,16 @@ const HomeSection = () => {
     ];
 
     return (
-        <SectionCards cards={cards} />
+        <div className={styles.container}>
+            {cards.map((card) => (
+                <Link to={card.route}>
+                    <InfoCard
+                        color={card.color}
+                        title={card.title}
+                    />
+                </Link>
+            ))}
+        </div>
     );
 }
 

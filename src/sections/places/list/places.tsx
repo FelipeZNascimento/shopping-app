@@ -20,14 +20,14 @@ import {
 } from 'store/place/selector';
 
 // Components
-import { Fab } from '@material-ui/core';
+import { Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, SearchInput, Table } from 'components/index';
+import { AddCircle as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import { GenericTable, Loading, SearchInput } from 'components/index';
 import AddPlaceModal from './components/add_place_modal';
 import DeletePlaceModal from './components/delete_place_modal';
 
-import { 
+import {
     IItemName,
     IPlace,
     ISortingState
@@ -35,6 +35,7 @@ import {
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import { invertSort } from 'utils/utils';
 import { resultsPerPage } from 'constants/general';
+import styles from './places.module.scss';
 
 const defaultSortState = {
     orderBy: 'description',
@@ -80,9 +81,38 @@ const PlacesList = () => {
             key: 'description',
             value: 'Lugar',
             sortable: true
+        },
+        {
+            key: 'delete',
+            value: '',
+            sortable: false
         }
     ];
 
+    const renderDeleteIcon = (item: IPlace) => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => setToBeDeleted(item)}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
+
+    const bodyColumns = [
+        {
+            key: 'place',
+            renderFunction: (item: IPlace) => <td className="align-left">{item.description}</td>
+        },
+        {
+            key: 'place',
+            renderFunction: (item: IPlace) => <td className="align-left">{item.category_description}</td>
+        },
+        {
+            key: 'brand',
+            renderFunction: (item: IPlace) => <td className="align-right">{renderDeleteIcon(item)}</td>
+        }
+    ];
     const onDeletePlace = () => {
         if (toBeDeleted) {
             dispatch(deletePlace(toBeDeleted));
@@ -131,41 +161,52 @@ const PlacesList = () => {
                 <AddIcon />&nbsp;
                 Novo lugar
             </Fab>
-            <SearchInput
-                options={mergedNames}
-                onSearch={onSearch}
-            />
-            <div className="bottom-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+            <div className={styles.container}>
+                <SearchInput
+                    options={mergedNames}
+                    onSearch={onSearch}
+                />
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
+                <GenericTable
+                    bodyColumns={isPlacesLoading ? [] : bodyColumns}
+                    color="yellow"
+                    data={places}
+                    headerColumns={headers}
+                    isLoading={isPlacesLoading}
+                    sortState={currentSortState}
+                    onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
+                />
+                {isPlacesLoading && <Loading />}
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
+                <AddPlaceModal
+                    isOpen={isAddPlaceOpen}
+                    onClose={() => setIsAddPlaceOpen(false)}
+                    onConfirm={onAddNewPlace}
+                />
+                <DeletePlaceModal
+                    place={toBeDeleted}
+                    onClose={() => setToBeDeleted(null)}
+                    onConfirm={onDeletePlace}
                 />
             </div>
-            <Table
-                bodyColumns={places}
-                color="yellow"
-                headerColumns={headers}
-                isLoading={isPlacesLoading}
-                sortState={currentSortState}
-                onSecondaryAction={(product: IPlace) => setToBeDeleted(product)}
-                onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
-            />
-            {isPlacesLoading && <Loading />}
-            <AddPlaceModal
-                isOpen={isAddPlaceOpen}
-                onClose={() => setIsAddPlaceOpen(false)}
-                onConfirm={onAddNewPlace}
-            />
-            <DeletePlaceModal
-                place={toBeDeleted}
-                onClose={() => setToBeDeleted(null)}
-                onConfirm={onDeletePlace}
-            />
         </>
     )
 }
