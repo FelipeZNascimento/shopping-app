@@ -193,7 +193,6 @@ render(
                         </Route>
                         <Route path={routes.PURCHASES_SECTION}>
                             <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
-                            <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
                             <Route path={routes.PURCHASE_HISTORY} component={PurchaseHistory} />
                         </Route>
                         <Route path={routes.PURCHASE + "/:purchaseId"} component={PurchaseHistory} />
@@ -205,6 +204,7 @@ render(
                             <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategories} />
                             <Route path={routes.PRODUCTS_LIST} component={ProductsList} />
                         </Route>
+                        <Route path={routes.SHOPPING_LIST} component={ShoppingList} />
                         <Route path={routes.PRODUCT + "/:productId"} component={Product} />
                         <Route path={routes.BRANDS} component={BrandsSection} />
                         <Route>

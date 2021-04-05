@@ -102,7 +102,9 @@ const Menu = () => {
             <div className={`${buttonClass} ${styles.submenu}`}>
                 {item.display}
                 {item.dropdownOptions && item.dropdownOptions.map((option) => (
-                    <Link to={option.path}><p>{option.display}</p></Link>
+                    <Link to={option.path} onClick={() => setIsMenuOpen(false)}>
+                        <p>{option.display}</p>
+                    </Link>
                 ))}
             </div>
         )
@@ -147,11 +149,10 @@ const Menu = () => {
         return (
             <>
                 <div className={styles['container--mobile']}>
-                    <div className={styles.button}>
+                    <div className={styles.button} onClick={() => setIsMenuOpen(true)}>
                         <Button
                             classes={{ root: 'of-white' }}
                             startIcon={<MenuIcon />}
-                            onClick={() => setIsMenuOpen(true)}
                         >
                             Menu
                     </Button>

@@ -8,6 +8,11 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+
+    td {
+        @include padded(top, s);
+        @include padded(bottom, s);
+    }
 }
 
 .pagination {

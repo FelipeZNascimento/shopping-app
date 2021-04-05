@@ -10,11 +10,13 @@
     width: 100%;
 
     td {
-        @include padded(all, l);
+        @include padded(top, s);
+        @include padded(bottom, s);
     }
 }
 
 .graphicContainer {
+    @include padded(top, s);
     @include marged(all, s);
 
     height: 300px;

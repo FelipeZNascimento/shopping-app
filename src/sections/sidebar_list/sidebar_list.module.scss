@@ -8,6 +8,10 @@ $sidebar-width: 250px;
 .container {
     @include padded(all, m);
     min-width: $sidebar-width;
+
+    a {
+        text-decoration: none;
+    }
 }
 
 .title {

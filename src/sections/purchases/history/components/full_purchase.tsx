@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { isMobile } from "react-device-detect";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -55,32 +56,38 @@ const FullPurchase = ({
         {
             key: 'quantity',
             value: 'Quantidade',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         },
         {
             key: 'category_description',
             value: 'Categoria',
-            sortable: true
+            sortable: true,
+            showOnMobile: false
         },
         {
             key: 'description',
             value: 'Produto',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'brand',
             value: 'Marca',
-            sortable: false
+            sortable: false,
+            showOnMobile: false
         },
         {
             key: 'price',
             value: 'Preço',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'total',
             value: 'Total',
-            sortable: false
+            sortable: false,
+            showOnMobile: false
         }
     ];
 
@@ -89,11 +96,13 @@ const FullPurchase = ({
     const bodyColumns = [
         {
             key: 'quantity',
-            renderFunction: (item: IPurchaseItem) => <td className="align-left">{item.quantity} {itemUnit(item)?.description}</td>
+            renderFunction: (item: IPurchaseItem) => <td className="align-left">{item.quantity} {itemUnit(item)?.description}</td>,
+            showOnMobile: true
         },
         {
             key: 'category_description',
-            renderFunction: (item: IPurchaseItem) => <td>{item.category_description}</td>
+            renderFunction: (item: IPurchaseItem) => <td>{item.category_description}</td>,
+            showOnMobile: false
         },
         {
             key: 'description',
@@ -111,29 +120,33 @@ const FullPurchase = ({
                         <Link to={routes.PRODUCT + `/${item.product_id}`}>{item.description}</Link> {renderItemDetails()}
                     </td>
                 )
-            }
+            },
+            showOnMobile: true
         },
         {
             key: 'brand_description',
-            renderFunction: (item: IPurchaseItem) => <td>{item.brand_description || '-'}</td>
+            renderFunction: (item: IPurchaseItem) => <td>{item.brand_description || '-'}</td>,
+            showOnMobile: false
         },
         {
             key: 'price',
-            renderFunction: (item: IPurchaseItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price} / {itemUnit(item)?.description}</td>
+            renderFunction: (item: IPurchaseItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price} / {itemUnit(item)?.description}</td>,
+            showOnMobile: true
         },
         {
             key: 'total',
-            renderFunction: (item: IPurchaseItem) => <td>€ {item.price * item.quantity}</td>
+            renderFunction: (item: IPurchaseItem) => <td>€ {item.price * item.quantity}</td>,
+            showOnMobile: false
         }
     ];
 
     const lastRow = () => {
         return (
             <tr>
-                <td colSpan={5}>
+                <td colSpan={isMobile ? 2 : 5}>
                     &nbsp;
             </td>
-                <td className='align-left' colSpan={1}>
+                <td className='align-left'>
                     € {purchase.total}
                 </td>
             </tr>

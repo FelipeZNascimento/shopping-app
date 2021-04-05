@@ -65,12 +65,14 @@ const BrandsSection = () => {
         {
             key: 'description',
             value: 'Marca',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'delete',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         }
     ];
 
@@ -87,11 +89,13 @@ const BrandsSection = () => {
     const bodyColumns = [
         {
             key: 'place',
-            renderFunction: (item: IBrand) => <td className="align-left">{item.description}</td>
+            renderFunction: (item: IBrand) => <td className="align-left">{item.description}</td>,
+            showOnMobile: true
         },
         {
             key: 'brand',
-            renderFunction: (item: IBrand) => <td className="align-right">{renderDeleteIcon(item)}</td>
+            renderFunction: (item: IBrand) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            showOnMobile: true
         }
     ];
 

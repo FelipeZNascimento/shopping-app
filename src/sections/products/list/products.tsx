@@ -86,27 +86,32 @@ const ProductsList = () => {
         {
             key: 'checkbox',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         },
         {
             key: 'add_to_shopping_list',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         },
         {
             key: 'category',
             value: 'Categoria',
-            sortable: true
+            sortable: true,
+            showOnMobile: false
         },
         {
             key: 'description',
             value: 'Produto',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'delete',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         }
     ];
 
@@ -158,15 +163,18 @@ const ProductsList = () => {
     const bodyColumns = [
         {
             key: 'checkbox',
-            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>
+            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>,
+            showOnMobile: true
         },
         {
             key: 'add_to_shopping_list',
-            renderFunction: (item: IProduct) => <td>{renderAddToShoppingList(item)}</td>
+            renderFunction: (item: IProduct) => <td>{renderAddToShoppingList(item)}</td>,
+            showOnMobile: true
         },
         {
             key: 'category',
-            renderFunction: (item: IProduct) => <td className="align-left">{item.category_description}</td>
+            renderFunction: (item: IProduct) => <td className="align-left">{item.category_description}</td>,
+            showOnMobile: false
         },
         {
             key: 'description',
@@ -174,11 +182,13 @@ const ProductsList = () => {
                 <td className="align-left">
                     <Link to={routes.PRODUCT + `/${item.id}`}>{item.description}</Link>
                 </td>
-            )
+            ),
+            showOnMobile: true
         },
         {
             key: 'delete',
-            renderFunction: (item: IProduct) => <td>{renderDeleteIcon(item)}</td>
+            renderFunction: (item: IProduct) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            showOnMobile: true
         }
     ];
 

@@ -96,7 +96,6 @@ export function clearShoppingList() {
 }
 
 export const fetchShoppingList = (
-    currentPage = 0,
     sortState = {
         orderBy: 'description',
         sort: 'ASC'
@@ -108,7 +107,6 @@ export const fetchShoppingList = (
 
     fetchItems({
         objectType: objectTypes.shoppingList,
-        currentPage: currentPage,
         orderBy: orderBy,
         sort: sort,
         searchField: searchField
