@@ -119,6 +119,10 @@
     @include font-sized(l);
     @include font-colored($of-white);
 
+    a {
+        text-decoration: none;
+    }
+
     .button {
         padding: 10px 0;
     }

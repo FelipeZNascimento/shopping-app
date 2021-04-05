@@ -75,17 +75,20 @@ const PlacesList = () => {
         {
             key: 'category_description',
             value: 'Categoria',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'description',
             value: 'Lugar',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'delete',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         }
     ];
 
@@ -102,15 +105,18 @@ const PlacesList = () => {
     const bodyColumns = [
         {
             key: 'place',
-            renderFunction: (item: IPlace) => <td className="align-left">{item.description}</td>
+            renderFunction: (item: IPlace) => <td className="align-left">{item.description}</td>,
+            showOnMobile: true
         },
         {
             key: 'place',
-            renderFunction: (item: IPlace) => <td className="align-left">{item.category_description}</td>
+            renderFunction: (item: IPlace) => <td className="align-left">{item.category_description}</td>,
+            showOnMobile: true
         },
         {
             key: 'brand',
-            renderFunction: (item: IPlace) => <td className="align-right">{renderDeleteIcon(item)}</td>
+            renderFunction: (item: IPlace) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            showOnMobile: true
         }
     ];
     const onDeletePlace = () => {

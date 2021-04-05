@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 // Selectors
 import { shoppingList, getIsLoading } from 'store/shopping_list/selector';
@@ -25,9 +25,7 @@ import {
     Delete as DeleteIcon,
 } from '@material-ui/icons';
 import { Checkbox, Fab, IconButton } from '@material-ui/core';
-import { Pagination } from '@material-ui/lab';
 
-import { resultsPerPage } from 'constants/general';
 import { routes } from 'constants/routes';
 import { invertSort } from 'utils/utils';
 
@@ -40,7 +38,6 @@ const defaultSortState = {
 
 const ShoppingList = () => {
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
     const [searchField, setSearchField] = useState<string>('');
 
@@ -54,26 +51,30 @@ const ShoppingList = () => {
         {
             key: 'checkbox',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         },
         {
             key: 'category_description',
             value: 'Categoria',
-            sortable: true
+            sortable: true,
+            showOnMobile: false
         },
         {
             key: 'description',
             value: 'Produto',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'delete',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         }
     ];
 
-    const onCheckboxClick = (item: any) => {
+    const onCheckboxClick = (item: IProduct) => {
         let updatedCheckedProducts;
         const index = checkedProducts.findIndex((product: IProduct) => product.id === item.id);
         if (index === -1) {
@@ -111,50 +112,49 @@ const ShoppingList = () => {
     const bodyColumns = [
         {
             key: 'checkbox',
-            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>
+            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>,
+            showOnMobile: true
         },
         {
             key: 'category',
-            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.category_description}</td>
+            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.category_description}</td>,
+            showOnMobile: false
         },
         {
             key: 'description',
-            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.description}</td>
+            renderFunction: (item: IShoppingListItem) => (
+                <td className="align-left">
+                    <Link to={routes.PRODUCT + `/${item.product_id}`}>{item.description}</Link>
+                </td>
+            ),
+            showOnMobile: true
         },
         {
             key: 'delete',
-            renderFunction: (item: IShoppingListItem) => <td>{renderDeleteIcon(item)}</td>
+            renderFunction: (item: IShoppingListItem) => <td>{renderDeleteIcon(item)}</td>,
+            showOnMobile: true
         }
     ];
 
     useEffect(() => {
-        dispatch(fetchShoppingList(currentPage - 1));
+        dispatch(fetchShoppingList());
     }, []);
 
     if (shoppingList.length === 0) {
         return null;
     }
 
-    const onDeleteProduct = (product: IShoppingListItem) => {
-        dispatch(deleteFromShoppingList(product));
-    };
-
     const onSortChange = (orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
         setCurrentSortState({ orderBy, sort: newSort });
-        dispatch(fetchShoppingList(currentPage - 1, { orderBy, sort: newSort }, searchField));
+        dispatch(fetchShoppingList({ orderBy, sort: newSort }, searchField));
     };
 
     const onConvertClick = () => {
         dispatch(convertToPurchase(checkedProducts, purchaseListLength));
         history.push(routes.PURCHASE_FORM);
     }
-
-    const onPageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-        dispatch(fetchShoppingList(newPage - 1, currentSortState, searchField));
-    };
 
     const onSearch = (item: IAutocompleteItem | string) => {
         let newSearchInput;
@@ -168,7 +168,7 @@ const ShoppingList = () => {
         setSearchField(newSearchInput);
 
         if (newSearchInput.length >= 2 || newSearchInput.length === 0) {
-            dispatch(fetchShoppingList(0, currentSortState, newSearchInput));
+            dispatch(fetchShoppingList(currentSortState, newSearchInput));
         }
     };
 
@@ -191,17 +191,6 @@ const ShoppingList = () => {
                     options={list}
                     onSearch={onSearch}
                 />
-                <div className={styles.pagination}>
-                    <Pagination
-                        color="primary"
-                        count={Math.ceil(list.length / resultsPerPage)}
-                        page={currentPage}
-                        size="large"
-                        shape="rounded"
-                        variant="outlined"
-                        onChange={(event, newPage) => onPageChange(newPage)}
-                    />
-                </div>
                 <GenericTable
                     bodyColumns={isListLoading ? [] : bodyColumns}
                     color="cyan"
@@ -211,17 +200,6 @@ const ShoppingList = () => {
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
                 {isListLoading && <Loading />}
-                <div className={styles.pagination}>
-                    <Pagination
-                        color="primary"
-                        count={Math.ceil(list.length / resultsPerPage)}
-                        page={currentPage}
-                        size="large"
-                        shape="rounded"
-                        variant="outlined"
-                        onChange={(event, newPage) => onPageChange(newPage)}
-                    />
-                </div>
             </div>
         </>
     );

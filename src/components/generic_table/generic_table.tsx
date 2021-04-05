@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from "react-device-detect";
 
 import {
     ArrowDropDown as ArrowDropDownIcon,
@@ -83,6 +84,10 @@ const GenericTable = ({
         };
 
         return tableHeader.map((header) => {
+            if (isMobile && !header.showOnMobile) {
+                return null;
+            }
+
             return (
                 <th key={header.key}>
                     <div className="vertical-align-center">
@@ -95,7 +100,13 @@ const GenericTable = ({
     };
 
     const renderRow = (item: any) => {
-        return bodyColumns.map((column) => column.renderFunction(item));
+        return bodyColumns.map((column) => {
+            if (isMobile && !column.showOnMobile) {
+                return null;
+            }
+
+            return column.renderFunction(item);
+        });
     };
 
     return (

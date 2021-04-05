@@ -87,41 +87,49 @@ const SingleProduct = () => {
         {
             key: 'place',
             value: 'Lugar',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'brand',
             value: 'Marca',
-            sortable: false
+            sortable: false,
+            showOnMobile: false
         },
         {
             key: 'price',
             value: 'Preço',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'date',
             value: 'Data',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         }
     ];
 
     const bodyColumns = [
         {
             key: 'place',
-            renderFunction: (item: TProductHistoryItem) => <td className="align-left">{item.placeDescription}</td>
+            renderFunction: (item: TProductHistoryItem) => <td className="align-left">{item.placeDescription}</td>,
+            showOnMobile: true
         },
         {
             key: 'brand',
-            renderFunction: (item: TProductHistoryItem) => <td>{item.brandDescription || '-'}</td>
+            renderFunction: (item: TProductHistoryItem) => <td>{item.brandDescription || '-'}</td>,
+            showOnMobile: false
         },
         {
             key: 'price',
-            renderFunction: (item: TProductHistoryItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price}</td>
+            renderFunction: (item: TProductHistoryItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price}</td>,
+            showOnMobile: true
         },
         {
             key: 'date',
-            renderFunction: (item: TProductHistoryItem) => <td>{moment(item.date).format('DD/MM/YYYY')}</td>
+            renderFunction: (item: TProductHistoryItem) => <td>{moment(item.date).format('DD/MM/YYYY')}</td>,
+            showOnMobile: true
         }
     ];
 
@@ -184,9 +192,11 @@ const SingleProduct = () => {
                 sortState={currentSortState}
                 onSortChange={onSortChange}
             />
-            <div className={styles.graphicContainer}>
-                {renderLineChart()}
-            </div>
+            {graphicData.length > 0
+                && <div className={styles.graphicContainer}>
+                    {renderLineChart()}
+                </div>
+            }
         </div>
     );
 };

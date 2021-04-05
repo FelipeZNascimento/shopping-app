@@ -55,12 +55,14 @@ const CategoriesSection = ({
         {
             key: 'description',
             value: 'Categoria de Lugares',
-            sortable: true
+            sortable: true,
+            showOnMobile: true
         },
         {
             key: 'delete',
             value: '',
-            sortable: false
+            sortable: false,
+            showOnMobile: true
         }
     ];
 
@@ -77,11 +79,13 @@ const CategoriesSection = ({
     const bodyColumns = [
         {
             key: 'description',
-            renderFunction: (item: ICategory) => <td className="align-left">{item.description}</td>
+            renderFunction: (item: ICategory) => <td className="align-left">{item.description}</td>,
+            showOnMobile: true
         },
         {
             key: 'delete',
-            renderFunction: (item: ICategory) => <td className="align-right">{renderDeleteIcon(item)}</td>
+            renderFunction: (item: ICategory) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            showOnMobile: true
         }
     ];
 

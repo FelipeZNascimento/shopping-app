@@ -26,7 +26,6 @@
         }
         th {
             @include padded(top, m);
-            @include padded(right, l);
             @include padded(bottom, m);
             @include padded(left, l);
         }
