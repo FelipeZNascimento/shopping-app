@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './full_purchase_table.module.scss';
 
 import {
     ArrowDropDown as ArrowDropDownIcon,
@@ -10,36 +9,33 @@ import {
     ISortingState
 } from 'constants/objectInterfaces';
 
-import {
-    productUnits
-} from 'constants/products';
+import { TBodyColumn, THeaderColumn } from './types';
+import styles from './generic_table.module.scss';
 
 const defaultSortingState = {
     orderBy: 'description',
     sort: 'ASC'
 };
 
-type IHeaderColumn = {
-    key: string;
-    value: string;
-    sortable: boolean;
-}
-
 type TProps = {
-    bodyColumns?: any[];
+    bodyColumns: TBodyColumn[];
     color?: string;
-    headerColumns: IHeaderColumn[];
+    data?: any[];
+    headerColumns: THeaderColumn[];
     isLoading?: boolean;
     sortState?: ISortingState;
+    lastRow?: null | (() => void);
     onSortChange?: null | ((column: string, direction: string) => void);
 }
 
-const FullPurchaseTable = ({
-    bodyColumns = [],
+const GenericTable = ({
+    bodyColumns,
     color = 'green',
+    data = [],
     headerColumns,
     isLoading = false,
     sortState = defaultSortingState,
+    lastRow = null,
     onSortChange = null
 }: TProps) => {
     const setSortingState = (key: string) => {
@@ -71,7 +67,7 @@ const FullPurchaseTable = ({
     const renderHeader = () => {
         const tableHeader = [...headerColumns];
 
-        const renderHeaderValue = (header: IHeaderColumn) => {
+        const renderHeaderValue = (header: THeaderColumn) => {
             if (header.sortable) {
                 return (
                     <p
@@ -98,35 +94,8 @@ const FullPurchaseTable = ({
         });
     };
 
-    const renderItemDetails = (details: string) => {
-        if (details === '') {
-            return;
-        }
-
-        return <span>({details})</span>;
-    };
-
-    const renderBody = () => {
-        if (bodyColumns.length === 0 && !isLoading) {
-            return (
-                <tr>
-                    <td className={styles.notFound} colSpan={20}><p>Nenhum resultado encontrado</p></td>
-                </tr>
-            );
-        }
-        return bodyColumns
-            .map((item) => {
-                const itemUnit = productUnits.find((unit) => unit.id === item.unit);
-                return (
-                    <tr key={item.id}>
-                        <td className='align-left'>{item.quantity}</td>
-                        <td>{item.category_description}</td>
-                        <td>{item.description} {renderItemDetails(item.details)}</td>
-                        <td>{item.brand_description || ''}</td>
-                        <td>€ {item.price} / {itemUnit?.description}</td>
-                    </tr>
-                );
-            });
+    const renderRow = (item: any) => {
+        return bodyColumns.map((column) => column.renderFunction(item));
     };
 
     return (
@@ -137,10 +106,14 @@ const FullPurchaseTable = ({
                 </tr>
             </thead>
             <tbody>
-                {renderBody()}
+                {data.length === 0 && !isLoading &&
+                    <tr><td className={styles.notFound} colSpan={20}><p>Nenhum resultado encontrado.</p></td></tr>
+                }
+                {data.map((item) => <tr>{renderRow(item)}</tr>)}
+                {lastRow !== null && lastRow()}
             </tbody>
         </table>
     );
 };
 
-export default FullPurchaseTable;
+export default GenericTable;

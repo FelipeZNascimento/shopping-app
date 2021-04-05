@@ -6,31 +6,42 @@
 @import "style/paddings.scss";
 
 .table {
-    @include font-colored($of-white);
     @include aligned(left);
+    @include font-colored($of-white);
+    @include marged(all, s);
 
-    border: 1px solid $of-grey3;
     border-spacing: 0;
-    width: 100%;
+    flex: 1;
 
     thead {
         @include font-colored($of-black);
 
         font-weight: bold;
 
+        th:first-child {
+            border-top-left-radius: 4px;
+        }
+        th:last-child {
+            border-top-right-radius: 4px;
+        }
         th {
-            padding: 10px 20px;
+            @include padded(top, m);
+            @include padded(right, l);
+            @include padded(bottom, m);
+            @include padded(left, l);
         }
     }
 
     tbody {
         td {
-            padding: 5px 10px;
+            @include padded(right, l);
+            @include padded(left, l);
         }
 
         tr:nth-child(even) {
             @include bg-colored($of-grey4);
         }
+
         tr:nth-child(odd) {
             @include bg-colored($of-grey5);
         }
@@ -45,23 +56,27 @@
     }
 }
 
+.cyan-bg {
+    @include bg-rgba-colored($of-cyan, 0.6);
+}
+
 .green-bg {
-    @include bg-colored($of-green);
+    @include bg-rgba-colored($of-green, 0.6);
 }
 
 .pink-bg {
-    @include bg-colored($of-pink);
+    @include bg-rgba-colored($of-pink, 0.6);
 }
 
 .yellow-bg {
-    @include bg-colored($of-yellow);
-}
-
-.cyan-bg {
-    @include bg-colored($of-cyan);
+    @include bg-rgba-colored($of-yellow, 0.6);
 }
 
 .notFound {
     @include aligned(center);
     @include marged(all, m);
+}
+
+.discount {
+    @include font-colored($of-green);
 }

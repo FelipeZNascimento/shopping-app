@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 // Actions
 import {
@@ -19,16 +19,21 @@ import {
     getProductCategoryNames,
     getProducts,
     getProductsCount,
-    getIsLoading
+    selectIsLoading
 } from 'store/product/selector';
 import { shoppingList as listShopping } from 'store/shopping_list/selector';
 import { getPurchaseListLength } from 'store/purchase/selector';
 
 // Components
-import { Fab } from '@material-ui/core';
+import { Checkbox, Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import { AddCircle as AddIcon, AddShoppingCart } from '@material-ui/icons';
-import { Loading, SearchInput, Table } from 'components/index';
+import {
+    AddCircle as AddIcon,
+    AddShoppingCart,
+    Delete as DeleteIcon,
+    PlaylistAdd
+} from '@material-ui/icons';
+import { GenericTable, Loading, SearchInput } from 'components/index';
 import AddProductModal from 'sections/products/list/components/add_product_modal';
 import DeleteProductModal from 'sections/products/list/components/delete_product_modal';
 
@@ -37,6 +42,7 @@ import { resultsPerPage } from 'constants/general';
 import { IProduct, IItemName, ISortingState } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import { invertSort } from 'utils/utils';
+import styles from './products.module.scss';
 
 const defaultSortState = {
     orderBy: 'description',
@@ -62,7 +68,7 @@ const ProductsList = () => {
     const products: IProduct[] = useSelector(getProducts);
     const totalCount = useSelector(getProductsCount);
     const shoppingList: IProduct[] = useSelector(listShopping);
-    const isProductsLoading: boolean = useSelector(getIsLoading);
+    const isProductsLoading: boolean = useSelector(selectIsLoading);
     const purchaseListLength: number = useSelector(getPurchaseListLength);
 
     useEffect(() => {
@@ -78,7 +84,17 @@ const ProductsList = () => {
 
     const headers = [
         {
-            key: 'category_description',
+            key: 'checkbox',
+            value: '',
+            sortable: false
+        },
+        {
+            key: 'add_to_shopping_list',
+            value: '',
+            sortable: false
+        },
+        {
+            key: 'category',
             value: 'Categoria',
             sortable: true
         },
@@ -86,6 +102,83 @@ const ProductsList = () => {
             key: 'description',
             value: 'Produto',
             sortable: true
+        },
+        {
+            key: 'delete',
+            value: '',
+            sortable: false
+        }
+    ];
+
+    const renderDeleteIcon = (item: IProduct) => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => setToBeDeleted(item)}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
+
+    const onCheckboxClick = (item: IProduct) => {
+        let updatedCheckedProducts;
+        const index = checkedProducts.findIndex((product: IProduct) => product.id === item.id);
+        if (index === -1) {
+            updatedCheckedProducts = [
+                ...checkedProducts,
+                item
+            ];
+        } else {
+            const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
+            updatedCheckedProducts = [...filteredProducts];
+        }
+
+        setCheckedProducts(updatedCheckedProducts);
+    };
+
+    const isChecked = (item: IProduct) => (checkedProducts.findIndex((product: IProduct) => product.id === item.id) !== -1);
+    const renderCheckbox = (item: IProduct) => (
+        <Checkbox
+            checked={isChecked(item)}
+            size="small"
+            inputProps={{ 'aria-label': 'checkbox with small size' }}
+            onClick={() => onCheckboxClick(item)}
+        />
+    );
+
+    const renderAddToShoppingList = (item: IProduct) => (
+        <IconButton
+            aria-label="add"
+            onClick={() => onAddToShoppingList(item)}
+        >
+            <PlaylistAdd classes={{ root: 'of-green' }} />
+        </IconButton>
+    );
+
+    const bodyColumns = [
+        {
+            key: 'checkbox',
+            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>
+        },
+        {
+            key: 'add_to_shopping_list',
+            renderFunction: (item: IProduct) => <td>{renderAddToShoppingList(item)}</td>
+        },
+        {
+            key: 'category',
+            renderFunction: (item: IProduct) => <td className="align-left">{item.category_description}</td>
+        },
+        {
+            key: 'description',
+            renderFunction: (item: IProduct) => (
+                <td className="align-left">
+                    <Link to={routes.PRODUCT + `/${item.id}`}>{item.description}</Link>
+                </td>
+            )
+        },
+        {
+            key: 'delete',
+            renderFunction: (item: IProduct) => <td>{renderDeleteIcon(item)}</td>
         }
     ];
 
@@ -113,10 +206,6 @@ const ProductsList = () => {
 
         setCurrentSortState({ orderBy, sort: newSort });
         dispatch(fetchProducts(currentPage - 1, { orderBy, sort: newSort }, searchField));
-    };
-
-    const onCheckboxClick = (productList: IProduct[]) => {
-        setCheckedProducts(productList);
     };
 
     const onConvertClick = () => {
@@ -174,56 +263,51 @@ const ProductsList = () => {
     return (
         <>
             {renderFab()}
-            <SearchInput
-                options={mergedNames}
-                onSearch={onSearch}
-            />
-            <div className="bottom-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+            <div className={styles.container}>
+                <SearchInput
+                    options={mergedNames}
+                    onSearch={onSearch}
                 />
-            </div>
-            <Table
-                bodyColumns={isProductsLoading ? [] : products}
-                checkedProducts={checkedProducts}
-                color="green"
-                headerColumns={headers}
-                isLoading={isProductsLoading}
-                sortState={currentSortState}
-                onCheckboxAction={onCheckboxClick}
-                onMainAction={onAddToShoppingList}
-                onSecondaryAction={setToBeDeleted}
-                onSortChange={onSortChange}
-            />
-            {isProductsLoading && <Loading />}
-            <AddProductModal
-                isOpen={isAddProductOpen}
-                onClose={() => setIsAddProductOpen(false)}
-                onConfirm={onAddNewProduct}
-            />
-            <DeleteProductModal
-                product={toBeDeleted}
-                onClose={() => setToBeDeleted(null)}
-                onConfirm={onDeleteProduct}
-            />
-            <div className="top-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
+                <GenericTable
+                    bodyColumns={isProductsLoading ? [] : bodyColumns}
+                    color="green"
+                    data={products}
+                    headerColumns={headers}
+                    isLoading={isProductsLoading}
+                    onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
+                {isProductsLoading && <Loading />}
+                <AddProductModal
+                    isOpen={isAddProductOpen}
+                    onClose={() => setIsAddProductOpen(false)}
+                    onConfirm={onAddNewProduct}
+                />
+                <DeleteProductModal
+                    product={toBeDeleted}
+                    onClose={() => setToBeDeleted(null)}
+                    onConfirm={onDeleteProduct}
+                />
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
             </div>
-
         </>
 
     )

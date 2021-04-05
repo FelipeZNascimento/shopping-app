@@ -1,27 +1,32 @@
 import React, { useState } from 'react';
 
 // Components
-import { Fab } from '@material-ui/core';
-import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, Table } from 'components/index';
+import { Fab, IconButton } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import { AddCircle as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import { GenericTable, Loading, SearchInput } from 'components/index';
 import AddCategoryModal from './components/add_category_modal';
 import DeleteCategoryModal from './components/delete_category_modal';
 
+// Types
 import { ICategory, ISortingState } from 'constants/objectInterfaces';
+import { IAutocompleteItem } from 'components/autocomplete/types';
+import { resultsPerPage } from 'constants/general';
+
+import styles from './categories.module.scss';
 
 type TProps = {
-    bodyColumns: ICategory[];
     color: string;
-    headerColumns: {
-        key: string;
-        value: string;
-        sortable: boolean;
-    };
+    data: ICategory[];
     isLoading?: boolean;
+    searchOptions: ICategory[];
     sortState: ISortingState;
+    totalCount: number;
     onAddNewCategory: (categoryName: string) => void;
     onDeleteCategory: (category: ICategory) => void;
-    onSortChange: (column: string, direction: string) => void;
+    onPageChange: (page: number) => void;
+    onSearch: (item: IAutocompleteItem | string | null) => void;
+    onSortChange: (currentPage: number, column: string, direction: string) => void;
 };
 
 const defaultSortState = {
@@ -30,28 +35,71 @@ const defaultSortState = {
 };
 
 const CategoriesSection = ({
-    bodyColumns,
     color,
-    headerColumns,
+    data,
     isLoading = false,
+    searchOptions,
     sortState = defaultSortState,
+    totalCount,
     onAddNewCategory,
     onDeleteCategory,
+    onPageChange,
+    onSearch,
     onSortChange
 }: TProps) => {
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [toBeDeleted, setToBeDeleted] = useState<ICategory | null>(null);
+
+    const headerColumns = [
+        {
+            key: 'description',
+            value: 'Categoria de Lugares',
+            sortable: true
+        },
+        {
+            key: 'delete',
+            value: '',
+            sortable: false
+        }
+    ];
+
+    const renderDeleteIcon = (item: ICategory) => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => setToBeDeleted(item)}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
+
+    const bodyColumns = [
+        {
+            key: 'description',
+            renderFunction: (item: ICategory) => <td className="align-left">{item.description}</td>
+        },
+        {
+            key: 'delete',
+            renderFunction: (item: ICategory) => <td className="align-right">{renderDeleteIcon(item)}</td>
+        }
+    ];
 
     const deleteCategory = () => {
         if (toBeDeleted) {
             onDeleteCategory(toBeDeleted);
         }
         setToBeDeleted(null);
-    }
+    };
 
     const addNewCategory = (categoryName: string) => {
         onAddNewCategory(categoryName);
         setIsAddModalOpen(false);
+    };
+
+    const onPagination = (event: any, newPage: number) => {
+        setCurrentPage(newPage);
+        onPageChange(newPage);
     };
 
     return (
@@ -66,29 +114,54 @@ const CategoriesSection = ({
                 <AddIcon />&nbsp;
                 Nova categoria
             </Fab>
-            <Table
-                bodyColumns={isLoading ? [] : bodyColumns}
-                color={color}
-                headerColumns={[headerColumns]}
-                isLoading={isLoading}
-                sortState={sortState}
-                onSecondaryAction={setToBeDeleted}
-                onSortChange={onSortChange}
-            />
-            {isLoading && <Loading />}
-            <AddCategoryModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onConfirm={addNewCategory}
-            />
-            <DeleteCategoryModal
-                category={toBeDeleted}
-                onClose={() => setToBeDeleted(null)}
-                onConfirm={deleteCategory}
-            />
+            <div className={styles.container}>
+                <SearchInput
+                    options={searchOptions}
+                    onSearch={onSearch}
+                />
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={onPagination}
+                    />
+                </div>
+                <GenericTable
+                    bodyColumns={isLoading ? [] : bodyColumns}
+                    color={color}
+                    data={data}
+                    headerColumns={headerColumns}
+                    isLoading={isLoading}
+                    sortState={sortState}
+                    onSortChange={(column: string, direction: string) => onSortChange(currentPage, column, direction)}
+                />
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        onChange={onPagination}
+                    />
+                </div>
+                {isLoading && <Loading />}
+                <AddCategoryModal
+                    isOpen={isAddModalOpen}
+                    onClose={() => setIsAddModalOpen(false)}
+                    onConfirm={addNewCategory}
+                />
+                <DeleteCategoryModal
+                    category={toBeDeleted}
+                    onClose={() => setToBeDeleted(null)}
+                    onConfirm={deleteCategory}
+                />
+            </div>
         </>
-
-    )
-}
+    );
+};
 
 export default CategoriesSection;

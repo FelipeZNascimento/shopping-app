@@ -18,10 +18,10 @@ import {
 } from 'store/brand/selector';
 
 // Components
-import { Fab } from '@material-ui/core';
+import { Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
-import { AddCircle as AddIcon } from '@material-ui/icons';
-import { Loading, SearchInput, Table } from 'components/index';
+import { AddCircle as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
+import { GenericTable, Loading, SearchInput } from 'components/index';
 import AddBrandModal from './components/add_brand_modal';
 import DeleteBrandModal from './components/delete_brand_modal';
 
@@ -34,6 +34,7 @@ import {
     ISortingState
 } from 'constants/objectInterfaces';
 import { invertSort } from 'utils/utils';
+import styles from './brands.module.scss';
 
 const defaultSortState = {
     orderBy: 'description',
@@ -65,6 +66,32 @@ const BrandsSection = () => {
             key: 'description',
             value: 'Marca',
             sortable: true
+        },
+        {
+            key: 'delete',
+            value: '',
+            sortable: false
+        }
+    ];
+
+    const renderDeleteIcon = (item: IBrand) => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => setToBeDeleted(item)}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
+
+    const bodyColumns = [
+        {
+            key: 'place',
+            renderFunction: (item: IBrand) => <td className="align-left">{item.description}</td>
+        },
+        {
+            key: 'brand',
+            renderFunction: (item: IBrand) => <td className="align-right">{renderDeleteIcon(item)}</td>
         }
     ];
 
@@ -116,50 +143,54 @@ const BrandsSection = () => {
                 <AddIcon />&nbsp;
                 Nova marca
             </Fab>
-            <SearchInput
-                options={brandNames}
-                onSearch={onSearch}
-            />
-            <div className="bottom-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+
+            <div className={styles.container}>
+                <SearchInput
+                    options={brandNames}
+                    onSearch={onSearch}
                 />
-            </div>
-            <Table
-                bodyColumns={isLoading ? [] : brands}
-                color="pink"
-                headerColumns={headers}
-                isLoading={isLoading}
-                onSecondaryAction={(brand: IBrand) => setToBeDeleted(brand)}
-                onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
-            />
-            {isLoading && <Loading />}
-            <AddBrandModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onConfirm={onAddNewBrand}
-            />
-            <DeleteBrandModal
-                brand={toBeDeleted}
-                onClose={() => setToBeDeleted(null)}
-                onConfirm={onDeleteBrand}
-            />
-            <div className="top-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        variant="outlined"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
+                <GenericTable
+                    bodyColumns={isLoading ? [] : bodyColumns}
+                    color="pink"
+                    data={brands}
+                    headerColumns={headers}
+                    isLoading={isLoading}
+                    sortState={currentSortState}
+                    onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
+                {isLoading && <Loading />}
+                <AddBrandModal
+                    isOpen={isAddModalOpen}
+                    onClose={() => setIsAddModalOpen(false)}
+                    onConfirm={onAddNewBrand}
+                />
+                <DeleteBrandModal
+                    brand={toBeDeleted}
+                    onClose={() => setToBeDeleted(null)}
+                    onConfirm={onDeleteBrand}
+                />
+                <div className={styles.pagination}>
+                    <Pagination
+                        color="primary"
+                        count={Math.ceil(totalCount / resultsPerPage)}
+                        page={currentPage}
+                        size="large"
+                        shape="rounded"
+                        variant="outlined"
+                        onChange={(event, newPage) => onPageChange(newPage)}
+                    />
+                </div>
             </div>
         </>
     );

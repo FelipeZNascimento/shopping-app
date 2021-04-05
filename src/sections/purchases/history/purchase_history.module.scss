@@ -19,3 +19,21 @@
         flex-wrap: wrap;
     }
 }
+
+.noPurchase {
+    @include font-colored($of-white);
+    @include font-sized(xl);
+}
+
+.footer {
+    @include bg-colored($of-grey5);
+    @include font-colored($of-grey2);
+    @include font-sized(m);
+    @include padded(all, m);
+
+    transition: 0.5s;
+
+    &:hover {
+        @include font-colored($of-white);
+    }
+}

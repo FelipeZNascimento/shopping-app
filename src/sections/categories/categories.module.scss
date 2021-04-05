@@ -1,0 +1,23 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/paddings.scss";
+@import "style/margins.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.pagination {
+    @include flex-aligned(center, center);
+    @include padded(top, l);
+    @include padded(bottom, l);
+
+    display: flex;
+}
+
+.icon {
+    @include font-colored($of-red);
+}

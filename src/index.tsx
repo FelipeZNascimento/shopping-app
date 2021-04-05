@@ -31,6 +31,7 @@ import {
     HomeSection,
     PlacesList,
     PlacesCategoriesList,
+    Product,
     ProductsList,
     ProductsCategories,
     SidebarList,
@@ -204,6 +205,7 @@ render(
                             <Route path={routes.PRODUCTS_CATEGORIES} component={ProductsCategories} />
                             <Route path={routes.PRODUCTS_LIST} component={ProductsList} />
                         </Route>
+                        <Route path={routes.PRODUCT + "/:productId"} component={Product} />
                         <Route path={routes.BRANDS} component={BrandsSection} />
                         <Route>
                             <HomeSection />

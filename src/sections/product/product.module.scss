@@ -1,0 +1,48 @@
+@import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/paddings.scss";
+@import "style/margins.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    td {
+        @include padded(all, l);
+    }
+}
+
+.graphicContainer {
+    @include marged(all, s);
+
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltip {
+    @include bg-rgba-colored($of-grey3, 0.5);
+    @include padded(all, s);
+    border-radius: 4px;
+
+    p {
+        @include marged(all, none);
+        @include padded(all, none);
+    }
+
+    .place {
+        @include font-sized(l);
+    }
+
+    .price {
+        @include font-sized(m);
+    }
+
+    .discount {
+        @extend .price;
+        @include font-colored($of-green);
+
+    }
+}

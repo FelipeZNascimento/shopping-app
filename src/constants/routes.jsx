@@ -12,6 +12,7 @@ export const routes = {
     PRODUCTS_SECTION: '/products',
     PRODUCTS_LIST: '/products/list',
     PRODUCTS_CATEGORIES: '/products/categories',
+    PRODUCT: '/product',
 
     // Purchases
     PURCHASES_SECTION: '/purchases',

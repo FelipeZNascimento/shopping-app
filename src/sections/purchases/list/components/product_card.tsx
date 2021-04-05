@@ -140,7 +140,7 @@ const ProductCard = ({
                             inputProps={{ 'aria-label': 'checkbox with small size' }}
                             onChange={(e) => setItemInfo({
                                 ...itemInfo,
-                                promotion: e.target.checked
+                                discount: e.target.checked
                             })}
                         />
                     </div>

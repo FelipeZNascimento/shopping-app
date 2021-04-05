@@ -9,7 +9,7 @@ import {
 } from 'store/product/actions';
 
 // Selectors
-import { 
+import {
     getProductCategories,
     getProductCategoriesCount,
     getIsLoadingCategories
@@ -45,14 +45,6 @@ const ProductsCategories = () => {
         dispatch(fetchProductCategories(currentPage - 1));
     }, []);
 
-    const headers = {
-        key: 'description',
-        value: 'Categoria de Produtos',
-        sortable: true
-    };
-
-    const color = 'green';
-
     const onDeleteCategory = (category: ICategory) => {
         dispatch(deleteProductCategory(category));
     }
@@ -66,7 +58,7 @@ const ProductsCategories = () => {
         dispatch(saveProductCategory(newCategory));
     };
 
-    const onSortChange = (orderBy: string, sort: string) => {
+    const onSortChange = (currentPage: number, orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
         setCurrentSortState({ orderBy, sort: newSort });
@@ -91,45 +83,21 @@ const ProductsCategories = () => {
     };
 
     return (
-        <>
-            <SearchInput
-                options={categories}
-                onSearch={onSearch}
-            />
-            <div className="bottom-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
-                />
-            </div>
-            <CategoriesSection
-                bodyColumns={categories}
-                color={color}
-                headerColumns={headers}
-                isLoading={isCategoriesLoading}
-                sortState={currentSortState}
-                onAddNewCategory={onAddNewCategory}
-                onDeleteCategory={onDeleteCategory}
-                onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
-            />
-            <div className="top-padding-l">
-                <Pagination
-                    color="primary"
-                    count={Math.ceil(totalCount / resultsPerPage)}
-                    page={currentPage}
-                    size="large"
-                    shape="rounded"
-                    variant="outlined"
-                    onChange={(event, newPage) => onPageChange(newPage)}
-                />
-            </div>
-        </>
+        <CategoriesSection
+            color={'green'}
+            data={categories}
+            isLoading={isCategoriesLoading}
+            searchOptions={categories}
+            sortState={currentSortState}
+            totalCount={totalCount}
+
+            onAddNewCategory={onAddNewCategory}
+            onDeleteCategory={onDeleteCategory}
+            onPageChange={onPageChange}
+            onSearch={onSearch}
+            onSortChange={onSortChange}
+        />
     );
-}
+};
 
 export default ProductsCategories;
