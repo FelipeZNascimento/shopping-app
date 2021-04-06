@@ -1,7 +1,6 @@
 @import "style/alignments.scss";
 @import "style/colors.scss";
 @import "style/font-sizes.scss";
-@import "style/globals.scss";
 @import "style/margins.scss";
 @import "style/paddings.scss";
 
@@ -24,10 +23,26 @@
         th:last-child {
             border-top-right-radius: 4px;
         }
-        th {
+        th .column {
             @include padded(top, m);
+            @include padded(right, none);
             @include padded(bottom, m);
             @include padded(left, l);
+            @include marged(all, none);
+
+            display: flex;
+            align-items: center;
+
+            .sortable {
+                @include padded(all, none);
+                @include marged(all, none);
+
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 

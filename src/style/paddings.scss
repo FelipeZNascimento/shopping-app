@@ -1,13 +1,4 @@
-$padding: (
-    "none": 0px,
-    "xxs": 2px,
-    "xs": 4px,
-    "s": 8px,
-    "m": 12px,
-    "l": 16px,
-    "xl": 25px,
-    "xxl": 50px
-);
+@import "style/variables.scss";
 
 @each $name, $pixels in $padding {
     .top-padding-#{$name} {

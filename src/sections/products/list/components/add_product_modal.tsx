@@ -19,6 +19,8 @@ import {
 } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
+import styles from './modal.module.scss';
+
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
@@ -70,7 +72,7 @@ const AddProductModal = ({
                 type="text"
                 onChange={onDescriptionChange}
             />
-            <div className="min-padding">
+            <div className={styles.minPadding}>
                 <Autocomplete
                     options={categories}
                     title="Categoria"
