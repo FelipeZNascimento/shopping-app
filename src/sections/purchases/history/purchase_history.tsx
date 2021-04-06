@@ -63,7 +63,7 @@ const PurchaseHistory = () => {
     };
 
     if (selectedPurchase === null) {
-        if (purchaseHistory.length === 0) {
+        if (purchaseHistory.length === 0 && !isLoading) {
             return (
                 <div className={styles.noPurchase}>
                     <p>Nenhuma compra foi feita ainda!</p>
