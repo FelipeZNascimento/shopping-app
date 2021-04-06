@@ -74,6 +74,7 @@ const PurchaseHistory = () => {
             <div className={isMobile ? styles.containerMobile : styles.containerDesktop}>
                 {isLoading && <Loading />}
                 {!isLoading && purchaseHistory.map((purchase) => <InfoCard
+                    clickable
                     title={purchase.description}
                     subtitle={moment(purchase.date).format('DD/MM/YYYY')}
                     renderFooter={() => renderFooter(purchase)}

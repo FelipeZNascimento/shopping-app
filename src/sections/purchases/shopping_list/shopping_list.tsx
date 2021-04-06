@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 
 // Selectors
 import { shoppingList, getIsLoading } from 'store/shopping_list/selector';
-import { getPurchaseListLength } from 'store/purchase/selector';
+import { getPurchaseList } from 'store/purchase/selector';
 
 // Actions
 import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
@@ -25,6 +25,7 @@ import {
     Delete as DeleteIcon,
 } from '@material-ui/icons';
 import { Checkbox, Fab, IconButton } from '@material-ui/core';
+import { IPurchaseItem } from 'constants/objectInterfaces';
 
 import { routes } from 'constants/routes';
 import { invertSort } from 'utils/utils';
@@ -43,7 +44,7 @@ const ShoppingList = () => {
 
     const list: IShoppingListItem[] = useSelector(shoppingList);
     const isListLoading: boolean = useSelector(getIsLoading);
-    const purchaseListLength: number = useSelector(getPurchaseListLength);
+    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -152,7 +153,7 @@ const ShoppingList = () => {
     };
 
     const onConvertClick = () => {
-        dispatch(convertToPurchase(checkedProducts, purchaseListLength));
+        dispatch(convertToPurchase(checkedProducts, purchaseList));
         history.push(routes.PURCHASE_FORM);
     }
 
@@ -176,7 +177,7 @@ const ShoppingList = () => {
     return (
         <>
             <Fab
-                classes={{ root: isFabButtonDisabled ? 'of-grey4-bg' : 'of-cyan-bg' }}
+                classes={{ root: isFabButtonDisabled ? 'of-grey4-bg' : 'of-orange-bg' }}
                 className="fab-bottom"
                 disabled={isFabButtonDisabled}
                 size="large"
@@ -193,7 +194,7 @@ const ShoppingList = () => {
                 />
                 <GenericTable
                     bodyColumns={isListLoading ? [] : bodyColumns}
-                    color="cyan"
+                    color="orange"
                     data={list}
                     headerColumns={headers}
                     isLoading={isListLoading}

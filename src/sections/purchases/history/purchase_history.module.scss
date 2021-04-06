@@ -5,16 +5,19 @@
 @import "style/margins.scss";
 
 .container {
-    @include flex-aligned(center, top);
+    @include flex-aligned(center, flex-start);
     display: flex;
     width: 100%;
 
     &Mobile {
         @extend .container;
+        @include flex-aligned(center, center);
+
         flex-direction: column;
     }
     &Desktop {
         @extend .container;
+
         flex-direction: row;
         flex-wrap: wrap;
     }

@@ -2,30 +2,12 @@
 @import "style/colors.scss";
 @import "style/font-sizes.scss";
 @import "style/paddings.scss";
+@import "style/variables.scss";
 
 .container {
     display: flex;
     flex-direction: column;
     width: 100%;
-
-    .card:nth-child(even) {
-        @include bg-colored($of-grey4);
-    }
-    .card:nth-child(odd) {
-        @include bg-colored($of-grey5);
-    }
-}
-
-.card {
-    margin: 5px;
-    width: 350px;
-}
-
-.totalCard {
-    @extend .card;
-    @include bg-rgba-colored($of-cyan, 0.5);
-    overflow-y: auto !important;
-    max-height: 347px;
 }
 
 .cardElementContainer {
@@ -33,61 +15,32 @@
     margin-bottom: 10px;
 }
 
-.leftAlign {
-    @include aligned(left);
-    flex: 2 !important;
-}
-
-.rightAlign {
-    @include aligned(right);
-}
-
-.dottedBorder {
-    border-bottom: 1px dotted black;
-}
-
 .cardElement {
     flex: 1;
 }
-
-.cardElement:not(:last-child) {
-    margin-right: 5px;
-}
-.cardElement:last-child {
-    margin-left: 5px;
+.cardElement + .cardElement {
+    @include padded(left, m);
 }
 
-.title {
+.promo {
+    @include flex-aligned(center, center);
+    @include font-colored($of-green);
+
+    flex: 1;
+    flex-direction: column;
+}
+
+.totalCardFooter {
+    @include bg-rgba-colored($of-grey3, 0.6);
     @include font-colored($of-white);
-    @include font-sized(l);
+    @include font-sized(m);
+    @include padded(all, m);
+
+    box-shadow: inset 0px 2px 0px $of-grey1;
+    flex: 0;
 }
 
-.subtitle {
-    @include font-colored($of-grey1);
-}
-
-.totalPriceAvatar {
-    @include bg-colored($of-cyan);
-    @include font-colored($of-black);
-    @include font-sized(s);
-}
-
-.flexCenter {
-    @include flex-aligned(center, center);
-}
-
-.footer {
-    @include bg-rgba-colored($of-black, 0.2);
-    @include font-colored($of-grey2);
-    @include flex-aligned(center, center);
-
-    font-weight: bold;
-}
-
-.redBorder {
-    border-bottom: 1px solid $of-red;
-}
-
-.greenBorder {
-    box-shadow: 0px 2px 1px -1px rgba($of-green, 0.2), 0px 1px 1px 0px rgba($of-green,0.14), 0px 1px 3px 0px rgba($of-green,0.12) !important;
+.totalCardFooterValid {
+    @extend .totalCardFooter;
+    box-shadow: inset 0px 2px 0px $of-cyan;
 }

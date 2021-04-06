@@ -1,28 +1,37 @@
-@import "style/colors.scss";
 @import "style/alignments.scss";
+@import "style/colors.scss";
+@import "style/font-sizes.scss";
+@import "style/margins.scss";
+@import "style/paddings.scss";
+
 @value card from './components/product_card.module.scss';
 
 .purchaseFormHeader {
+    @include padded(bottom, l);
+
     display: flex;
     width: 100%;
 
     & > * {
         flex: 1;
         padding: 0 20px;
-    }      
+    }
 }
 
 .purchaseCardContainer {
-    @include flex-aligned(center, top);
+    @include flex-aligned(center, flex-start);
     display: flex;
     width: 100%;
 
     &Mobile {
         @extend .purchaseCardContainer;
+        @include flex-aligned(center, center);
+
         flex-direction: column;
     }
     &Desktop {
         @extend .purchaseCardContainer;
+
         flex-direction: row;
         flex-wrap: wrap;
     }
@@ -32,5 +41,38 @@
     }
     .card:nth-child(odd) {
         @include bg-colored($of-grey5);
+    }
+}
+
+.category {
+    @include marged(bottom, m);
+
+    display: flex;
+    margin-bottom: 10px;
+    border-bottom: 1px dotted black;
+    width: 100%;
+
+    .title {
+        @include aligned(left);
+        flex: 2;
+    }
+
+    .total {
+        @include aligned(right);
+        flex: 1;
+    }
+}
+
+.totalCardFooter {
+    @include bg-colored($of-grey5);
+    @include font-colored($of-white);
+    @include font-sized(m);
+    @include padded(all, m);
+
+    flex: 0;
+    transition: 0.5s;
+
+    &:hover {
+        @include font-colored($of-white);
     }
 }

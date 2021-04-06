@@ -70,6 +70,10 @@
     }
 }
 
+.orange-bg {
+    @include bg-rgba-colored($of-orange, 0.6);
+}
+
 .cyan-bg {
     @include bg-rgba-colored($of-cyan, 0.6);
 }

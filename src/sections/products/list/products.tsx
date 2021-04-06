@@ -22,7 +22,7 @@ import {
     selectIsLoading
 } from 'store/product/selector';
 import { shoppingList as listShopping } from 'store/shopping_list/selector';
-import { getPurchaseListLength } from 'store/purchase/selector';
+import { getPurchaseList } from 'store/purchase/selector';
 
 // Components
 import { Checkbox, Fab, IconButton } from '@material-ui/core';
@@ -39,7 +39,7 @@ import DeleteProductModal from 'sections/products/list/components/delete_product
 
 import { routes } from 'constants/routes';
 import { resultsPerPage } from 'constants/general';
-import { IProduct, IItemName, ISortingState } from 'constants/objectInterfaces';
+import { IProduct, IItemName, IPurchaseItem, ISortingState } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import { invertSort } from 'utils/utils';
 import styles from './products.module.scss';
@@ -69,7 +69,7 @@ const ProductsList = () => {
     const totalCount = useSelector(getProductsCount);
     const shoppingList: IProduct[] = useSelector(listShopping);
     const isProductsLoading: boolean = useSelector(selectIsLoading);
-    const purchaseListLength: number = useSelector(getPurchaseListLength);
+    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
 
     useEffect(() => {
         dispatch(fetchProducts(currentPage - 1));
@@ -219,7 +219,7 @@ const ProductsList = () => {
     };
 
     const onConvertClick = () => {
-        dispatch(convertToPurchase(checkedProducts, purchaseListLength));
+        dispatch(convertToPurchase(checkedProducts, purchaseList));
         history.push(routes.PURCHASE_FORM);
     };
 

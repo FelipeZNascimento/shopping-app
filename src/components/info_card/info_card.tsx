@@ -4,19 +4,25 @@ import classNames from 'classnames';
 import styles from './info_card.module.scss';
 
 type TProps = {
+    children?: React.ReactNode;
+    clickable?: boolean;
     color?: string;
     subtitle?: string;
     title: string;
-    wide?: boolean;
+    responsiveWidth?: boolean;
+    renderButton?: null | (() => JSX.Element);
     renderFooter?: null | (() => JSX.Element);
     onClick?: null | (() => void);
 }
 
 const PurchaseCard = ({
+    children = null,
+    clickable = false,
     color = 'cyan',
     title,
     subtitle,
-    wide = false,
+    responsiveWidth = false,
+    renderButton = null,
     renderFooter = null,
     onClick = null
 }: TProps) => {
@@ -26,22 +32,28 @@ const PurchaseCard = ({
         }
     };
 
-    const cardClass = classNames({
-        [styles.wideCard]: wide,
-        [styles.card]: !wide,
-        [styles.green]: color === 'green',
-        [styles.cyan]: color === 'cyan',
-        [styles.yellow]: color === 'yellow',
-        [styles.pink]: color === 'pink',
+    const cardClass = classNames(
+        [styles[color]], {
+        [styles.responsiveCard]: responsiveWidth,
+        [styles.card]: !responsiveWidth,
+        [styles.clickable]: clickable
+    });
+
+    const contentClass = classNames(
+        [styles.content], {
+        [styles.centerAligned]: children === null
     });
 
     return (
         <div className={cardClass} onClick={onCardClick}>
-            <div className={styles.content}>
+            <div className={contentClass}>
+                {renderButton !== null &&
+                    <div className={styles.button}>{renderButton()}</div>}
                 <p className={styles.title}>{title}</p>
                 {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
             </div>
-            {!wide && renderFooter !== null &&
+            {children && <div className={styles.children}>{children}</div>}
+            {renderFooter !== null &&
                 <div className={styles.footer}>{renderFooter()}</div>}
         </div>
     );

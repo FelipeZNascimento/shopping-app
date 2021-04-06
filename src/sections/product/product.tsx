@@ -178,7 +178,7 @@ const SingleProduct = () => {
     return (
         <div className={styles.container}>
             {selectedProduct && <InfoCard
-                wide
+                responsiveWidth
                 color={'green'}
                 title={`[${selectedProduct.id}] ${selectedProduct.description}`}
                 subtitle={selectedProduct.categoryDescription}

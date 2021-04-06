@@ -163,7 +163,7 @@ const FullPurchase = ({
     return (
         <div className={styles.container}>
             <InfoCard
-                wide
+                responsiveWidth
                 title={purchase.description}
                 subtitle={moment(purchase.date).format('DD/MM/YYYY')}
             />

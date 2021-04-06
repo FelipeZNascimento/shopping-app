@@ -10,6 +10,7 @@ import { dynamicSort } from 'utils/utils'
 
 interface IAction {
     type: string,
+    newlyAddedItems: IPurchaseItem[],
     purchaseHistory: IPurchase[],
     purchaseList: IPurchaseItem[],
     fullPurchase: IPurchaseItem[],
@@ -37,7 +38,7 @@ export default function purchaseReducer(
                 ...state,
                 purchaseList: [
                     ...state.purchaseList,
-                    ...action.purchaseList
+                    ...action.newlyAddedItems
                 ].sort(dynamicSort('description'))
             };
         case ACTIONTYPES.REMOVE_ITEM_FROM_PURCHASE:

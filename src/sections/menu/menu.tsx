@@ -23,14 +23,16 @@ const Menu = () => {
         },
         {
             id: 1,
+            display: 'Lista',
+            hasDropdown: false,
+            route: routes.SHOPPING_LIST
+        },
+        {
+            id: 2,
             display: 'Compras',
             hasDropdown: true,
             route: routes.PURCHASES_SECTION,
             dropdownOptions: [
-                {
-                    display: 'Mercado',
-                    path: routes.SHOPPING_LIST
-                },
                 {
                     display: 'Nova Compra',
                     path: routes.PURCHASE_FORM
@@ -42,7 +44,7 @@ const Menu = () => {
             ]
         },
         {
-            id: 2,
+            id: 3,
             display: 'Lugares',
             hasDropdown: true,
             route: routes.PLACES_SECTION,
@@ -58,7 +60,7 @@ const Menu = () => {
             ]
         },
         {
-            id: 3,
+            id: 4,
             display: 'Produtos',
             hasDropdown: true,
             route: routes.PRODUCTS_SECTION,
@@ -75,7 +77,7 @@ const Menu = () => {
 
         },
         {
-            id: 4,
+            id: 5,
             display: 'Marcas',
             hasDropdown: false,
             route: routes.BRANDS
