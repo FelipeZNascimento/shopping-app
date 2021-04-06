@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchPlaceCategories } from 'store/place/actions';
 
 // Selectors
-import { getPlaceCategories } from 'store/place/selector';
+import { selectPlaceCategories } from 'store/place/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -19,6 +19,8 @@ import {
 } from 'constants/objectModels';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
+import styles from './modal.module.scss';
+
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
@@ -31,7 +33,7 @@ const AddPlaceModal = ({
     onConfirm
 }: IProps) => {
     const [selectedItem, setSelectedItem] = useState<IPlace>(placeModel);
-    const categories: ICategory[] = useSelector(getPlaceCategories);
+    const categories: ICategory[] = useSelector(selectPlaceCategories);
 
     const dispatch = useDispatch();
 
@@ -76,7 +78,7 @@ const AddPlaceModal = ({
                 type="text"
                 onChange={onDescriptionChange}
             />
-            <div className="min-padding">
+            <div className={styles.minPadding}>
                 <Autocomplete
                     options={categories}
                     title="Categoria"

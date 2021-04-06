@@ -16,7 +16,7 @@ $sidebar-width: 250px;
 
 .title {
     @include aligned(center);
-    @include font-colored($of-green);
+    @include font-colored($of-orange);
     @include font-sized(l);
     cursor: pointer;
     transition: 0.5s;

@@ -4,7 +4,7 @@ export function selectIsLoading(state: { productReducer: TState }) {
     return state.productReducer.loading;
 }
 
-export function getIsLoadingCategories(state: { productReducer: TState }) {
+export function selectIsLoadingCategories(state: { productReducer: TState }) {
     return state.productReducer.loadingCategories;
 }
 
@@ -16,25 +16,25 @@ export function selectProductInfo(state: { productReducer: TState }) {
     return state.productReducer.productInfo;
 }
 
-export function getProducts(state: { productReducer: TState }) {
+export function selectProducts(state: { productReducer: TState }) {
     return state.productReducer.products.data;
 }
 
-export function getProductsCount(state: { productReducer: TState }) {
+export function selectProductsCount(state: { productReducer: TState }) {
     return state.productReducer.products.totalCount;
 }
 
-export function getProductCategories(state: { productReducer: TState }) {
+export function selectProductCategories(state: { productReducer: TState }) {
     return state.productReducer.productCategories.data;
 }
-export function getProductCategoriesCount(state: { productReducer: TState }) {
+export function selectProductCategoriesCount(state: { productReducer: TState }) {
     return state.productReducer.productCategories.totalCount;
 }
 
-export function getProductNames(state: { productReducer: TState }) {
+export function selectProductNames(state: { productReducer: TState }) {
     return state.productReducer.productNames;
 }
 
-export function getProductCategoryNames(state: { productReducer: TState }) {
+export function selectProductCategoryNames(state: { productReducer: TState }) {
     return state.productReducer.productCategoryNames;
 }

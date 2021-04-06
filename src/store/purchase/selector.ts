@@ -4,7 +4,7 @@ export function selectIsLoading(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.loading;
 }
 
-export function hasError(state: { purchaseReducer: TState }) {
+export function selectHasError(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.error;
 }
 
@@ -16,10 +16,10 @@ export function selectFullPurchase(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.fullPurchase;
 }
 
-export function getPurchaseList(state: { purchaseReducer: TState }) {
+export function selectPurchaseList(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseList;
 }
 
-export function getPurchaseListLength(state: { purchaseReducer: TState }) {
+export function selectPurchaseListLength(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseList.length;
 }

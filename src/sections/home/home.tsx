@@ -10,7 +10,7 @@ const HomeSection = () => {
         {
             title: 'Lista de Mercado',
             route: routes.SHOPPING_LIST,
-            color: 'cyan'
+            color: 'orange'
         },
         {
             title: 'Nova Compra',
@@ -54,6 +54,7 @@ const HomeSection = () => {
             {cards.map((card) => (
                 <Link to={card.route}>
                     <InfoCard
+                        clickable
                         color={card.color}
                         title={card.title}
                     />

@@ -11,10 +11,10 @@ import {
 
 // Selectors
 import {
-    getBrands,
-    getBrandsCount,
-    getBrandNames,
-    getIsLoading
+    selectBrands,
+    selectBrandsCount,
+    selectBrandNames,
+    selectIsLoading
 } from 'store/brand/selector';
 
 // Components
@@ -49,10 +49,10 @@ const BrandsSection = () => {
     const [toBeDeleted, setToBeDeleted] = useState<IBrand | null>(null);
 
     const dispatch = useDispatch();
-    const brands: IBrand[] = useSelector(getBrands);
-    const brandNames: IItemName[] = useSelector(getBrandNames);
-    const totalCount: number = useSelector(getBrandsCount);
-    const isLoading: boolean = useSelector(getIsLoading);
+    const brands: IBrand[] = useSelector(selectBrands);
+    const brandNames: IItemName[] = useSelector(selectBrandNames);
+    const totalCount: number = useSelector(selectBrandsCount);
+    const isLoading: boolean = useSelector(selectIsLoading);
 
     useEffect(() => {
         dispatch(fetchBrands(currentPage - 1));
@@ -64,13 +64,13 @@ const BrandsSection = () => {
     const headers = [
         {
             key: 'description',
-            value: 'Marca',
+            renderFunction: () => 'Marca',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'delete',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         }

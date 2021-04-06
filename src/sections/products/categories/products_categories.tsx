@@ -10,18 +10,15 @@ import {
 
 // Selectors
 import {
-    getProductCategories,
-    getProductCategoriesCount,
-    getIsLoadingCategories
+    selectProductCategories,
+    selectProductCategoriesCount,
+    selectIsLoadingCategories
 } from 'store/product/selector';
 
 // Components
 import CategoriesSection from 'sections/categories/categories';
-import { SearchInput } from 'components/index';
-import { Pagination } from '@material-ui/lab';
 
 // Types, Constants, Misc
-import { resultsPerPage } from 'constants/general';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import { ICategory, ISortingState } from 'constants/objectInterfaces';
 import { invertSort } from 'utils/utils';
@@ -36,9 +33,9 @@ const ProductsCategories = () => {
     const [searchField, setSearchField] = useState<string>('');
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
-    const categories: ICategory[] = useSelector(getProductCategories);
-    const isCategoriesLoading: boolean = useSelector(getIsLoadingCategories);
-    const totalCount: number = useSelector(getProductCategoriesCount);
+    const categories: ICategory[] = useSelector(selectProductCategories);
+    const isCategoriesLoading: boolean = useSelector(selectIsLoadingCategories);
+    const totalCount: number = useSelector(selectProductCategoriesCount);
     const dispatch = useDispatch();
 
     useEffect(() => {

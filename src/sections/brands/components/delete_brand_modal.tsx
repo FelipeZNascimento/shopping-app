@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { TextField } from '@material-ui/core';
-import { IBrand } from '../../../constants/objectInterfaces';
+import { IBrand } from 'constants/objectInterfaces';
 
-import ConfirmationDialog from '../../../components/dialogs/confirmation_dialog';
+import { ConfirmationDialog } from 'components/index';
 
 interface IProps {
     brand: IBrand | null;

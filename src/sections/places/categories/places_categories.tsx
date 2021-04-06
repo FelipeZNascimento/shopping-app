@@ -10,9 +10,9 @@ import {
 
 // Selectors
 import {
-    getIsLoadingCategories,
-    getPlaceCategories,
-    getPlaceCategoriesCount
+    selectIsLoadingCategories,
+    selectPlaceCategories,
+    selectPlaceCategoriesCount
 } from 'store/place/selector';
 
 // Components
@@ -32,9 +32,9 @@ const PlacesCategories = () => {
     const [searchField, setSearchField] = useState<string>('');
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
-    const categories: ICategory[] = useSelector(getPlaceCategories);
-    const isCategoriesLoading: boolean = useSelector(getIsLoadingCategories);
-    const totalCount: number = useSelector(getPlaceCategoriesCount);
+    const categories: ICategory[] = useSelector(selectPlaceCategories);
+    const isLoadingCategories: boolean = useSelector(selectIsLoadingCategories);
+    const totalCount: number = useSelector(selectPlaceCategoriesCount);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -81,7 +81,7 @@ const PlacesCategories = () => {
         <CategoriesSection
             color={'yellow'}
             data={categories}
-            isLoading={isCategoriesLoading}
+            isLoading={isLoadingCategories}
             searchOptions={categories}
             sortState={currentSortState}
             totalCount={totalCount}

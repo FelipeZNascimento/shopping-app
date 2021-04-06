@@ -16,7 +16,12 @@ import {
 } from 'store/purchase/selector';
 
 // Components
-import { GenericTable, InfoCard, Loading } from 'components/index';
+import {
+    GenericTable,
+    InfoCard,
+    Loading,
+    PlaceIcon
+} from 'components/index';
 
 import {
     IPurchaseItem,
@@ -55,37 +60,37 @@ const FullPurchase = ({
     const headers = [
         {
             key: 'quantity',
-            value: 'Quantidade',
+            renderFunction: () => 'Quantidade',
             sortable: false,
             showOnMobile: true
         },
         {
             key: 'category_description',
-            value: 'Categoria',
+            renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: false
         },
         {
             key: 'description',
-            value: 'Produto',
+            renderFunction: () => 'Produto',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'brand',
-            value: 'Marca',
+            renderFunction: () => 'Marca',
             sortable: false,
             showOnMobile: false
         },
         {
             key: 'price',
-            value: 'Preço',
+            renderFunction: () => 'Preço',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'total',
-            value: 'Total',
+            renderFunction: () => 'Total',
             sortable: false,
             showOnMobile: false
         }
@@ -135,7 +140,7 @@ const FullPurchase = ({
         },
         {
             key: 'total',
-            renderFunction: (item: IPurchaseItem) => <td>€ {item.price * item.quantity}</td>,
+            renderFunction: (item: IPurchaseItem) => <td>€ {Math.round(item.price * item.quantity * 100) / 100}</td>,
             showOnMobile: false
         }
     ];
@@ -153,6 +158,8 @@ const FullPurchase = ({
         )
     };
 
+    const renderIcon = (categoryId: number) => <PlaceIcon categoryId={categoryId} />
+
     const onSortChange = (orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
@@ -163,9 +170,10 @@ const FullPurchase = ({
     return (
         <div className={styles.container}>
             <InfoCard
-                wide
-                title={purchase.description}
+                responsiveWidth
                 subtitle={moment(purchase.date).format('DD/MM/YYYY')}
+                title={purchase.description}
+                renderButton={() => renderIcon(purchase.categoryId)}
             />
             <GenericTable
                 bodyColumns={bodyColumns}

@@ -1,9 +1,10 @@
 @import "style/colors.scss";
 @import "style/columns.scss";
 @import "style/font-sizes.scss";
+@import "style/globals.scss";
 @import "style/margins.scss";
 @import "style/paddings.scss";
-@import "style/globals.scss";
+@import "style/variables.scss";
 
 body {
     margin: 0;
@@ -12,10 +13,6 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #272b30;
-}
-
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .index-container {

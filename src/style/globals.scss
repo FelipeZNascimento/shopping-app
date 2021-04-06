@@ -1,25 +1,16 @@
-// z-indexes
-$z-index-top-max: 9999;
-$sidebar-width: 250px;
+@import "style/variables.scss";
 
 html {
     box-sizing: border-box;
 }
 
-*,
-*:before,
-*:after {
+*, *:before, *:after {
     box-sizing: inherit;
 }
 
 a {
     color: inherit;
     cursor: pointer;
-}
-
-.vertical-align-center {
-    display: flex;
-    align-items: center;
 }
 
 .align-center {
@@ -47,10 +38,6 @@ a {
 
 .flex-grow {
     flex-grow: 1;
-}
-
-.min-padding {
-    padding: 10px 0;
 }
 
 .button {

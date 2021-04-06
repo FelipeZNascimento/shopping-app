@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductCategories } from 'store/product/actions';
 
 // Selectors
-import { getProductCategories } from 'store/product/selector';
+import { selectProductCategories } from 'store/product/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -19,6 +19,8 @@ import {
 } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
+import styles from './modal.module.scss';
+
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
@@ -31,7 +33,7 @@ const AddProductModal = ({
     onConfirm
 }: IProps) => {
     const [selectedItem, setSelectedItem] = useState<IProduct>(productModel);
-    const categories: ICategory[] = useSelector(getProductCategories);
+    const categories: ICategory[] = useSelector(selectProductCategories);
 
     const dispatch = useDispatch();
 
@@ -70,7 +72,7 @@ const AddProductModal = ({
                 type="text"
                 onChange={onDescriptionChange}
             />
-            <div className="min-padding">
+            <div className={styles.minPadding}>
                 <Autocomplete
                     options={categories}
                     title="Categoria"

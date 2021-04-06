@@ -5,16 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 // Actions
+import { fetchBrands } from 'store/brand/actions';
 import { fetchPlaces } from 'store/place/actions';
 import { savePurchaseList, removeFromList, updateList } from 'store/purchase/actions';
 
 // Selectors
-import { 
-    getPurchaseList,
-    hasError,
+import {
+    selectPurchaseList,
+    selectHasError,
     selectIsLoading
 } from 'store/purchase/selector';
-import { getPlaces } from 'store/place/selector';
+import { selectBrands } from 'store/brand/selector';
+import { selectPlaces } from 'store/place/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
@@ -22,17 +24,24 @@ import { Save as SaveIcon } from '@material-ui/icons';
 import {
     Autocomplete,
     Datepicker,
+    InfoCard,
     Loading
 } from 'components/index';
 import ProductCard from './components/product_card';
-import TotalPurchaseCard from './components/total_purchase_card';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
 // Interfaces, Constants
-import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
+import { IBrand, IPlace, IPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
+import { dynamicSort } from 'utils/utils'
 
 import styles from './purchases.module.scss';
+
+type TCategoryCount = {
+    description: string;
+    count: number;
+    total: number;
+}
 
 const PurchaseList = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
@@ -40,25 +49,28 @@ const PurchaseList = () => {
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
     const [isPurchaseSaved, setIsPurchaseSaved] = useState<boolean>(false);
 
-    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
-    const places: IPlace[] = useSelector(getPlaces);
-    const formIsLoading: boolean = useSelector(selectIsLoading);
-    const formHasError: boolean = useSelector(hasError);
+    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
+    const brands: IBrand[] = useSelector(selectBrands);
+    const places: IPlace[] = useSelector(selectPlaces);
+    const isLoading: boolean = useSelector(selectIsLoading);
+    const hasError: boolean = useSelector(selectHasError);
     const dispatch = useDispatch();
     const history = useHistory();
-  
+
+    console.log(purchaseList);
     useEffect(() => {
         dispatch(fetchPlaces());
+        dispatch(fetchBrands())
     }, []);
 
     useEffect(() => {
-        if(!formIsLoading && !formHasError && isPurchaseSaved) {
+        if (!isLoading && !hasError && isPurchaseSaved) {
             setIsPurchaseSaved(false);
             setPurchaseTotal(0);
             setSelectedPlaceId(null);
             history.push(routes.PURCHASE_HISTORY);
         }
-    }, [formHasError, formIsLoading]);
+    }, [hasError, isLoading]);
 
     const onSavePurchase = () => {
         dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId, purchaseTotal));
@@ -72,13 +84,17 @@ const PurchaseList = () => {
         return total + item.total_price;
     };
 
-    const removeItem = (item: IPurchaseItem) => {
+    const onDelete = (item: IPurchaseItem) => {
         dispatch(removeFromList(item));
     };
 
     const onUpdate = (item: IPurchaseItem) => {
         const updatedPurchaseList = purchaseList.map((purchaseItem) => ({ ...purchaseItem }));
         const foundIndex = updatedPurchaseList.findIndex((purchaseItem) => purchaseItem.id === item.id);
+
+        if (foundIndex === -1) {
+            return;
+        }
 
         if (item.price !== updatedPurchaseList[foundIndex].price && !isNaN(item.price)) {
             item.total_price = item.price > 0
@@ -114,12 +130,53 @@ const PurchaseList = () => {
 
     };
 
-    if (formIsLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
     const hasInvalidItem = purchaseList.find((item) => item.total_price <= 0) !== undefined;
     const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
+
+    const renderCategoriesTotal = () => {
+        const allCategories: TCategoryCount[] = [];
+        purchaseList
+            .filter((item) => {
+                const foundIndex = allCategories.findIndex((x) => (x.description === item.category_description));
+                if (foundIndex <= -1) {
+                    allCategories.push({
+                        description: item.category_description,
+                        count: 1,
+                        total: Math.round(item.price * item.quantity * 100) / 100
+                    });
+                } else {
+                    allCategories[foundIndex].count++;
+                    allCategories[foundIndex].total += Math.round(item.price * item.quantity * 100) / 100;
+                }
+                return null;
+            });
+
+        return allCategories
+            .sort(dynamicSort('description'))
+            .map((item: TCategoryCount) => (
+                <div className={styles.category}>
+                    <div className={styles.title}>
+                        {item.count}x {item.description}
+                    </div>
+                    <div className={styles.total}>
+                        € {item.total}
+                    </div>
+                </div>
+            ));
+    }
+
+    const renderFooter = () => {
+        return (
+            <div className={styles.totalCardFooter}>
+                € {purchaseTotal}
+            </div>
+        );
+    };
+
     return (
         <>
             <Fab
@@ -133,7 +190,7 @@ const PurchaseList = () => {
                 <SaveIcon />&nbsp;
                 Salvar compra
             </Fab>
-            <div className={`${styles.purchaseFormHeader} bottom-padding-l`}>
+            <div className={styles.purchaseFormHeader}>
                 <Autocomplete
                     freeSolo={false}
                     options={places}
@@ -143,14 +200,19 @@ const PurchaseList = () => {
                 <Datepicker onChange={setSelectedDate} />
             </div>
             <div className={isMobile ? styles.purchaseCardContainerMobile : styles.purchaseCardContainerDesktop}>
-                <TotalPurchaseCard
-                    purchaseList={purchaseList}
-                    total={purchaseTotal}
-                />
-                {purchaseList.map((item) =>
+                <InfoCard
+                    title={'Total'}
+                    subtitle={`${purchaseTotal} itens`}
+                    renderFooter={renderFooter}
+                >
+                    {renderCategoriesTotal()}
+                </InfoCard>
+                {purchaseList.map((item, index) =>
                     <ProductCard
-                        item={item}
-                        onDelete={removeItem}
+                        brands={brands}
+                        color={index % 2 === 0 ? 'grey3' : 'grey4'}
+                        purchaseItem={item}
+                        onDelete={onDelete}
                         onUpdate={onUpdate}
                     />)}
             </div>

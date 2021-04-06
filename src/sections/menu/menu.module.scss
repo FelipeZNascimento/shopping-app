@@ -1,9 +1,9 @@
 @import "style/alignments.scss";
 @import "style/colors.scss";
 @import "style/font-sizes.scss";
-@import "style/globals.scss";
 @import "style/paddings.scss";
 @import "style/margins.scss";
+@import "style/variables.scss";
 
 .container {
     @include bg-rgba-colored($of-black, 0.6);

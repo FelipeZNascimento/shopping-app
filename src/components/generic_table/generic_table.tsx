@@ -72,15 +72,15 @@ const GenericTable = ({
             if (header.sortable) {
                 return (
                     <p
-                        className="right-padding-s margin-none clickable"
+                        className={styles.sortable}
                         onClick={() => setSortingState(header.key)}
                     >
-                        {header.value}
+                        {header.renderFunction()}
                     </p>
                 )
             }
 
-            return (<p className="right-padding-s margin-none">{header.value}</p>);
+            return (<p className="padding-none margin-none">{header.renderFunction()}</p>);
         };
 
         return tableHeader.map((header) => {
@@ -90,7 +90,7 @@ const GenericTable = ({
 
             return (
                 <th key={header.key}>
-                    <div className="vertical-align-center">
+                    <div className={styles.column}>
                         {renderHeaderValue(header)}
                         {renderSortIcon(header.key)}
                     </div>

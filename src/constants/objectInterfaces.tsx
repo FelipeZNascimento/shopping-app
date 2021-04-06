@@ -76,6 +76,8 @@ export interface IPurchase {
     date: string;
     total: number;
     description: string;
+    categoryId: number;
+    categoryDescription: string;
     items: number;
 }
 

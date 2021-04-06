@@ -86,25 +86,25 @@ const SingleProduct = () => {
     const headers = [
         {
             key: 'place',
-            value: 'Lugar',
+            renderFunction: () => 'Lugar',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'brand',
-            value: 'Marca',
+            renderFunction: () => 'Marca',
             sortable: false,
             showOnMobile: false
         },
         {
             key: 'price',
-            value: 'Preço',
+            renderFunction: () => 'Preço',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'date',
-            value: 'Data',
+            renderFunction: () => 'Data',
             sortable: true,
             showOnMobile: true
         }
@@ -178,7 +178,7 @@ const SingleProduct = () => {
     return (
         <div className={styles.container}>
             {selectedProduct && <InfoCard
-                wide
+                responsiveWidth
                 color={'green'}
                 title={`[${selectedProduct.id}] ${selectedProduct.description}`}
                 subtitle={selectedProduct.categoryDescription}

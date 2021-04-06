@@ -10,22 +10,26 @@
 
     border-radius: 4px;
     box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-    cursor: pointer;
+        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     flex-direction: column;
     min-height: 100px;
-    min-width: 300px;
-    opacity: 0.8;
-    transition: 0.5s;
-
-    &:hover {
-        box-shadow: 0px 0px 8px 5px rgba(0, 0, 0, 0.2);
-        opacity: 1;
-    }
+    transition: 0.6s;
+    width: 300px;
 
     .content {
         @include padded(all, l);
+
         box-sizing: border-box;
+        flex: 1;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+
+        .button {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
     }
 
     .title {
@@ -43,44 +47,72 @@
     }
 }
 
-.wideCard {
+.responsiveCard {
     @extend .card;
 
-    border-radius: 4px;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     cursor: default;
+    flex: 1;
     opacity: 1;
+    width: auto;
+}
+
+.centerAligned {
+    @include flex-aligned(center, center);
+}
+
+.clickable {
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.5s;
+
+    &:hover {
+        box-shadow: 0px 0px 8px 5px rgba(0, 0, 0, 0.2);
+        opacity: 1;
+    }
+}
+
+.orange {
+    @include bg-rgba-colored($of-orange, 0.6);
 }
 
 .cyan {
     @include bg-rgba-colored($of-cyan, 0.6);
-    &:hover {
-        @include bg-rgba-colored($of-cyan, 0.6);
-    }
 }
 
 .green {
     @include bg-rgba-colored($of-green, 0.6);
-    &:hover {
-        @include bg-rgba-colored($of-green, 0.6);
-    }
+}
+
+.grey3 {
+    @include font-colored($of-white);
+    @include bg-rgba-colored($of-grey4, 1);
+}
+
+.grey4 {
+    @include font-colored($of-white);
+    @include bg-rgba-colored($of-grey5, 1);
 }
 
 .yellow {
     @include bg-rgba-colored($of-yellow, 0.6);
-    &:hover {
-        @include bg-rgba-colored($of-yellow, 0.6);
-    }
 }
 
 .pink {
     @include bg-rgba-colored($of-pink, 0.6);
-    &:hover {
-        @include bg-rgba-colored($of-pink, 0.6);
-    }
+}
+
+.children {
+    @include padded(top, none);
+    @include padded(right, m);
+    @include padded(bottom, m);
+    @include padded(left, m);
+
+    max-height: 320px;
+    overflow: auto;
+    width: 100%;
 }
 
 .footer {
+    transition: 0.6s;
     width: 100%;
 }

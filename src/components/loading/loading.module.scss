@@ -1,8 +1,8 @@
 @import "style/alignments.scss";
 @import "style/colors.scss";
 @import "style/font-sizes.scss";
-@import "style/globals.scss";
 @import "style/paddings.scss";
+@import "style/variables.scss";
 
 .loading {
     @include flex-aligned(center, center);

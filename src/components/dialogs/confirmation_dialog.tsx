@@ -46,7 +46,7 @@ const ConfirmationDialog = ({
             open={open}
             onClose={onClose}
         >
-            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+            <DialogTitle classes={{ root: 'align-center' }} id="alert-dialog-title">{title}</DialogTitle>
             <DialogContent>
                 {renderContent()}
             </DialogContent>

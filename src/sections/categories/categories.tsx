@@ -54,13 +54,13 @@ const CategoriesSection = ({
     const headerColumns = [
         {
             key: 'description',
-            value: 'Categoria de Lugares',
+            renderFunction: () => 'Categoria de Lugares',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'delete',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         }

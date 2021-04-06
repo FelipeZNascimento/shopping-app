@@ -1,0 +1,8 @@
+@import "style/paddings.scss";
+
+.minPadding {
+    @include padded(top, s);
+    @include padded(right, none);
+    @include padded(bottom, s);
+    @include padded(left, none);
+}

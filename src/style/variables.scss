@@ -1,0 +1,67 @@
+// z-indexes
+$z-index-top-max: 9999;
+
+// Fixed widths/heights
+$sidebar-width: 250px;
+$single_column_width: 8.333;
+
+$padding: (
+    "none": 0px,
+    "xxs": 2px,
+    "xs": 4px,
+    "s": 8px,
+    "m": 12px,
+    "l": 16px,
+    "xl": 25px,
+    "xxl": 50px
+);
+
+$margin: $padding;
+
+$font-sizes: (
+    "xs": 8px,
+    "s": 12px,
+    "m": 16px,
+    "l": 20px,
+    "xl": 24px,
+    "xxl": 48px
+);
+
+// Colors
+$of-black: #000000;
+$of-blue: #4369e6;
+$of-cyan: #59b8c4;
+$of-green: #62c462;
+$of-orange: #c47b59;
+$of-pink: #844dc2;
+$of-red: #c24d4d;
+$of-white: #ffffff;
+$of-yellow: #c4a859;
+
+$of-grey1: #b8c3cc;
+$of-grey2: #97a1a8;
+$of-grey3: #7a8288;
+$of-grey4: #353b41;
+$of-grey5: #2e3338;
+
+$of-brown: #9e7e6e;
+$of-beige: #EDF5E1;
+
+$colors: (
+    "of-blue":      $of-blue,
+    "of-black":     $of-black,
+    "of-cyan":      $of-cyan,
+    "of-green":     $of-green,
+    "of-orange":    $of-orange,
+    "of-pink":      $of-pink,
+    "of-red":       $of-red,
+    "of-white":     $of-white,
+    "of-yellow":    $of-yellow,
+    "of-grey1":     $of-grey1,
+    "of-grey2":     $of-grey2,
+    "of-grey3":     $of-grey3,
+    "of-grey4":     $of-grey4,
+    "of-grey5":     $of-grey5,
+
+    "of-disabled": "rgba(0, 0, 0, 0.26)",
+);

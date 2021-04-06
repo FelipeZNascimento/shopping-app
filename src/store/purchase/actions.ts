@@ -17,9 +17,11 @@ import {
 import { productUnits } from 'constants/products';
 import { objectTypes } from 'constants/general';
 
-export function convertToPurchase(productsList: IProduct[], purchaseListLength: number) {
-    const purchaseList: IPurchaseItem[] = productsList.map((product, index) => ({
-        id: index + purchaseListLength,
+export function convertToPurchase(productsList: IProduct[], purchaseList: IPurchaseItem[]) {
+    const nextId = purchaseList.length === 0 ? 0 : Math.max(...purchaseList.map(function(item) { return item.id; })) + 1;
+
+    const newlyAddedItems: IPurchaseItem[] = productsList.map((product, index) => ({
+        id: nextId + index,
         brand_description: '',
         brand_id: null,
         category_description: product.category_description,
@@ -36,7 +38,7 @@ export function convertToPurchase(productsList: IProduct[], purchaseListLength: 
 
     return {
         type: ACTIONTYPES.CONVERT_TO_PURCHASE,
-        purchaseList
+        newlyAddedItems
     }
 }
 
@@ -112,18 +114,6 @@ export function updateList(purchaseList: IPurchaseItem[]) {
     return {
         type: ACTIONTYPES.UPDATE_PURCHASE_ITEM,
         purchaseList
-    }
-}
-
-export function clearList() {
-    return {
-        type: ACTIONTYPES.CLEAR_PURCHASE
-    }
-}
-
-export function saveList() {
-    return {
-        type: ACTIONTYPES.SAVING_PURCHASE_LIST
     }
 }
 

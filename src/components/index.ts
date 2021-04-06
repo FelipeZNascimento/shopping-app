@@ -8,6 +8,7 @@ export { default as GenericTable } from './generic_table/generic_table';
 export { default as InfoCard } from './info_card/info_card';
 export { default as Loading } from './loading/loading';
 export { default as Notification } from './notification/notification';
+export { default as PlaceIcon } from './place_icon/place_icon';
 export { default as SearchInput } from './search_input/search_input';
 export { default as SectionCards } from './section_cards/section_cards';
 export { default as Separator } from './separator/separator';
