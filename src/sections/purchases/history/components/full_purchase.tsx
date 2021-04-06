@@ -168,7 +168,7 @@ const FullPurchase = ({
                 subtitle={moment(purchase.date).format('DD/MM/YYYY')}
             />
             <GenericTable
-                bodyColumns={isLoading ? [] : bodyColumns}
+                bodyColumns={bodyColumns}
                 color="cyan"
                 data={fullPurchase}
                 headerColumns={headers}

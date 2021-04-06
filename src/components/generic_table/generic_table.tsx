@@ -121,7 +121,7 @@ const GenericTable = ({
                     <tr><td className={styles.notFound} colSpan={20}><p>Nenhum resultado encontrado.</p></td></tr>
                 }
                 {data.map((item) => <tr>{renderRow(item)}</tr>)}
-                {lastRow !== null && lastRow()}
+                {lastRow !== null && !isLoading && lastRow()}
             </tbody>
         </table>
     );
