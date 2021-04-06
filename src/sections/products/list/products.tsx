@@ -15,14 +15,14 @@ import { convertToPurchase } from 'store/purchase/actions';
 
 // Selectors
 import {
-    getProductNames,
-    getProductCategoryNames,
-    getProducts,
-    getProductsCount,
+    selectProductNames,
+    selectProductCategoryNames,
+    selectProducts,
+    selectProductsCount,
     selectIsLoading
 } from 'store/product/selector';
-import { shoppingList as listShopping } from 'store/shopping_list/selector';
-import { getPurchaseList } from 'store/purchase/selector';
+import { selectShoppingList } from 'store/shopping_list/selector';
+import { selectPurchaseList } from 'store/purchase/selector';
 
 // Components
 import { Checkbox, Fab, IconButton } from '@material-ui/core';
@@ -60,16 +60,16 @@ const ProductsList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const productNames: IItemName[] = useSelector(getProductNames);
-    const productCategoryNames: IItemName[] = useSelector(getProductCategoryNames);
+    const productNames: IItemName[] = useSelector(selectProductNames);
+    const productCategoryNames: IItemName[] = useSelector(selectProductCategoryNames);
     const mergedNames = [...productNames, ...productCategoryNames]
         .sort((a, b) => a.description.localeCompare(b.description));
 
-    const products: IProduct[] = useSelector(getProducts);
-    const totalCount = useSelector(getProductsCount);
-    const shoppingList: IProduct[] = useSelector(listShopping);
+    const products: IProduct[] = useSelector(selectProducts);
+    const totalCount = useSelector(selectProductsCount);
+    const shoppingList: IProduct[] = useSelector(selectShoppingList);
     const isProductsLoading: boolean = useSelector(selectIsLoading);
-    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
+    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
 
     useEffect(() => {
         dispatch(fetchProducts(currentPage - 1));
@@ -85,31 +85,31 @@ const ProductsList = () => {
     const headers = [
         {
             key: 'checkbox',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         },
         {
             key: 'add_to_shopping_list',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         },
         {
             key: 'category',
-            value: 'Categoria',
+            renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: false
         },
         {
             key: 'description',
-            value: 'Produto',
+            renderFunction: () => 'Produto',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'delete',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         }
@@ -294,6 +294,7 @@ const ProductsList = () => {
                     data={products}
                     headerColumns={headers}
                     isLoading={isProductsLoading}
+                    sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
                 {isProductsLoading && <Loading />}

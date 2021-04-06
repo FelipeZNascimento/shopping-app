@@ -27,7 +27,7 @@ export function areArraysEqualSets(a1, a2) {
     return true;
 }
 
-function objectsAreEqual(x, y) {
+export function objectsAreEqual(x, y) {
     for (var propertyName in x) {
         if (x[propertyName] !== y[propertyName]) {
             return false;

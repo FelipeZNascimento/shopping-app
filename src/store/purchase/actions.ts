@@ -117,18 +117,6 @@ export function updateList(purchaseList: IPurchaseItem[]) {
     }
 }
 
-export function clearList() {
-    return {
-        type: ACTIONTYPES.CLEAR_PURCHASE
-    }
-}
-
-export function saveList() {
-    return {
-        type: ACTIONTYPES.SAVING_PURCHASE_LIST
-    }
-}
-
 export const savePurchaseList = (
     newPurchase: IPurchaseItem[],
     date: string,

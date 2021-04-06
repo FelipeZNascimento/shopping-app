@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchPlaceCategories } from 'store/place/actions';
 
 // Selectors
-import { getPlaceCategories } from 'store/place/selector';
+import { selectPlaceCategories } from 'store/place/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -33,7 +33,7 @@ const AddPlaceModal = ({
     onConfirm
 }: IProps) => {
     const [selectedItem, setSelectedItem] = useState<IPlace>(placeModel);
-    const categories: ICategory[] = useSelector(getPlaceCategories);
+    const categories: ICategory[] = useSelector(selectPlaceCategories);
 
     const dispatch = useDispatch();
 

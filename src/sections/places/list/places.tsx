@@ -12,11 +12,11 @@ import {
 
 // Selectors
 import {
-    getIsLoading,
-    getPlaces,
-    getPlaceNames,
-    getPlaceCategoryNames,
-    getPlacesCount
+    selectIsLoading,
+    selectPlaces,
+    selectPlaceNames,
+    selectPlaceCategoryNames,
+    selectPlacesCount
 } from 'store/place/selector';
 
 // Components
@@ -50,15 +50,15 @@ const PlacesList = () => {
     const [toBeDeleted, setToBeDeleted] = useState<IPlace | null>(null);
 
     const dispatch = useDispatch();
-    const placeNames: IItemName[] = useSelector(getPlaceNames);
-    const placeCategoryNames: IItemName[] = useSelector(getPlaceCategoryNames);
+    const placeNames: IItemName[] = useSelector(selectPlaceNames);
+    const placeCategoryNames: IItemName[] = useSelector(selectPlaceCategoryNames);
     const mergedNames = [...placeNames, ...placeCategoryNames]
         .sort((a, b) => a.description.localeCompare(b.description));
 
-    const places: IPlace[] = useSelector(getPlaces);
-    const totalCount = useSelector(getPlacesCount);
+    const places: IPlace[] = useSelector(selectPlaces);
+    const totalCount = useSelector(selectPlacesCount);
 
-    const isPlacesLoading: boolean = useSelector(getIsLoading);
+    const isLoading: boolean = useSelector(selectIsLoading);
 
     useEffect(() => {
         dispatch(fetchPlaces(currentPage - 1));
@@ -74,19 +74,19 @@ const PlacesList = () => {
     const headers = [
         {
             key: 'category_description',
-            value: 'Categoria',
+            renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'description',
-            value: 'Lugar',
+            renderFunction: () => 'Lugar',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'delete',
-            value: '',
+            renderFunction: () => '',
             sortable: false,
             showOnMobile: true
         }
@@ -183,15 +183,15 @@ const PlacesList = () => {
                     />
                 </div>
                 <GenericTable
-                    bodyColumns={isPlacesLoading ? [] : bodyColumns}
+                    bodyColumns={isLoading ? [] : bodyColumns}
                     color="yellow"
                     data={places}
                     headerColumns={headers}
-                    isLoading={isPlacesLoading}
+                    isLoading={isLoading}
                     sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
-                {isPlacesLoading && <Loading />}
+                {isLoading && <Loading />}
                 <div className={styles.pagination}>
                     <Pagination
                         color="primary"

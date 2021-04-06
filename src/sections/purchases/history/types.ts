@@ -1,7 +1,9 @@
 export type TPurchase = {
-    id: number;
+    categoryId: number;
+    categoryDescription: string;
     date: string;
-    total: number;
     description: string;
+    id: number;
     items: number;
+    total: number;
 };

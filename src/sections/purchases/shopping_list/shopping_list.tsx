@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 
 // Selectors
-import { shoppingList, getIsLoading } from 'store/shopping_list/selector';
-import { getPurchaseList } from 'store/purchase/selector';
+import { selectShoppingList, selectIsLoading } from 'store/shopping_list/selector';
+import { selectPurchaseList } from 'store/purchase/selector';
 
 // Actions
-import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
+import { fetchShoppingList, deleteFromShoppingList, deleteShoppingList } from 'store/shopping_list/actions';
 import { convertToPurchase } from 'store/purchase/actions';
 
 // Interfaces
@@ -18,7 +18,12 @@ import {
 } from 'constants/objectInterfaces';
 
 // Components
-import { GenericTable, Loading, SearchInput } from 'components/index';
+import {
+    ConfirmationDialog,
+    GenericTable,
+    Loading,
+    SearchInput
+} from 'components/index';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import {
     AddShoppingCart,
@@ -41,35 +46,62 @@ const ShoppingList = () => {
     const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
     const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
     const [searchField, setSearchField] = useState<string>('');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-    const list: IShoppingListItem[] = useSelector(shoppingList);
-    const isListLoading: boolean = useSelector(getIsLoading);
-    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
+    const shoppingList: IShoppingListItem[] = useSelector(selectShoppingList);
+    const isLoading: boolean = useSelector(selectIsLoading);
+    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const renderHeaderCheckbox = () => {
+        const isChecked = checkedProducts.length === shoppingList.length;
+        return (
+            <Checkbox
+                checked={isChecked}
+                size="small"
+                inputProps={{ 'aria-label': 'checkbox with small size' }}
+                onClick={() => isChecked ? setCheckedProducts([]) : setCheckedProducts([...shoppingList])}
+            />
+        )
+    };
+
+    const onDeleteAllShoppingList = () => {
+        setIsDeleteModalOpen(false);
+        dispatch(deleteShoppingList());
+    };
+    const renderDeleteAll = () => (
+        <IconButton
+            aria-label="delete"
+            classes={{ root: styles.icon }}
+            onClick={() => setIsDeleteModalOpen(true)}
+        >
+            <DeleteIcon classes={{ root: styles.icon }} />
+        </IconButton>
+    );
 
     const headers = [
         {
             key: 'checkbox',
-            value: '',
+            renderFunction: () => renderHeaderCheckbox(),
             sortable: false,
             showOnMobile: true
         },
         {
             key: 'category_description',
-            value: 'Categoria',
+            renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: false
         },
         {
             key: 'description',
-            value: 'Produto',
+            renderFunction: () => 'Produto',
             sortable: true,
             showOnMobile: true
         },
         {
             key: 'delete',
-            value: '',
+            renderFunction: () => renderDeleteAll(),
             sortable: false,
             showOnMobile: true
         }
@@ -176,6 +208,12 @@ const ShoppingList = () => {
     const isFabButtonDisabled = checkedProducts.length === 0;
     return (
         <>
+            {isDeleteModalOpen && <ConfirmationDialog
+                open={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={onDeleteAllShoppingList}
+                title='Deseja remover todos os itens da lista de mercado?'
+            />}
             <Fab
                 classes={{ root: isFabButtonDisabled ? 'of-grey4-bg' : 'of-orange-bg' }}
                 className="fab-bottom"
@@ -189,18 +227,19 @@ const ShoppingList = () => {
             </Fab>
             <div className={styles.container}>
                 <SearchInput
-                    options={list}
+                    options={shoppingList}
                     onSearch={onSearch}
                 />
                 <GenericTable
-                    bodyColumns={isListLoading ? [] : bodyColumns}
+                    bodyColumns={isLoading ? [] : bodyColumns}
                     color="orange"
-                    data={list}
+                    data={shoppingList}
                     headerColumns={headers}
-                    isLoading={isListLoading}
+                    isLoading={isLoading}
+                    sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
-                {isListLoading && <Loading />}
+                {isLoading && <Loading />}
             </div>
         </>
     );

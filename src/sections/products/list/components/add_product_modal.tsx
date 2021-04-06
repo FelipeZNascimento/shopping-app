@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductCategories } from 'store/product/actions';
 
 // Selectors
-import { getProductCategories } from 'store/product/selector';
+import { selectProductCategories } from 'store/product/selector';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
@@ -33,7 +33,7 @@ const AddProductModal = ({
     onConfirm
 }: IProps) => {
     const [selectedItem, setSelectedItem] = useState<IProduct>(productModel);
-    const categories: ICategory[] = useSelector(getProductCategories);
+    const categories: ICategory[] = useSelector(selectProductCategories);
 
     const dispatch = useDispatch();
 

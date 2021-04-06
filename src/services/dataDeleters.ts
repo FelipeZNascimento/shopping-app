@@ -6,7 +6,7 @@ import {
 import { http } from './utilities';
 
 type TProps = {
-    objectId: number,
+    objectId: null | number,
     objectType: number
 };
 

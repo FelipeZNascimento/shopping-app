@@ -75,12 +75,12 @@ const GenericTable = ({
                         className={styles.sortable}
                         onClick={() => setSortingState(header.key)}
                     >
-                        {header.value}
+                        {header.renderFunction()}
                     </p>
                 )
             }
 
-            return (<p className="padding-none margin-none">{header.value}</p>);
+            return (<p className="padding-none margin-none">{header.renderFunction()}</p>);
         };
 
         return tableHeader.map((header) => {

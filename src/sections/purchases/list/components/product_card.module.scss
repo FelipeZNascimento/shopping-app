@@ -17,6 +17,7 @@
 
 .cardElement {
     flex: 1;
+    transition: 0.6;
 }
 .cardElement + .cardElement {
     @include padded(left, m);
@@ -43,4 +44,5 @@
 .totalCardFooterValid {
     @extend .totalCardFooter;
     box-shadow: inset 0px 2px 0px $of-cyan;
+    transition: 0.6s;
 }

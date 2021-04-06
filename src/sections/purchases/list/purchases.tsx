@@ -5,16 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 // Actions
+import { fetchBrands } from 'store/brand/actions';
 import { fetchPlaces } from 'store/place/actions';
 import { savePurchaseList, removeFromList, updateList } from 'store/purchase/actions';
 
 // Selectors
 import {
-    getPurchaseList,
-    hasError,
+    selectPurchaseList,
+    selectHasError,
     selectIsLoading
 } from 'store/purchase/selector';
-import { getPlaces } from 'store/place/selector';
+import { selectBrands } from 'store/brand/selector';
+import { selectPlaces } from 'store/place/selector';
 
 // Components
 import { Fab } from '@material-ui/core';
@@ -29,7 +31,7 @@ import ProductCard from './components/product_card';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
 // Interfaces, Constants
-import { IPlace, IPurchaseItem } from 'constants/objectInterfaces';
+import { IBrand, IPlace, IPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
 import { dynamicSort } from 'utils/utils'
 
@@ -47,25 +49,28 @@ const PurchaseList = () => {
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
     const [isPurchaseSaved, setIsPurchaseSaved] = useState<boolean>(false);
 
-    const purchaseList: IPurchaseItem[] = useSelector(getPurchaseList);
-    const places: IPlace[] = useSelector(getPlaces);
-    const formIsLoading: boolean = useSelector(selectIsLoading);
-    const formHasError: boolean = useSelector(hasError);
+    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
+    const brands: IBrand[] = useSelector(selectBrands);
+    const places: IPlace[] = useSelector(selectPlaces);
+    const isLoading: boolean = useSelector(selectIsLoading);
+    const hasError: boolean = useSelector(selectHasError);
     const dispatch = useDispatch();
     const history = useHistory();
 
+    console.log(purchaseList);
     useEffect(() => {
         dispatch(fetchPlaces());
+        dispatch(fetchBrands())
     }, []);
 
     useEffect(() => {
-        if (!formIsLoading && !formHasError && isPurchaseSaved) {
+        if (!isLoading && !hasError && isPurchaseSaved) {
             setIsPurchaseSaved(false);
             setPurchaseTotal(0);
             setSelectedPlaceId(null);
             history.push(routes.PURCHASE_HISTORY);
         }
-    }, [formHasError, formIsLoading]);
+    }, [hasError, isLoading]);
 
     const onSavePurchase = () => {
         dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId, purchaseTotal));
@@ -125,7 +130,7 @@ const PurchaseList = () => {
 
     };
 
-    if (formIsLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
@@ -169,7 +174,7 @@ const PurchaseList = () => {
             <div className={styles.totalCardFooter}>
                 € {purchaseTotal}
             </div>
-        )
+        );
     };
 
     return (
@@ -204,6 +209,7 @@ const PurchaseList = () => {
                 </InfoCard>
                 {purchaseList.map((item, index) =>
                     <ProductCard
+                        brands={brands}
                         color={index % 2 === 0 ? 'grey3' : 'grey4'}
                         purchaseItem={item}
                         onDelete={onDelete}

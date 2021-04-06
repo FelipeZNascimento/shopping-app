@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 
 import {
     Checkbox,
@@ -8,21 +6,18 @@ import {
     TextField
 } from '@material-ui/core';
 import { Remove as RemoveIcon } from '@material-ui/icons';
-
 import { Autocomplete, InfoCard } from 'components/index';
 
-import { getBrands } from 'store/brand/selector';
-import { fetchBrands } from 'store/brand/actions';
-import styles from './product_card.module.scss';
-
+import { productUnits } from 'constants/products';
 import {
     IBrand,
     IPurchaseItem
 } from 'constants/objectInterfaces';
-
-import { productUnits } from 'constants/products';
+import styles from './product_card.module.scss';
+import { objectsAreEqual } from 'services/utilities';
 
 interface IProps {
+    brands: IBrand[];
     color: string;
     purchaseItem: IPurchaseItem
     onDelete: (item: IPurchaseItem) => void;
@@ -30,6 +25,7 @@ interface IProps {
 }
 
 const ProductCard = ({
+    brands,
     color,
     purchaseItem,
     onDelete,
@@ -37,19 +33,12 @@ const ProductCard = ({
 }: IProps) => {
     const [itemInfo, setItemInfo] = useState(purchaseItem);
     const [currentUnit, setCurrentUnit] = useState(productUnits[0]);
-    const dispatch = useDispatch();
-
-    const brands: IBrand[] = useSelector(getBrands);
 
     useEffect(() => {
-        if (brands.length === 0) {
-            dispatch(fetchBrands())
+        if (!objectsAreEqual(itemInfo, purchaseItem)) {
+            onUpdate(itemInfo);
+            setCurrentUnit(productUnits.find((unit) => unit.id === purchaseItem.unit) || productUnits[0]);
         }
-    }, []);
-
-    useEffect(() => {
-        onUpdate(itemInfo);
-        setCurrentUnit(productUnits.find((unit) => unit.id === itemInfo.unit) || productUnits[0]);
     }, [itemInfo]);
 
     const renderContent = () => (
@@ -59,7 +48,7 @@ const ProductCard = ({
                     options={brands}
                     title="Marca"
                     onChange={(item: any) => setItemInfo({
-                        ...itemInfo,
+                        ...purchaseItem,
                         brand_description: item ? item.description : '',
                         brand_id: item ? item.id : null
                     })}
@@ -73,9 +62,9 @@ const ProductCard = ({
                         InputProps={{ inputProps: { min: 0 } }}
                         label="Qtd"
                         type="number"
-                        value={itemInfo.quantity}
+                        value={purchaseItem.quantity}
                         onChange={(e) => setItemInfo({
-                            ...itemInfo,
+                            ...purchaseItem,
                             quantity: parseFloat(e.target.value)
                         })}
                     />
@@ -87,7 +76,7 @@ const ProductCard = ({
                         title="Unidade"
                         onChange={(item: any) => {
                             setItemInfo({
-                                ...itemInfo,
+                                ...purchaseItem,
                                 unit: item.id
                             })
                         }}
@@ -102,9 +91,9 @@ const ProductCard = ({
                         InputProps={{ inputProps: { min: 0 } }}
                         label={`€/${currentUnit.description}`}
                         type="number"
-                        value={itemInfo.price}
+                        value={purchaseItem.price}
                         onChange={(e) => setItemInfo({
-                            ...itemInfo,
+                            ...purchaseItem,
                             price: parseFloat(e.target.value),
                         })}
                     />
@@ -115,7 +104,7 @@ const ProductCard = ({
                         size="small"
                         inputProps={{ 'aria-label': 'checkbox with small size' }}
                         onChange={(e) => setItemInfo({
-                            ...itemInfo,
+                            ...purchaseItem,
                             discount: e.target.checked
                         })}
                     />
@@ -128,7 +117,7 @@ const ProductCard = ({
                     label="Detalhes"
                     type="text"
                     onChange={(e) => setItemInfo({
-                        ...itemInfo,
+                        ...purchaseItem,
                         details: e.target.value
                     })}
                 />
@@ -139,22 +128,22 @@ const ProductCard = ({
     const renderButton = () => (
         <IconButton
             aria-label="settings"
-            onClick={() => onDelete(itemInfo)}
+            onClick={() => onDelete(purchaseItem)}
         >
             <RemoveIcon classes={{ root: 'of-red' }} />
         </IconButton>
     )
     const renderFooter = () => (
-        <div className={itemInfo.total_price > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
-            € {itemInfo.total_price}
+        <div className={purchaseItem.total_price > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
+            € {purchaseItem.total_price}
         </div>
     );
 
     return (
         <InfoCard
             color={color}
-            title={itemInfo.description}
-            subtitle={itemInfo.category_description}
+            title={purchaseItem.description}
+            subtitle={purchaseItem.category_description}
             renderFooter={renderFooter}
             renderButton={renderButton}
         >

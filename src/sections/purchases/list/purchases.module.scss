@@ -70,9 +70,5 @@
     @include padded(all, m);
 
     flex: 0;
-    transition: 0.5s;
-
-    &:hover {
-        @include font-colored($of-white);
-    }
+    transition: 0.6s;
 }

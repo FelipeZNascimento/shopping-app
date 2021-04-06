@@ -1,21 +1,17 @@
 import { TState } from './types';
 
-export function getIsLoading(state: { brandReducer: TState }) {
+export function selectIsLoading(state: { brandReducer: TState }) {
     return state.brandReducer.loading;
 }
 
-export function getIsLoadingNames(state: { brandReducer: TState }) {
-    return state.brandReducer.loadingNames;
-}
-
-export function getBrands(state: { brandReducer: TState }) {
+export function selectBrands(state: { brandReducer: TState }) {
     return state.brandReducer.brands.data;
 }
 
-export function getBrandsCount(state: { brandReducer: TState }) {
+export function selectBrandsCount(state: { brandReducer: TState }) {
     return state.brandReducer.brands.totalCount;
 }
 
-export function getBrandNames(state: { brandReducer: TState }) {
+export function selectBrandNames(state: { brandReducer: TState }) {
     return state.brandReducer.brandNames;
 }

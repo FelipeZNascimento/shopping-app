@@ -17,16 +17,15 @@ import { fetchPurchases } from 'store/purchase/actions';
 
 // Components
 import FullPurchase from './components/full_purchase';
-import { InfoCard, Loading } from 'components/index';
+import { InfoCard, Loading, PlaceIcon } from 'components/index';
 
-import {
-    IPurchase
-} from 'constants/objectInterfaces';
+import { TPurchase } from './types';
+
 import { routes } from 'constants/routes';
 import styles from './purchase_history.module.scss';
 
 const PurchaseHistory = () => {
-    const [selectedPurchase, setSelectedPurchase] = useState<IPurchase | null>(null);
+    const [selectedPurchase, setSelectedPurchase] = useState<TPurchase | null>(null);
     const { purchaseId } = useParams<{ purchaseId: string }>();
 
     const purchaseHistory = useSelector(selectPurchaseHistory);
@@ -49,18 +48,18 @@ const PurchaseHistory = () => {
         }
     }, [purchaseHistory]);
 
-    const onClick = (purchase: IPurchase) => {
+    const onClick = (purchase: TPurchase) => {
         history.push(routes.PURCHASE + `/${purchase.id}`);
     };
 
-    const renderFooter = (purchase: IPurchase) => {
-        return (
-            <div className={styles.footer}>
-                <div>{purchase.items} {purchase.items > 1 ? 'itens' : 'item'}</div>
-                <div>€{purchase.total}</div>
-            </div>
-        )
-    };
+    const renderIcon = (categoryId: number) => <PlaceIcon categoryId={categoryId} />
+
+    const renderFooter = (purchase: TPurchase) => (
+        <div className={styles.footer}>
+            <div>{purchase.items} {purchase.items > 1 ? 'itens' : 'item'}</div>
+            <div>€{purchase.total}</div>
+        </div>
+    );
 
     if (selectedPurchase === null) {
         if (purchaseHistory.length === 0 && !isLoading) {
@@ -77,6 +76,7 @@ const PurchaseHistory = () => {
                     clickable
                     title={purchase.description}
                     subtitle={moment(purchase.date).format('DD/MM/YYYY')}
+                    renderButton={() => renderIcon(purchase.categoryId)}
                     renderFooter={() => renderFooter(purchase)}
                     onClick={() => onClick(purchase)}
                 />)}

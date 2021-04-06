@@ -29,6 +29,7 @@ export default function shoppingListReducer(
     switch (action.type) {
         case ACTIONTYPES.FETCHING_SHOPPING_LIST:
         case ACTIONTYPES.ADDING_TO_SHOPPING_LIST:
+        case ACTIONTYPES.DELETING_SHOPPING_LIST:
         case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST:
             return {
                 ...state,
@@ -37,6 +38,7 @@ export default function shoppingListReducer(
             };
         case ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR:
         case ACTIONTYPES.ADDING_TO_SHOPPING_LIST_ERROR:
+        case ACTIONTYPES.DELETING_SHOPPING_LIST_ERROR:
         case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_ERROR:
             return {
                 ...state,
@@ -60,8 +62,14 @@ export default function shoppingListReducer(
                     ...state.shoppingList,
                     data: [action.newProduct, ...state.shoppingList.data],
                     count: state.shoppingList.count + 1,
-                    totalCount: state.shoppingList.totalCount + 1 
+                    totalCount: state.shoppingList.totalCount + 1
                 }
+            };
+        case ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS:
+            return {
+                ...initialState,
+                loading: false,
+                error: false,
             };
         case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS:
             return {
@@ -74,10 +82,6 @@ export default function shoppingListReducer(
                     totalCount: state.shoppingList.totalCount - 1
                 }
             };
-        case ACTIONTYPES.CLEAR_SHOPPING_LIST:
-            return {
-                ...initialState
-            }
         default:
             return state;
     }

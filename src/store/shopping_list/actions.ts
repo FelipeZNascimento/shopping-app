@@ -56,6 +56,32 @@ export const addToShoppingList = (
         })
 };
 
+export const deleteShoppingList = () => async (dispatch: Dispatch<TDeleteShoppingList>) => {
+    dispatch({ type: ACTIONTYPES.DELETING_SHOPPING_LIST } as const);
+    deleteItems({
+        objectId: null,
+        objectType: objectTypes.shoppingList
+    })
+        .then(() => {
+            dispatch({
+                type: ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTIONTYPES.DELETING_SHOPPING_LIST_ERROR,
+                errorMessage: error.message
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error.message
+            });
+        })
+};
+
 export const deleteFromShoppingList = (
     purchaseItem: IProduct
 ) => async (dispatch: Dispatch<TDeleteShoppingList>) => {
@@ -88,12 +114,6 @@ export const deleteFromShoppingList = (
             });
         })
 };
-
-export function clearShoppingList() {
-    return {
-        type: ACTIONTYPES.CLEAR_SHOPPING_LIST
-    }
-}
 
 export const fetchShoppingList = (
     sortState = {

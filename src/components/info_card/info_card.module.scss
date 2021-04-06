@@ -13,6 +13,7 @@
         0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     flex-direction: column;
     min-height: 100px;
+    transition: 0.6s;
     width: 300px;
 
     .content {
@@ -49,12 +50,10 @@
 .responsiveCard {
     @extend .card;
 
-    border-radius: 4px;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     cursor: default;
+    flex: 1;
     opacity: 1;
-    width: 100%;
+    width: auto;
 }
 
 .centerAligned {
@@ -114,5 +113,6 @@
 }
 
 .footer {
+    transition: 0.6s;
     width: 100%;
 }
