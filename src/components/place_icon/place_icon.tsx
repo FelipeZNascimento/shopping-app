@@ -14,9 +14,13 @@ import {
 } from '@material-ui/icons';
 
 type TProps = {
-    categoryId: number;
+    categoryId: number | null;
 }
 const PlaceIcon = ({ categoryId }: TProps) => {
+    if (categoryId === null) {
+        return null;
+    }
+
     switch (categoryId) {
         case 1:
             return <ShoppingCartIcon />;

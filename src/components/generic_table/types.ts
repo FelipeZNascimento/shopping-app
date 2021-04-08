@@ -10,3 +10,8 @@ export type TBodyColumn = {
     renderFunction: (item: any) => React.ReactNode;
     showOnMobile?: boolean;
 }
+
+export type TSortingState = {
+    orderBy: string;
+    sort: string
+}

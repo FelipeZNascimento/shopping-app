@@ -1,106 +1,55 @@
-export interface IBrand {
-    created: string;
-    description: string;
+type TBase = {
     id: number | null;
+    description: string;
+    created?: string;
 }
 
-export interface IPlace {
-    category_description: string;
-    category_id: number | null;
-    created: string;
-    description: string;
-    id: number | null;
+export type TBrand = TBase;
+export type TCategory = TBase;
+export type TItemName = TBase;
+
+export type TPlace = TBase & {
+    category: TCategory;
 }
 
-export interface IProduct {
-    category_description: string;
-    category_id: number | null;
-    created: string;
-    description: string;
-    id: number | null;
-    product_id: number | null;
+export type TProduct = TBase & {
+    category: TCategory;
 }
 
-export type TProductInfo = {
+export type TPurchaseDetail = {
+    price: number;
+    quantity: number;
+    unit: number;
+    discount: boolean;
+    details: string;
+
+    brand: TBrand | null;
+    product: TProduct;
+};
+
+export type TPurchaseItem = TPurchaseDetail & {
     id: number;
-    categoryDescription: string;
+}
+
+export type TShoppingListItem = {
+    id: number;
+    product: TProduct;
+}
+
+export type TPurchase = {
+    numberOfItems: number;
+    id: number;
+    date: string;
+    total: number;
     created: number;
-    description: string;
+    place: TPlace;
 }
 
 export type TProductHistoryItem = {
     price: number;
     discount: boolean;
     unit: number;
-    brandId: number;
-    placeId: number;
-    productCategoryId: number;
-    description: string;
     date: string;
-    categoryDescription: string;
-    brandDescription: string;
-    placeDescription: string;
-}
-
-export interface IProductsObject {
-    totalCount: number,
-    data: IProduct[]
-}
-
-export interface IItemName {
-    description: string,
-    id: number
-}
-
-export interface IShoppingListItem {
-    category_description: string;
-    category_id: number | null;
-    created: string;
-    description: string;
-    id: number | null;
-    product_id: number | null;
-}
-
-export interface ICategory {
-    id: number | null;
-    description: string;
-}
-
-export interface ICategoriesObject {
-    totalCount: number,
-    data: ICategory[]
-}
-
-export interface IPurchase {
-    id: number;
-    date: string;
-    total: number;
-    description: string;
-    categoryId: number;
-    categoryDescription: string;
-    items: number;
-}
-
-export interface IPurchaseItem {
-    id: number;
-    brand_description: string;
-    brand_id: number | null;
-
-    category_description: string;
-    category_id: number | null;
-    created: string;
-    description: string;
-    product_id: number | null;
-
-    quantity: number;
-    unit: number;
-    price: number;
-    total_price: number;
-    discount?: boolean;
-    details?: string;
-}
-
-export interface ISortingState {
-    orderBy: string;
-    sort: string
+    brand: TBrand | null;
+    place: TPlace;
 }

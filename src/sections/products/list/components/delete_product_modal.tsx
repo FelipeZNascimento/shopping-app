@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { TextField } from '@material-ui/core';
-import { IProduct } from 'constants/objectInterfaces';
+import { TProduct } from 'constants/objectInterfaces';
 
 import ConfirmationDialog from 'components/dialogs/confirmation_dialog';
 
 interface IProps {
-    product: IProduct | null;
+    product: TProduct | null;
     onClose: () => void;
     onConfirm: () => void;
 }
@@ -26,7 +26,7 @@ const DeleteProductModal = ({
                     id="description"
                     label="Categoria"
                     type="text"
-                    value={product?.category_description}
+                    value={product?.category.description}
                 />
                 <TextField
                     disabled

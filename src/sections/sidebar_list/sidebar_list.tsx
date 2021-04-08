@@ -11,7 +11,7 @@ import { selectShoppingList } from 'store/shopping_list/selector';
 import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
 
 // Interfaces
-import { IShoppingListItem } from 'constants/objectInterfaces';
+import { TShoppingListItem } from 'constants/objectInterfaces';
 
 // Components
 import { Separator } from 'components/index';
@@ -24,15 +24,15 @@ import styles from './sidebar_list.module.scss';
 
 const SidebarList = () => {
     const dispatch = useDispatch();
-    const list: IShoppingListItem[] = useSelector(selectShoppingList);
+    const list: TShoppingListItem[] = useSelector(selectShoppingList);
     const { pathname } = useLocation();
 
     useEffect(() => {
         dispatch(fetchShoppingList());
     }, []);
 
-    const deleteProduct = (product: IShoppingListItem) => {
-        dispatch(deleteFromShoppingList(product));
+    const deleteProduct = (item: TShoppingListItem) => {
+        dispatch(deleteFromShoppingList(item));
     };
 
     const renderShoppingList = () => {
@@ -45,17 +45,17 @@ const SidebarList = () => {
                 </Link>
                 <Separator />
                 {
-                    list.map((product: IShoppingListItem) => {
+                    list.map((item: TShoppingListItem) => {
                         return (
                             <div className="bottom-padding-s">
                                 <IconButton
                                     aria-label="remove"
                                     size="small"
-                                    onClick={() => deleteProduct(product)}
+                                    onClick={() => deleteProduct(item)}
                                 >
                                     <RemoveIcon className="of-red" />
                                 </IconButton>
-                                <span className={styles.item}>{product.description}</span>
+                                <span className={styles.item}>{item.product.description}</span>
                             </div>
                         );
                     })

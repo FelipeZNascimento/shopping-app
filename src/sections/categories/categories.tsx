@@ -9,21 +9,22 @@ import AddCategoryModal from './components/add_category_modal';
 import DeleteCategoryModal from './components/delete_category_modal';
 
 // Types
-import { ICategory, ISortingState } from 'constants/objectInterfaces';
+import { TCategory } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
+import { TSortingState } from 'components/generic_table/types';
 import { resultsPerPage } from 'constants/general';
 
 import styles from './categories.module.scss';
 
 type TProps = {
     color: string;
-    data: ICategory[];
+    data: TCategory[];
     isLoading?: boolean;
-    searchOptions: ICategory[];
-    sortState: ISortingState;
+    searchOptions: TCategory[];
+    sortState: TSortingState;
     totalCount: number;
     onAddNewCategory: (categoryName: string) => void;
-    onDeleteCategory: (category: ICategory) => void;
+    onDeleteCategory: (category: TCategory) => void;
     onPageChange: (page: number) => void;
     onSearch: (item: IAutocompleteItem | string | null) => void;
     onSortChange: (currentPage: number, column: string, direction: string) => void;
@@ -49,12 +50,18 @@ const CategoriesSection = ({
 }: TProps) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [toBeDeleted, setToBeDeleted] = useState<ICategory | null>(null);
+    const [toBeDeleted, setToBeDeleted] = useState<TCategory | null>(null);
 
     const headerColumns = [
         {
+            key: 'id',
+            renderFunction: () => 'Id',
+            sortable: true,
+            showOnMobile: false
+        },
+        {
             key: 'description',
-            renderFunction: () => 'Categoria de Lugares',
+            renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: true
         },
@@ -66,7 +73,7 @@ const CategoriesSection = ({
         }
     ];
 
-    const renderDeleteIcon = (item: ICategory) => (
+    const renderDeleteIcon = (item: TCategory) => (
         <IconButton
             aria-label="delete"
             classes={{ root: styles.icon }}
@@ -78,13 +85,18 @@ const CategoriesSection = ({
 
     const bodyColumns = [
         {
+            key: 'id',
+            renderFunction: (item: TCategory) => <td className="align-left">{item.id}</td>,
+            showOnMobile: false
+        },
+        {
             key: 'description',
-            renderFunction: (item: ICategory) => <td className="align-left">{item.description}</td>,
+            renderFunction: (item: TCategory) => <td className="align-left">{item.description}</td>,
             showOnMobile: true
         },
         {
             key: 'delete',
-            renderFunction: (item: ICategory) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            renderFunction: (item: TCategory) => <td className="align-right">{renderDeleteIcon(item)}</td>,
             showOnMobile: true
         }
     ];

@@ -1,8 +1,8 @@
 import * as ACTIONTYPES from '../actionTypes';
 import {
-    IPurchase,
-    IPurchaseItem,
-    IShoppingListItem
+    TPurchase,
+    TPurchaseItem,
+    TShoppingListItem
 } from 'constants/objectInterfaces';
 import { TState } from './types';
 
@@ -10,12 +10,12 @@ import { dynamicSort } from 'utils/utils'
 
 interface IAction {
     type: string,
-    newlyAddedItems: IPurchaseItem[],
-    purchaseHistory: IPurchase[],
-    purchaseList: IPurchaseItem[],
-    fullPurchase: IPurchaseItem[],
+    newlyAddedItems: TPurchaseItem[],
+    purchaseHistory: TPurchase[],
+    purchaseList: TPurchaseItem[],
+    fullPurchase: TPurchaseItem[],
     itemId: number,
-    response: IShoppingListItem,
+    response: TShoppingListItem,
     errorMessage: string
 }
 
@@ -39,17 +39,17 @@ export default function purchaseReducer(
                 purchaseList: [
                     ...state.purchaseList,
                     ...action.newlyAddedItems
-                ].sort(dynamicSort('description'))
+                ]
             };
         case ACTIONTYPES.REMOVE_ITEM_FROM_PURCHASE:
             return {
                 ...state,
-                purchaseList: state.purchaseList.filter((item: IPurchaseItem) => item.id !== action.itemId)
+                purchaseList: state.purchaseList.filter((item: TPurchaseItem) => item.id !== action.itemId)
             };
         case ACTIONTYPES.UPDATE_PURCHASE_ITEM:
             return {
                 ...state,
-                purchaseList: action.purchaseList.sort(dynamicSort('description'))
+                purchaseList: action.purchaseList
             };
         case ACTIONTYPES.CLEAR_PURCHASE:
             return {
@@ -83,7 +83,7 @@ export default function purchaseReducer(
                 ...state,
                 loading: false,
                 error: false,
-                purchaseHistory: action.purchaseHistory
+                purchaseHistory: action.response
             }
 
         case ACTIONTYPES.FETCHING_PURCHASE_SUCCESS:
@@ -91,7 +91,7 @@ export default function purchaseReducer(
                 ...state,
                 loading: false,
                 error: false,
-                fullPurchase: action.fullPurchase
+                fullPurchase: action.response
             }
 
         default:

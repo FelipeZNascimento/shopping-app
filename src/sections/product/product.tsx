@@ -28,10 +28,11 @@ import {
 import { GenericTable, InfoCard, Loading } from 'components/index';
 
 import {
-    ISortingState,
     TProductHistoryItem,
-    TProductInfo
+    TProduct
 } from 'constants/objectInterfaces';
+import { TSortingState } from 'components/generic_table/types';
+
 import { TProductGraphic } from './types';
 import { invertSort } from 'utils/utils';
 
@@ -43,9 +44,9 @@ const defaultSortState = {
 };
 
 const SingleProduct = () => {
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
     const [graphicData, setGraphicData] = useState<TProductGraphic[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<TProductInfo | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
 
     const dispatch = useDispatch();
     const { productId } = useParams<{ productId: string }>();
@@ -67,11 +68,11 @@ const SingleProduct = () => {
     useEffect(() => {
         if (productHistory && !isLoading) {
             const data = productHistory.map((item) => ({
-                brand: item.brandDescription,
+                brand: item.brand?.description,
                 date: moment(item.date).format('DD/MM/YYYY'),
                 discount: item.discount,
                 price: item.price,
-                place: item.placeDescription
+                place: item.place.description
             }));
 
             setGraphicData(data);
@@ -113,12 +114,12 @@ const SingleProduct = () => {
     const bodyColumns = [
         {
             key: 'place',
-            renderFunction: (item: TProductHistoryItem) => <td className="align-left">{item.placeDescription}</td>,
+            renderFunction: (item: TProductHistoryItem) => <td className="align-left">{item.place.description}</td>,
             showOnMobile: true
         },
         {
             key: 'brand',
-            renderFunction: (item: TProductHistoryItem) => <td>{item.brandDescription || '-'}</td>,
+            renderFunction: (item: TProductHistoryItem) => <td>{item.brand ? item.brand.description : '-'}</td>,
             showOnMobile: false
         },
         {
@@ -181,7 +182,7 @@ const SingleProduct = () => {
                 responsiveWidth
                 color={'green'}
                 title={`[${selectedProduct.id}] ${selectedProduct.description}`}
-                subtitle={selectedProduct.categoryDescription}
+                subtitle={selectedProduct.category.description}
             />}
             <GenericTable
                 bodyColumns={isLoading ? [] : bodyColumns}

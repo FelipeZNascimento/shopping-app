@@ -11,8 +11,8 @@ import { TextField } from '@material-ui/core';
 import { FormDialog, Autocomplete } from 'components/index';
 
 import {
-    IPlace,
-    ICategory
+    TPlace,
+    TCategory
 } from 'constants/objectInterfaces';
 import {
     place as placeModel
@@ -24,7 +24,7 @@ import styles from './modal.module.scss';
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (object: IPlace) => void;
+    onConfirm: (object: TPlace) => void;
 }
 
 const AddPlaceModal = ({
@@ -32,8 +32,8 @@ const AddPlaceModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const [selectedItem, setSelectedItem] = useState<IPlace>(placeModel);
-    const categories: ICategory[] = useSelector(selectPlaceCategories);
+    const [selectedItem, setSelectedItem] = useState<TPlace>(placeModel);
+    const categories: TCategory[] = useSelector(selectPlaceCategories);
 
     const dispatch = useDispatch();
 
@@ -45,11 +45,15 @@ const AddPlaceModal = ({
         const value = event.target.value;
 
         if (value) {
+            const category = {
+                id: selectedItem.category.id,
+                description: selectedItem.category.description
+            };
+
             setSelectedItem({
                 ...selectedItem,
                 created: selectedItem?.created || '',
-                category_id: selectedItem?.category_id,
-                category_description: selectedItem?.category_description || '',
+                category: category,
                 description: value,
                 id: selectedItem?.id
             });
@@ -60,10 +64,14 @@ const AddPlaceModal = ({
         category: IAutocompleteItem | string
     ) => {
         if (typeof category !== 'string') {
+            const newCategory = {
+                id: category.id,
+                description: category.description
+            };
+
             setSelectedItem({
                 ...selectedItem,
-                category_id: category.id,
-                category_description: category.description
+                category: newCategory
             })
         }
     };
@@ -90,7 +98,7 @@ const AddPlaceModal = ({
 
     return (
         <FormDialog
-            isEnable={selectedItem.description !== '' && selectedItem.category_id !== null}
+            isEnable={selectedItem.description !== '' && selectedItem.category.id !== null}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => selectedItem ? onConfirm(selectedItem) : null}

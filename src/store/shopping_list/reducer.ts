@@ -1,25 +1,22 @@
 import * as ACTIONTYPES from '../actionTypes';
-import { IShoppingListItem, IProduct } from 'constants/objectInterfaces';
+import { TShoppingListItem } from 'constants/objectInterfaces';
 import { TState } from './types';
 
 interface IAction {
     errorMessage: string,
     type: string,
-    toBeDeleted: IProduct,
-    newProduct: IProduct,
+    toBeDeleted: TShoppingListItem,
+    newProduct: TShoppingListItem,
     productId: number,
-    products: IShoppingListItem
+    products: TShoppingListItem,
+    response: TShoppingListItem[]
 }
 
 const initialState: TState = {
     error: false,
     errorMessage: '',
     loading: false,
-    shoppingList: {
-        count: 0,
-        totalCount: 0,
-        data: []
-    }
+    shoppingList: []
 };
 
 export default function shoppingListReducer(
@@ -46,42 +43,17 @@ export default function shoppingListReducer(
                 error: true,
                 errorMessage: action.errorMessage
             };
+        case ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS:
+        case ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS:
+        case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS:
         case ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: false,
-                shoppingList: action.products
+                shoppingList: action.response
             };
-        case ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                shoppingList: {
-                    ...state.shoppingList,
-                    data: [action.newProduct, ...state.shoppingList.data],
-                    count: state.shoppingList.count + 1,
-                    totalCount: state.shoppingList.totalCount + 1
-                }
-            };
-        case ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS:
-            return {
-                ...initialState,
-                loading: false,
-                error: false,
-            };
-        case ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                shoppingList: {
-                    data: state.shoppingList.data.filter((product: IProduct) => product.id !== action.toBeDeleted.id),
-                    count: state.shoppingList.count - 1,
-                    totalCount: state.shoppingList.totalCount - 1
-                }
-            };
+
         default:
             return state;
     }

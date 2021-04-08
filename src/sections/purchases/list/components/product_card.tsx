@@ -10,18 +10,18 @@ import { Autocomplete, InfoCard } from 'components/index';
 
 import { productUnits } from 'constants/products';
 import {
-    IBrand,
-    IPurchaseItem
+    TBrand,
+    TPurchaseItem
 } from 'constants/objectInterfaces';
 import styles from './product_card.module.scss';
 import { objectsAreEqual } from 'services/utilities';
 
 interface IProps {
-    brands: IBrand[];
+    brands: TBrand[];
     color: string;
-    purchaseItem: IPurchaseItem
-    onDelete: (item: IPurchaseItem) => void;
-    onUpdate: (item: IPurchaseItem) => void;
+    purchaseItem: TPurchaseItem
+    onDelete: (item: TPurchaseItem) => void;
+    onUpdate: (item: TPurchaseItem) => void;
 }
 
 const ProductCard = ({
@@ -31,7 +31,7 @@ const ProductCard = ({
     onDelete,
     onUpdate
 }: IProps) => {
-    const [itemInfo, setItemInfo] = useState(purchaseItem);
+    const [itemInfo, setItemInfo] = useState<TPurchaseItem>(purchaseItem);
     const [currentUnit, setCurrentUnit] = useState(productUnits[0]);
 
     useEffect(() => {
@@ -49,8 +49,10 @@ const ProductCard = ({
                     title="Marca"
                     onChange={(item: any) => setItemInfo({
                         ...purchaseItem,
-                        brand_description: item ? item.description : '',
-                        brand_id: item ? item.id : null
+                        brand: {
+                            description: item ? item.description : '',
+                            id: item ? item.id : null
+                        }
                     })}
                 />
             </div>
@@ -100,7 +102,7 @@ const ProductCard = ({
                 </div>
                 <div className={styles.promo}>
                     Promo?
-                        <Checkbox
+                    <Checkbox
                         size="small"
                         inputProps={{ 'aria-label': 'checkbox with small size' }}
                         onChange={(e) => setItemInfo({
@@ -133,17 +135,20 @@ const ProductCard = ({
             <RemoveIcon classes={{ root: 'of-red' }} />
         </IconButton>
     )
-    const renderFooter = () => (
-        <div className={purchaseItem.total_price > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
-            € {purchaseItem.total_price}
-        </div>
-    );
+    const renderFooter = () => {
+        const totalPrice = Math.round(purchaseItem.price * purchaseItem.quantity * 100) / 100;
+        return (
+            <div className={totalPrice > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
+                € {totalPrice}
+            </div>
+        );
+    }
 
     return (
         <InfoCard
             color={color}
-            title={purchaseItem.description}
-            subtitle={purchaseItem.category_description}
+            title={purchaseItem.product.description}
+            subtitle={purchaseItem.product.category.description}
             renderFooter={renderFooter}
             renderButton={renderButton}
         >

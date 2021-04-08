@@ -1,8 +1,8 @@
 import * as ACTIONTYPES from 'store/actionTypes';
-import { IBrand, ICategory, IItemName } from 'constants/objectInterfaces';
+import { TBrand, TCategory, TItemName } from 'constants/objectInterfaces';
 
 type TAction = {
-    readonly response?: IBrand[] | ICategory[];
+    readonly response?: TBrand[] | TCategory[];
     readonly errorMessage?: string;
 };
 
@@ -10,8 +10,12 @@ export type TState = {
     error: boolean,
     loading: boolean,
     loadingNames: boolean,
-    brands: TBrandsObject,
-    brandNames: IItemName[]
+    brands: {
+        totalCount: number;
+        count: number;
+        data: TBrand[];
+    }
+    brandNames: TItemName[]
 }
 
 export type TFetchBrandNames = TAction & {
@@ -23,11 +27,11 @@ export type TFetchBrandNames = TAction & {
 };
 
 export type TFetchBrands = TAction & {
-    readonly brands?: IBrand[];
     readonly type: typeof ACTIONTYPES.FETCHING_BRANDS
     | typeof ACTIONTYPES.FETCHING_BRANDS_SUCCESS
     | typeof ACTIONTYPES.FETCHING_BRANDS_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly brands?: TBrand[];
 };
 
 export type TSaveBrand = TAction & {
@@ -35,7 +39,7 @@ export type TSaveBrand = TAction & {
     | typeof ACTIONTYPES.SAVING_BRANDS_SUCCESS
     | typeof ACTIONTYPES.SAVING_BRANDS_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly newBrand?: IBrand;
+    readonly brands?: TBrand[];
 };
 
 export type TDeleteBrand = TAction & {
@@ -43,14 +47,5 @@ export type TDeleteBrand = TAction & {
     | typeof ACTIONTYPES.DELETING_BRANDS_SUCCESS
     | typeof ACTIONTYPES.DELETING_BRANDS_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly toBeDeleted?: IBrand;
+    readonly brands?: TBrand[];
 };
-
-type TApiResponse = {
-    readonly count: number,
-    readonly totalCount: number,
-}
-
-export type TBrandsObject = TApiResponse & {
-    readonly data: IBrand[]
-}

@@ -1,8 +1,8 @@
 import * as ACTIONTYPES from 'store/actionTypes';
-import { ICategory, IItemName, IPlace } from 'constants/objectInterfaces';
+import { TCategory, TItemName, TPlace } from 'constants/objectInterfaces';
 
 type TAction = {
-    readonly response?: IPlace[] | ICategory[];
+    readonly response?: TPlace[] | TCategory[];
     readonly errorMessage?: string;
 };
 
@@ -12,42 +12,50 @@ export type TState = {
     loadingCategories: boolean,
     loadingCategoryNames: boolean,
     loadingNames: boolean,
-    placeNames: IItemName[],
-    placeCategoryNames: IItemName[],
-    places: TPlacesObject,
-    placeCategories: TCategoriesObject
-}
+    placeNames: TItemName[],
+    placeCategoryNames: TItemName[],
+    places: {
+        count: number,
+        totalCount: number,
+        data: TPlace[]
+    },
+    placeCategories: {
+        count: number,
+        totalCount: number,
+        data: TCategory[]
+    }
+};
 
 export type TFetchPlaceNames = TAction & {
-    readonly names?: IItemName[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACE_NAMES
     | typeof ACTIONTYPES.FETCHING_PLACE_NAMES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACE_NAMES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly names?: TItemName[];
 };
 
 export type TFetchPlaceCategoryNames = TAction & {
-    readonly names?: IItemName[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES
     | typeof ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACE_CATEGORY_NAMES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly names?: TItemName[];
 };
 
 export type TFetchPlaces = TAction & {
-    readonly places?: IPlace[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACES
     | typeof ACTIONTYPES.FETCHING_PLACES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly places?: TPlace[];
 };
 
 export type TFetchCategories = TAction & {
-    readonly categories?: ICategory[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES
     | typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
+    readonly categories?: TCategory[];
 };
 
 export type TSaveCategory = TAction & {
@@ -55,7 +63,7 @@ export type TSaveCategory = TAction & {
     | typeof ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS
     | typeof ACTIONTYPES.SAVING_PLACES_CATEGORIES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly newCategory?: ICategory;
+    readonly categories?: TCategory[];
 };
 
 export type TSavePlace = TAction & {
@@ -63,7 +71,7 @@ export type TSavePlace = TAction & {
     | typeof ACTIONTYPES.SAVING_PLACES_SUCCESS
     | typeof ACTIONTYPES.SAVING_PLACES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly newPlace?: IPlace;
+    readonly places?: TPlace[];
 };
 
 export type TDeletePlace = TAction & {
@@ -71,26 +79,13 @@ export type TDeletePlace = TAction & {
     | typeof ACTIONTYPES.DELETING_PLACES_SUCCESS
     | typeof ACTIONTYPES.DELETING_PLACES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly toBeDeleted?: IPlace;
+    readonly places?: TPlace[];
 };
 
 export type TDeletePlaceCategory = TAction & {
-    readonly type: typeof ACTIONTYPES.DELETING_PLACE_CATEGORY
-    | typeof ACTIONTYPES.DELETING_PLACE_CATEGORY_SUCCESS
-    | typeof ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR
+    readonly type: typeof ACTIONTYPES.DELETING_PLACES_CATEGORIES
+    | typeof ACTIONTYPES.DELETING_PLACES_CATEGORIES_SUCCESS
+    | typeof ACTIONTYPES.DELETING_PLACES_CATEGORIES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly toBeDeleted?: ICategory;
+    readonly categories?: TCategory[];
 };
-
-type TApiResponse = {
-    readonly count: number,
-    readonly totalCount: number,
-}
-
-export type TCategoriesObject = TApiResponse & {
-    readonly data: ICategory[]
-}
-
-export type TPlacesObject = TApiResponse & {
-    readonly data: IPlace[]
-}

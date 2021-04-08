@@ -19,7 +19,7 @@ import { fetchPurchases } from 'store/purchase/actions';
 import FullPurchase from './components/full_purchase';
 import { InfoCard, Loading, PlaceIcon } from 'components/index';
 
-import { TPurchase } from './types';
+import { TPurchase } from 'constants/objectInterfaces';
 
 import { routes } from 'constants/routes';
 import styles from './purchase_history.module.scss';
@@ -28,7 +28,7 @@ const PurchaseHistory = () => {
     const [selectedPurchase, setSelectedPurchase] = useState<TPurchase | null>(null);
     const { purchaseId } = useParams<{ purchaseId: string }>();
 
-    const purchaseHistory = useSelector(selectPurchaseHistory);
+    const purchaseHistory: TPurchase[] = useSelector(selectPurchaseHistory);
     const isLoading = useSelector(selectIsLoading);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -52,11 +52,11 @@ const PurchaseHistory = () => {
         history.push(routes.PURCHASE + `/${purchase.id}`);
     };
 
-    const renderIcon = (categoryId: number) => <PlaceIcon categoryId={categoryId} />
+    const renderIcon = (categoryId: number | null) => <PlaceIcon categoryId={categoryId} />
 
     const renderFooter = (purchase: TPurchase) => (
         <div className={styles.footer}>
-            <div>{purchase.items} {purchase.items > 1 ? 'itens' : 'item'}</div>
+            <div>{purchase.numberOfItems} {purchase.numberOfItems > 1 ? 'itens' : 'item'}</div>
             <div>€{purchase.total}</div>
         </div>
     );
@@ -72,11 +72,11 @@ const PurchaseHistory = () => {
         return (
             <div className={isMobile ? styles.containerMobile : styles.containerDesktop}>
                 {isLoading && <Loading />}
-                {!isLoading && purchaseHistory.map((purchase) => <InfoCard
+                {!isLoading && purchaseHistory.map((purchase: TPurchase) => <InfoCard
                     clickable
-                    title={purchase.description}
+                    title={purchase.place.description}
                     subtitle={moment(purchase.date).format('DD/MM/YYYY')}
-                    renderButton={() => renderIcon(purchase.categoryId)}
+                    renderButton={() => renderIcon(purchase.place.category.id)}
                     renderFooter={() => renderFooter(purchase)}
                     onClick={() => onClick(purchase)}
                 />)}

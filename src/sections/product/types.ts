@@ -12,7 +12,7 @@ export type TProductInfo = {
 }
 
 export type TProductGraphic = {
-    brand: string;
+    brand: string | undefined;
     date: string;
     discount: boolean;
     place: string;

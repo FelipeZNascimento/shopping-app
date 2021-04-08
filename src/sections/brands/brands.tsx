@@ -28,10 +28,10 @@ import DeleteBrandModal from './components/delete_brand_modal';
 // Types, Constants, Misc
 import { resultsPerPage } from 'constants/general';
 import { IAutocompleteItem } from 'components/autocomplete/types';
+import { TSortingState } from 'components/generic_table/types';
 import {
-    IBrand,
-    IItemName,
-    ISortingState
+    TBrand,
+    TItemName
 } from 'constants/objectInterfaces';
 import { invertSort } from 'utils/utils';
 import styles from './brands.module.scss';
@@ -43,14 +43,14 @@ const defaultSortState = {
 
 const BrandsSection = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [searchField, setSearchField] = useState<string>('');
-    const [toBeDeleted, setToBeDeleted] = useState<IBrand | null>(null);
+    const [toBeDeleted, setToBeDeleted] = useState<TBrand | null>(null);
 
     const dispatch = useDispatch();
-    const brands: IBrand[] = useSelector(selectBrands);
-    const brandNames: IItemName[] = useSelector(selectBrandNames);
+    const brands: TBrand[] = useSelector(selectBrands);
+    const brandNames: TItemName[] = useSelector(selectBrandNames);
     const totalCount: number = useSelector(selectBrandsCount);
     const isLoading: boolean = useSelector(selectIsLoading);
 
@@ -62,6 +62,12 @@ const BrandsSection = () => {
     }, []);
 
     const headers = [
+        {
+            key: 'id',
+            renderFunction: () => 'Id',
+            sortable: true,
+            showOnMobile: false
+        },
         {
             key: 'description',
             renderFunction: () => 'Marca',
@@ -76,7 +82,7 @@ const BrandsSection = () => {
         }
     ];
 
-    const renderDeleteIcon = (item: IBrand) => (
+    const renderDeleteIcon = (item: TBrand) => (
         <IconButton
             aria-label="delete"
             classes={{ root: styles.icon }}
@@ -88,26 +94,41 @@ const BrandsSection = () => {
 
     const bodyColumns = [
         {
+            key: 'id',
+            renderFunction: (item: TBrand) => <td className="align-left">{item.id}</td>,
+            showOnMobile: false
+        },
+        {
             key: 'place',
-            renderFunction: (item: IBrand) => <td className="align-left">{item.description}</td>,
+            renderFunction: (item: TBrand) => <td className="align-left">{item.description}</td>,
             showOnMobile: true
         },
         {
             key: 'brand',
-            renderFunction: (item: IBrand) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            renderFunction: (item: TBrand) => <td className="align-right">{renderDeleteIcon(item)}</td>,
             showOnMobile: true
         }
     ];
 
     const onDeleteBrand = () => {
         if (toBeDeleted) {
-            dispatch(deleteBrand(toBeDeleted));
+            dispatch(deleteBrand(
+                toBeDeleted,
+                currentPage - 1,
+                currentSortState,
+                searchField
+            ));
         }
         setToBeDeleted(null);
     }
 
-    const onAddNewBrand = (newBrand: IBrand) => {
-        dispatch(saveBrand(newBrand));
+    const onAddNewBrand = (newBrand: TBrand) => {
+        dispatch(saveBrand(
+            newBrand,
+            currentPage - 1,
+            currentSortState,
+            searchField
+        ));
         setIsAddModalOpen(false);
     };
 

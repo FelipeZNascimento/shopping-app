@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog } from 'components/index';
-import { IBrand } from 'constants/objectInterfaces';
+import { TBrand } from 'constants/objectInterfaces';
 
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (newBrand: IBrand) => void;
+    onConfirm: (newBrand: TBrand) => void;
 }
 
 const AddBrandModal = ({
@@ -23,7 +23,7 @@ const AddBrandModal = ({
     };
 
     const onDialogConfirm = () => {
-        const newBrand: IBrand = {
+        const newBrand: TBrand = {
             id: null,
             created: '',
             description: brandName

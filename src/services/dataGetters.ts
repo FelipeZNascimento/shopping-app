@@ -3,7 +3,10 @@ import {
     objectTypeInfo,
 } from 'constants/general';
 
-import { http } from './utilities';
+import {
+    http,
+    stringifyQueryParams
+} from './utilities';
 
 type TProps = {
     objectType: number,
@@ -23,45 +26,13 @@ const fetchItems = ({
     id = null
 }: TProps) => {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
-
     let requestUrl = `${apiBaseUrl}${apiCallTarget}`;
-    let hasQueryParams = false;
 
     if (id !== null) {
         requestUrl += `${id}/`;
     }
 
-    if (currentPage !== 0) {
-        const parameter = `page=${currentPage}`;
-        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
-
-        requestUrl += queryParam;
-        hasQueryParams = true;
-    }
-
-    if (orderBy !== 'description') {
-        const parameter = `orderBy=${orderBy}`;
-        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
-
-        requestUrl += queryParam;
-        hasQueryParams = true;
-    }
-
-    if (sort !== 'ASC') {
-        const parameter = `sort=${sort}`;
-        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
-
-        requestUrl += queryParam;
-        hasQueryParams = true;
-    }
-
-    if (searchField !== '') {
-        const parameter = `searchField=${searchField}`;
-        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
-
-        requestUrl += queryParam;
-        hasQueryParams = true;
-    }
+    requestUrl += stringifyQueryParams(currentPage, orderBy, sort, searchField);
 
     const requestObject = new Request(
         `${requestUrl}`,
