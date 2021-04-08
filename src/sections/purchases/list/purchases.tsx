@@ -59,7 +59,7 @@ const PurchaseList = () => {
 
     useEffect(() => {
         dispatch(fetchPlaces());
-        dispatch(fetchBrands())
+        dispatch(fetchBrands(null))
     }, []);
 
     useEffect(() => {
