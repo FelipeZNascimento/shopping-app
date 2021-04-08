@@ -6,22 +6,18 @@ import fetchItems from 'services/dataGetters';
 import deleteItems from 'services/dataDeleters';
 import { setItem } from 'services/dataSetters';
 
-import { TDeleteShoppingList, TSaveShoppingList } from './types';
 import {
-    IProduct
+    TDeleteShoppingList,
+    TFetchShoppingListAction,
+    TSaveShoppingList
+} from './types';
+import {
+    TShoppingListItem,
+    TProduct
 } from 'constants/objectInterfaces';
 
-type fetchShoppingListAction = {
-    readonly type: typeof ACTIONTYPES.FETCHING_SHOPPING_LIST
-    | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS
-    | typeof ACTIONTYPES.FETCHING_SHOPPING_LIST_ERROR
-    | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly products?: IProduct[];
-    readonly errorMessage?: string;
-};
-
 export const addToShoppingList = (
-    product: IProduct
+    product: TProduct
 ) => async (dispatch: Dispatch<TSaveShoppingList>) => {
     dispatch({ type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST } as const);
 
@@ -30,15 +26,9 @@ export const addToShoppingList = (
         objectType: objectTypes.shoppingList
     })
         .then((response) => {
-            const purchaseItem = {
-                ...product,
-                product_id: product.id,
-                id: response.insertId
-            };
-
             dispatch({
                 type: ACTIONTYPES.ADDING_TO_SHOPPING_LIST_SUCCESS,
-                newProduct: purchaseItem
+                response: response.data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -62,9 +52,10 @@ export const deleteShoppingList = () => async (dispatch: Dispatch<TDeleteShoppin
         objectId: null,
         objectType: objectTypes.shoppingList
     })
-        .then(() => {
+        .then((response) => {
             dispatch({
-                type: ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS
+                type: ACTIONTYPES.DELETING_SHOPPING_LIST_SUCCESS,
+                response: response.data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -83,21 +74,21 @@ export const deleteShoppingList = () => async (dispatch: Dispatch<TDeleteShoppin
 };
 
 export const deleteFromShoppingList = (
-    purchaseItem: IProduct
+    shoppingListItem: TShoppingListItem
 ) => async (dispatch: Dispatch<TDeleteShoppingList>) => {
-    if (purchaseItem.id === null) {
+    if (shoppingListItem.id === null) {
         return;
     }
 
     dispatch({ type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST } as const);
     deleteItems({
-        objectId: purchaseItem.id,
+        objectId: shoppingListItem.id,
         objectType: objectTypes.shoppingList
     })
-        .then(() => {
+        .then((response) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_FROM_SHOPPING_LIST_SUCCESS,
-                toBeDeleted: purchaseItem
+                response: response.data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -121,7 +112,7 @@ export const fetchShoppingList = (
         sort: 'ASC'
     },
     searchField = ''
-) => async (dispatch: Dispatch<fetchShoppingListAction>) => {
+) => async (dispatch: Dispatch<TFetchShoppingListAction>) => {
     const { orderBy, sort } = sortState;
     dispatch({ type: ACTIONTYPES.FETCHING_SHOPPING_LIST } as const);
 
@@ -131,10 +122,10 @@ export const fetchShoppingList = (
         sort: sort,
         searchField: searchField
     })
-        .then((list) => {
+        .then((response) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_SHOPPING_LIST_SUCCESS,
-                products: list
+                response: response.data
             });
         })
         .catch((error) => {

@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { TextField } from '@material-ui/core';
-import { ICategory } from '../../../constants/objectInterfaces';
+import { TCategory } from 'constants/objectInterfaces';
 
-import ConfirmationDialog from '../../../components/dialogs/confirmation_dialog';
+import ConfirmationDialog from 'components/dialogs/confirmation_dialog';
 
 interface IProps {
-    category: ICategory | null;
+    category: TCategory | null;
     onClose: () => void;
     onConfirm: (object: any) => void;
 }

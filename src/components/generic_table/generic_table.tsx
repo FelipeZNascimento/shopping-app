@@ -7,10 +7,11 @@ import {
 } from '@material-ui/icons';
 
 import {
-    ISortingState
-} from 'constants/objectInterfaces';
+    TBodyColumn,
+    THeaderColumn,
+    TSortingState
+} from './types';
 
-import { TBodyColumn, THeaderColumn } from './types';
 import styles from './generic_table.module.scss';
 
 const defaultSortingState = {
@@ -24,7 +25,7 @@ type TProps = {
     data?: any[];
     headerColumns: THeaderColumn[];
     isLoading?: boolean;
-    sortState?: ISortingState;
+    sortState?: TSortingState;
     lastRow?: null | (() => void);
     onSortChange?: null | ((column: string, direction: string) => void);
 }

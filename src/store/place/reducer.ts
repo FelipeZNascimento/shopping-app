@@ -1,22 +1,22 @@
 import * as ACTIONTYPES from '../actionTypes';
 
-import {
-    TCategoriesObject,
-    TPlacesObject,
-    TState
-} from './types';
-import { ICategory, IPlace } from 'constants/objectInterfaces';
+import { TState } from './types';
+import { TCategory, TPlace } from 'constants/objectInterfaces';
 
 interface IAction {
-    categories: ICategory[],
     errorMessage: string,
-    itemId: number
     names: string[],
-    newCategory: ICategory,
-    newPlace: IPlace,
-    places: TPlacesObject,
-    placeCategories: TCategoriesObject,
-    toBeDeleted: IPlace | ICategory,
+    categories: {
+        count: number,
+        totalCount: number,
+        data: TCategory[]
+    },
+    places: {
+        count: number,
+        totalCount: number,
+        data: TPlace[]
+    }
+    toBeDeleted: TPlace | TCategory,
     type: string
 }
 
@@ -69,7 +69,8 @@ export default function placeReducer(
                 loadingCategoryNames: true,
                 error: false
             };
-
+        case ACTIONTYPES.DELETING_PLACES_SUCCESS:
+        case ACTIONTYPES.SAVING_PLACES_SUCCESS:
         case ACTIONTYPES.FETCHING_PLACES_SUCCESS:
             return {
                 ...state,
@@ -91,6 +92,8 @@ export default function placeReducer(
                 loadingCategoryNames: false,
                 placeCategoryNames: action.names
             };
+        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
+        case ACTIONTYPES.DELETING_PLACES_CATEGORIES_SUCCESS:
         case ACTIONTYPES.FETCHING_PLACES_CATEGORIES_SUCCESS:
             return {
                 ...state,
@@ -123,26 +126,7 @@ export default function placeReducer(
                 ...state,
                 loadingCategories: true
             };
-        case ACTIONTYPES.SAVING_PLACES_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                places: {
-                    ...state.places,
-                    data: [action.newPlace, ...state.places.data]
-                }
-            };
-        case ACTIONTYPES.SAVING_PLACES_CATEGORIES_SUCCESS:
-            return {
-                ...state,
-                loadingCategories: false,
-                error: false,
-                placeCategories: {
-                    ...state.placeCategories,
-                    data: [action.newCategory, ...state.placeCategories.data]
-                }
-            };
+
         case ACTIONTYPES.SAVING_PLACES_ERROR:
             return {
                 ...state,
@@ -162,33 +146,10 @@ export default function placeReducer(
                 ...state,
                 loading: true,
             };
-        case ACTIONTYPES.DELETING_PLACE_CATEGORY:
+        case ACTIONTYPES.DELETING_PLACES_CATEGORIES:
             return {
                 ...state,
                 loadingCategories: true,
-            };
-
-        case ACTIONTYPES.DELETING_PLACES_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                places: {
-                    data: state.places.data.filter((place: IPlace) => place.id !== action.toBeDeleted.id),
-                    count: state.places.count - 1,
-                    totalCount: state.places.totalCount - 1
-                }
-            };
-        case ACTIONTYPES.DELETING_PLACE_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                loadingCategories: false,
-                error: false,
-                placeCategories: {
-                    data: state.placeCategories.data.filter((category: ICategory) => category.id !== action.toBeDeleted.id),
-                    count: state.placeCategories.count - 1,
-                    totalCount: state.placeCategories.totalCount - 1
-                }
             };
         case ACTIONTYPES.DELETING_PLACES_ERROR:
             return {
@@ -197,7 +158,7 @@ export default function placeReducer(
                 errorMessage: action.errorMessage,
                 loading: false,
             };
-        case ACTIONTYPES.DELETING_PLACE_CATEGORY_ERROR:
+        case ACTIONTYPES.DELETING_PLACES_CATEGORIES_ERROR:
             return {
                 ...state,
                 error: true,

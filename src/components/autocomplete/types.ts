@@ -1,5 +1,5 @@
 export interface IAutocompleteItem {
-    description: string
+    description: string,
     firstLetter?: string,
     id: number | null
 }

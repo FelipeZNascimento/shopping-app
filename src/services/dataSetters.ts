@@ -4,26 +4,29 @@ import {
 } from 'constants/general';
 
 import {
-    IProduct,
-    IBrand,
-    IPlace,
-    ICategory,
-    IPurchaseItem
+    TProduct,
+    TBrand,
+    TPlace,
+    TCategory,
+    TPurchaseItem
 } from 'constants/objectInterfaces';
 
-import { http } from './utilities';
+import {
+    http,
+    stringifyQueryParams
+} from './utilities';
 
 type TPropsPurchase = {
-    purchase: IPurchaseItem[];
+    purchaseItems: TPurchaseItem[];
     date: string;
-    placeId: number | null;
+    place: TPlace;
     total: number;
 }
 
 export const setPurchase = ({
-    purchase,
+    purchaseItems,
     date,
-    placeId,
+    place,
     total
 }: TPropsPurchase) => {
     const requestObject = new Request(
@@ -35,9 +38,9 @@ export const setPurchase = ({
                 'Access-Control-Allow-Origin': 'Content-Type',
             },
             body: JSON.stringify({
-                purchase,
+                purchaseItems,
                 date,
-                placeId,
+                place,
                 total
             }),
         }
@@ -53,18 +56,28 @@ export const setPurchase = ({
 };
 
 type TPropsItem = {
-    itemArray: IProduct[] | IBrand[] | IPlace[] | ICategory[];
+    itemArray: TProduct[] | TBrand[] | TPlace[] | TCategory[];
     objectType: number;
+    currentPage?: number | null;
+    orderBy?: string;
+    sort?: string;
+    searchField?: string;
 };
 
 export const setItem = ({
     itemArray,
-    objectType
+    objectType,
+    currentPage = 0,
+    orderBy = 'description',
+    sort = 'ASC',
+    searchField = '',
 }: TPropsItem) => {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
+    let requestUrl = `${apiBaseUrl}${apiCallTarget}`;
+    requestUrl += stringifyQueryParams(currentPage, orderBy, sort, searchField);
 
     const requestObject = new Request(
-        `${apiBaseUrl}${apiCallTarget}`,
+        requestUrl,
         {
             method: "post",
             headers: {
@@ -83,52 +96,6 @@ export const setItem = ({
             throw error;
         })
 };
-
-// export const setProductToShoppingList = (itemId: number) => {
-//     const apiCallTarget = objectTypeInfo[objectTypes.shoppingList].apiCall;
-//     dispatch({ type: ACTIONTYPES.SAVING_SHOPPING_LIST });
-
-//     try {
-//         await fetch(`${apiBaseUrl}${apiCallTarget}add/${itemId}`, {
-//             method: 'GET',
-//             headers: {},
-//         })
-//             .then((response) => {
-//                 if (response.status === 200) {
-//                     return Promise.resolve(response.json());
-//                 }
-
-//                 return Promise.resolve(response.json())
-//                     .then((responseInJson) => Promise.reject(responseInJson));
-//             }) // Success
-//             .then((json) => {
-//                 dispatch({
-//                     type: ACTIONTYPES.SAVING_SHOPPING_LIST_SUCCESS,
-//                     response: json,
-//                 });
-//             }) // Error
-//             .catch((err) => {
-//                 let errorMessage;
-//                 if (err.sqlMessage) {
-//                     errorMessage = err.sqlMessage;
-//                 } else {
-//                     errorMessage = 'Erro desconhecido. Tente novamente mais tarde.';
-//                 }
-
-//                 dispatch({
-//                     type: ACTIONTYPES.SAVING_SHOPPING_LIST_ERROR,
-//                     response: errorMessage,
-//                 });
-//                 dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
-//             });
-//     } catch (error) {
-//         dispatch({
-//             type: ACTIONTYPES.SAVING_SHOPPING_LIST_ERROR,
-//             response: error,
-//         });
-//         dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
-//     }
-// };
 
 // export const updateItems = (items, objectType) => async function (dispatch) {
 //     const apiCallTarget = objectTypeInfo[objectType].apiCall;

@@ -5,5 +5,5 @@ export function selectIsLoading(state: { shoppingListReducer: TState }) {
 }
 
 export function selectShoppingList(state: { shoppingListReducer: TState }) {
-    return state.shoppingListReducer.shoppingList.data;
+    return state.shoppingListReducer.shoppingList;
 }

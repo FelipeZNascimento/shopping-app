@@ -49,6 +49,44 @@ export function arrayOfObjectsAreEqual(x, y) {
     return areEqual;
 }
 
+export function stringifyQueryParams(currentPage, orderBy, sort, searchField) {
+    let hasQueryParams = false;
+    let queryParams = '';
+    if (currentPage !== 0) {
+        const parameter = `page=${currentPage}`;
+        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
+
+        queryParams += queryParam;
+        hasQueryParams = true;
+    }
+
+    if (orderBy !== 'description') {
+        const parameter = `orderBy=${orderBy}`;
+        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
+
+        queryParams += queryParam;
+        hasQueryParams = true;
+    }
+
+    if (sort !== 'ASC') {
+        const parameter = `sort=${sort}`;
+        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
+
+        queryParams += queryParam;
+        hasQueryParams = true;
+    }
+
+    if (searchField !== '') {
+        const parameter = `searchField=${searchField}`;
+        const queryParam = hasQueryParams ? `&${parameter}` : `?${parameter}`;
+
+        queryParams += queryParam;
+        hasQueryParams = true;
+    }
+
+    return queryParams;
+}
+
 export function http(request) {
     return fetch(request)
         .then(function (response) {
@@ -70,4 +108,3 @@ export function http(request) {
             throw error;
         });
 }
-

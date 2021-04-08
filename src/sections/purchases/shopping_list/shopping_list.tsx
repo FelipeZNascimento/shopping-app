@@ -12,9 +12,8 @@ import { convertToPurchase } from 'store/purchase/actions';
 
 // Interfaces
 import {
-    IProduct,
-    IShoppingListItem,
-    ISortingState
+    TProduct,
+    TShoppingListItem,
 } from 'constants/objectInterfaces';
 
 // Components
@@ -24,13 +23,14 @@ import {
     Loading,
     SearchInput
 } from 'components/index';
+import { TSortingState } from 'components/generic_table/types';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 import {
     AddShoppingCart,
     Delete as DeleteIcon,
 } from '@material-ui/icons';
 import { Checkbox, Fab, IconButton } from '@material-ui/core';
-import { IPurchaseItem } from 'constants/objectInterfaces';
+import { TPurchaseItem } from 'constants/objectInterfaces';
 
 import { routes } from 'constants/routes';
 import { invertSort } from 'utils/utils';
@@ -43,14 +43,15 @@ const defaultSortState = {
 };
 
 const ShoppingList = () => {
-    const [checkedProducts, setCheckedProducts] = useState<IProduct[]>([]);
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
+    const [checkedProducts, setCheckedProducts] = useState<number[]>([]);
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
     const [searchField, setSearchField] = useState<string>('');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
-    const shoppingList: IShoppingListItem[] = useSelector(selectShoppingList);
+    const shoppingList: TShoppingListItem[] = useSelector(selectShoppingList);
+    const shoppingListProducts: TProduct[] = shoppingList.map((item) => item.product);
     const isLoading: boolean = useSelector(selectIsLoading);
-    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
+    const purchaseList: TPurchaseItem[] = useSelector(selectPurchaseList);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -61,7 +62,7 @@ const ShoppingList = () => {
                 checked={isChecked}
                 size="small"
                 inputProps={{ 'aria-label': 'checkbox with small size' }}
-                onClick={() => isChecked ? setCheckedProducts([]) : setCheckedProducts([...shoppingList])}
+                onClick={() => isChecked ? setCheckedProducts([]) : setCheckedProducts(shoppingList.map(item => item.id))}
             />
         )
     };
@@ -88,7 +89,13 @@ const ShoppingList = () => {
             showOnMobile: true
         },
         {
-            key: 'category_description',
+            key: 'id',
+            renderFunction: () => 'Id',
+            sortable: true,
+            showOnMobile: false
+        },
+        {
+            key: 'category',
             renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: false
@@ -107,24 +114,24 @@ const ShoppingList = () => {
         }
     ];
 
-    const onCheckboxClick = (item: IProduct) => {
+    const onCheckboxClick = (item: TProduct) => {
         let updatedCheckedProducts;
-        const index = checkedProducts.findIndex((product: IProduct) => product.id === item.id);
-        if (index === -1) {
+        const index = checkedProducts.findIndex((itemId: number) => itemId === item.id);
+        if (index === -1 && item.id !== null) {
             updatedCheckedProducts = [
                 ...checkedProducts,
-                item
+                item.id
             ];
         } else {
-            const filteredProducts = checkedProducts.filter((product: IProduct) => item.id !== product.id);
+            const filteredProducts = checkedProducts.filter((itemId: number) => item.id !== itemId);
             updatedCheckedProducts = [...filteredProducts];
         }
 
         setCheckedProducts(updatedCheckedProducts);
     };
 
-    const isChecked = (item: IProduct) => (checkedProducts.findIndex((product: IProduct) => product.id === item.id) !== -1);
-    const renderCheckbox = (item: IProduct) => (
+    const isChecked = (item: TProduct) => (checkedProducts.findIndex((itemId: number) => itemId === item.id) !== -1);
+    const renderCheckbox = (item: TProduct) => (
         <Checkbox
             checked={isChecked(item)}
             size="small"
@@ -132,7 +139,7 @@ const ShoppingList = () => {
             onClick={() => onCheckboxClick(item)}
         />
     );
-    const renderDeleteIcon = (item: IProduct) => (
+    const renderDeleteIcon = (item: TShoppingListItem) => (
         <IconButton
             aria-label="delete"
             classes={{ root: styles.icon }}
@@ -145,26 +152,31 @@ const ShoppingList = () => {
     const bodyColumns = [
         {
             key: 'checkbox',
-            renderFunction: (item: IProduct) => <td>{renderCheckbox(item)}</td>,
+            renderFunction: (item: TProduct) => <td>{renderCheckbox(item)}</td>,
             showOnMobile: true
         },
         {
             key: 'category',
-            renderFunction: (item: IShoppingListItem) => <td className="align-left">{item.category_description}</td>,
+            renderFunction: (item: TShoppingListItem) => <td className="align-left">{item.id}</td>,
+            showOnMobile: false
+        },
+        {
+            key: 'category',
+            renderFunction: (item: TShoppingListItem) => <td className="align-left">{item.product.category.description}</td>,
             showOnMobile: false
         },
         {
             key: 'description',
-            renderFunction: (item: IShoppingListItem) => (
+            renderFunction: (item: TShoppingListItem) => (
                 <td className="align-left">
-                    <Link to={routes.PRODUCT + `/${item.product_id}`}>{item.description}</Link>
+                    <Link to={routes.PRODUCT + `/${item.product.id}`}>{item.product.description}</Link>
                 </td>
             ),
             showOnMobile: true
         },
         {
             key: 'delete',
-            renderFunction: (item: IShoppingListItem) => <td>{renderDeleteIcon(item)}</td>,
+            renderFunction: (item: TShoppingListItem) => <td>{renderDeleteIcon(item)}</td>,
             showOnMobile: true
         }
     ];
@@ -185,9 +197,17 @@ const ShoppingList = () => {
     };
 
     const onConvertClick = () => {
-        dispatch(convertToPurchase(checkedProducts, purchaseList));
+        const convertingProducts: TProduct[] = [];
+        checkedProducts.forEach((id) => {
+            const foundItem = shoppingList.find((item) => item.id === id);
+            if (foundItem !== undefined) {
+                convertingProducts.push(foundItem.product);
+            }
+        })
+
+        dispatch(convertToPurchase(convertingProducts, purchaseList));
         history.push(routes.PURCHASE_FORM);
-    }
+    };
 
     const onSearch = (item: IAutocompleteItem | string) => {
         let newSearchInput;
@@ -227,7 +247,7 @@ const ShoppingList = () => {
             </Fab>
             <div className={styles.container}>
                 <SearchInput
-                    options={shoppingList}
+                    options={shoppingListProducts}
                     onSearch={onSearch}
                 />
                 <GenericTable

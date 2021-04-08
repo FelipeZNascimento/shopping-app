@@ -9,12 +9,6 @@ const initialState = {
 
 export default function appReducer(state = initialState, action) {
     switch (action.type) {
-        case ACTIONTYPES.CLEAR_ERRORS:
-            return {
-                ...state,
-                error: false,
-                errorMessage: null,
-            };
         case ACTIONTYPES.TOGGLE_NOTIFICATION:
             return {
                 ...state,

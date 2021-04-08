@@ -14,8 +14,8 @@ import {
 } from 'constants/objectModels';
 
 import {
-    IProduct,
-    ICategory
+    TProduct,
+    TCategory
 } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
@@ -24,7 +24,7 @@ import styles from './modal.module.scss';
 interface IProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: (object: IProduct) => void;
+    onConfirm: (object: TProduct) => void;
 }
 
 const AddProductModal = ({
@@ -32,8 +32,8 @@ const AddProductModal = ({
     onClose,
     onConfirm
 }: IProps) => {
-    const [selectedItem, setSelectedItem] = useState<IProduct>(productModel);
-    const categories: ICategory[] = useSelector(selectProductCategories);
+    const [selectedItem, setSelectedItem] = useState<TProduct>(productModel);
+    const categories: TCategory[] = useSelector(selectProductCategories);
 
     const dispatch = useDispatch();
 
@@ -53,10 +53,13 @@ const AddProductModal = ({
         category: IAutocompleteItem | string
     ) => {
         if (typeof category !== 'string') {
+            const newCategory = {
+                id: category.id,
+                description: category.description
+            };
             setSelectedItem({
                 ...selectedItem,
-                category_id: category.id,
-                category_description: category.description
+                category: newCategory
             })
         }
     };
@@ -84,7 +87,7 @@ const AddProductModal = ({
 
     return (
         <FormDialog
-            isEnable={selectedItem.description !== '' && selectedItem.category_id !== null}
+            isEnable={selectedItem.description !== '' && selectedItem.category.id !== null}
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={() => onConfirm(selectedItem)}

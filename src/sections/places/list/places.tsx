@@ -28,11 +28,11 @@ import AddPlaceModal from './components/add_place_modal';
 import DeletePlaceModal from './components/delete_place_modal';
 
 import {
-    IItemName,
-    IPlace,
-    ISortingState
+    TItemName,
+    TPlace
 } from 'constants/objectInterfaces';
 import { IAutocompleteItem } from 'components/autocomplete/types';
+import { TSortingState } from 'components/generic_table/types';
 import { invertSort } from 'utils/utils';
 import { resultsPerPage } from 'constants/general';
 import styles from './places.module.scss';
@@ -44,18 +44,18 @@ const defaultSortState = {
 
 const PlacesList = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
     const [isAddPlaceOpen, setIsAddPlaceOpen] = useState(false);
     const [searchField, setSearchField] = useState<string>('');
-    const [toBeDeleted, setToBeDeleted] = useState<IPlace | null>(null);
+    const [toBeDeleted, setToBeDeleted] = useState<TPlace | null>(null);
 
     const dispatch = useDispatch();
-    const placeNames: IItemName[] = useSelector(selectPlaceNames);
-    const placeCategoryNames: IItemName[] = useSelector(selectPlaceCategoryNames);
+    const placeNames: TItemName[] = useSelector(selectPlaceNames);
+    const placeCategoryNames: TItemName[] = useSelector(selectPlaceCategoryNames);
     const mergedNames = [...placeNames, ...placeCategoryNames]
         .sort((a, b) => a.description.localeCompare(b.description));
 
-    const places: IPlace[] = useSelector(selectPlaces);
+    const places: TPlace[] = useSelector(selectPlaces);
     const totalCount = useSelector(selectPlacesCount);
 
     const isLoading: boolean = useSelector(selectIsLoading);
@@ -73,7 +73,13 @@ const PlacesList = () => {
 
     const headers = [
         {
-            key: 'category_description',
+            key: 'id',
+            renderFunction: () => 'id',
+            sortable: true,
+            showOnMobile: false
+        },
+        {
+            key: 'category',
             renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: true
@@ -92,7 +98,7 @@ const PlacesList = () => {
         }
     ];
 
-    const renderDeleteIcon = (item: IPlace) => (
+    const renderDeleteIcon = (item: TPlace) => (
         <IconButton
             aria-label="delete"
             classes={{ root: styles.icon }}
@@ -104,30 +110,45 @@ const PlacesList = () => {
 
     const bodyColumns = [
         {
-            key: 'place',
-            renderFunction: (item: IPlace) => <td className="align-left">{item.description}</td>,
+            key: 'id',
+            renderFunction: (item: TPlace) => <td className="align-left">{item.id}</td>,
+            showOnMobile: false
+        },
+        {
+            key: 'category',
+            renderFunction: (item: TPlace) => <td className="align-left">{item.category.description}</td>,
             showOnMobile: true
         },
         {
-            key: 'place',
-            renderFunction: (item: IPlace) => <td className="align-left">{item.category_description}</td>,
+            key: 'description',
+            renderFunction: (item: TPlace) => <td className="align-left">{item.description}</td>,
             showOnMobile: true
         },
         {
-            key: 'brand',
-            renderFunction: (item: IPlace) => <td className="align-right">{renderDeleteIcon(item)}</td>,
+            key: 'delete',
+            renderFunction: (item: TPlace) => <td className="align-right">{renderDeleteIcon(item)}</td>,
             showOnMobile: true
         }
     ];
     const onDeletePlace = () => {
         if (toBeDeleted) {
-            dispatch(deletePlace(toBeDeleted));
+            dispatch(deletePlace(
+                toBeDeleted,
+                currentPage - 1,
+                currentSortState,
+                searchField
+            ));
         }
         setToBeDeleted(null);
     }
 
-    const onAddNewPlace = (place: IPlace) => {
-        dispatch(savePlace(place));
+    const onAddNewPlace = (place: TPlace) => {
+        dispatch(savePlace(
+            place,
+            currentPage - 1,
+            currentSortState,
+            searchField
+        ));
         setIsAddPlaceOpen(false);
     };
 

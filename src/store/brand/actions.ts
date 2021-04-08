@@ -11,7 +11,7 @@ import {
     TFetchBrandNames,
     TSaveBrand
 } from './types';
-import { IBrand } from 'constants/objectInterfaces';
+import { TBrand } from 'constants/objectInterfaces';
 import { objectTypes } from 'constants/general';
 
 export const fetchBrandNames = () => async (dispatch: Dispatch<TFetchBrandNames>) => {
@@ -54,10 +54,10 @@ export const fetchBrands = (
         sort: sort,
         searchField: searchField
     })
-        .then((list) => {
+        .then((response) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_BRANDS_SUCCESS,
-                brands: list
+                brands: response
             });
         })
         .catch((error) => {
@@ -73,20 +73,29 @@ export const fetchBrands = (
 };
 
 export const saveBrand = (
-    newBrand: IBrand
+    newBrand: TBrand,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
 ) => async (dispatch: Dispatch<TSaveBrand>) => {
+    const { orderBy, sort } = sortState;
     dispatch({ type: ACTIONTYPES.SAVING_BRANDS } as const);
 
     setItem({
         itemArray: [newBrand],
-        objectType: objectTypes.brands
+        objectType: objectTypes.brands,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
     })
-        .then((responseBody) => {
-            newBrand.id = responseBody.insertId;
-
+        .then((response) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_BRANDS_SUCCESS,
-                newBrand: newBrand
+                brands: response
             });
             return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })
@@ -103,21 +112,33 @@ export const saveBrand = (
 };
 
 export const deleteBrand = (
-    brand: IBrand
+    brand: TBrand,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
 ) => async (dispatch: Dispatch<TDeleteBrand>) => {
     if (brand.id === null) {
         return;
     }
 
+    const { orderBy, sort } = sortState;
     dispatch({ type: ACTIONTYPES.DELETING_BRANDS } as const);
+
     deleteItems({
         objectId: brand.id,
-        objectType: objectTypes.brands
+        objectType: objectTypes.brands,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
     })
-        .then(() => {
+        .then((response) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_BRANDS_SUCCESS,
-                toBeDeleted: brand
+                brands: response
             });
             return dispatch({ type: ACTIONTYPES.TOGGLE_NOTIFICATION });
         })

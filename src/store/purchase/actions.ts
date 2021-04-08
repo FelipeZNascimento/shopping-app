@@ -11,29 +11,31 @@ import {
 } from './types';
 
 import {
-    IProduct,
-    IPurchaseItem
+    TPlace,
+    TProduct,
+    TPurchaseItem
 } from 'constants/objectInterfaces';
 import { productUnits } from 'constants/products';
 import { objectTypes } from 'constants/general';
+import { dynamicSort } from 'utils/utils'
 
-export function convertToPurchase(productsList: IProduct[], purchaseList: IPurchaseItem[]) {
-    const nextId = purchaseList.length === 0 ? 0 : Math.max(...purchaseList.map(function(item) { return item.id; })) + 1;
+export function convertToPurchase(productsList: TProduct[], purchaseList: TPurchaseItem[]) {
+    const nextId = purchaseList.length === 0 ? 0 : Math.max(...purchaseList.map(function (item) { return item.id; })) + 1;
 
-    const newlyAddedItems: IPurchaseItem[] = productsList.map((product, index) => ({
+    const newlyAddedItems: TPurchaseItem[] = productsList
+        .sort(dynamicSort('description'))
+        .map((product, index) => ({
         id: nextId + index,
-        brand_description: '',
-        brand_id: null,
-        category_description: product.category_description,
-        category_id: product.category_id,
-        created: product.created,
-        description: product.description,
-        product_id: product.product_id,
+        details: '',
         quantity: 1,
         unit: productUnits[0].id,
         price: 0,
-        total_price: 0,
-        discount: false
+        discount: false,
+        brand: {
+            id: null,
+            description: ''
+        },
+        product: product
     }));
 
     return {
@@ -48,10 +50,10 @@ export const fetchPurchases = () => async (dispatch: Dispatch<TFetchPurchases>) 
     fetchItems({
         objectType: objectTypes.purchases
     })
-        .then((list) => {
+        .then((response) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PURCHASES_SUCCESS,
-                purchaseHistory: list
+                response: response.data
             });
         })
         .catch((error) => {
@@ -83,10 +85,10 @@ export const fetchPurchase = (
         orderBy: orderBy,
         sort: sort
     })
-        .then((data) => {
+        .then((response) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PURCHASE_SUCCESS,
-                fullPurchase: data
+                response: response.data
             });
         })
         .catch((error) => {
@@ -101,7 +103,7 @@ export const fetchPurchase = (
         })
 };
 
-export function removeFromList(item: IPurchaseItem) {
+export function removeFromList(item: TPurchaseItem) {
     const itemId = item.id;
 
     return {
@@ -110,7 +112,7 @@ export function removeFromList(item: IPurchaseItem) {
     }
 }
 
-export function updateList(purchaseList: IPurchaseItem[]) {
+export function updateList(purchaseList: TPurchaseItem[]) {
     return {
         type: ACTIONTYPES.UPDATE_PURCHASE_ITEM,
         purchaseList
@@ -118,17 +120,17 @@ export function updateList(purchaseList: IPurchaseItem[]) {
 }
 
 export const savePurchaseList = (
-    newPurchase: IPurchaseItem[],
+    newPurchase: TPurchaseItem[],
     date: string,
-    placeId: number | null,
+    place: TPlace,
     total: number
 ) => async (dispatch: Dispatch<TSavePurchaseList>) => {
     dispatch({ type: ACTIONTYPES.SAVING_PURCHASE_LIST } as const);
 
     setPurchase({
-        purchase: newPurchase,
+        purchaseItems: newPurchase,
         date: date,
-        placeId: placeId,
+        place: place,
         total: total
     })
         .then(() => {

@@ -31,7 +31,7 @@ import ProductCard from './components/product_card';
 import { IAutocompleteItem } from 'components/autocomplete/types';
 
 // Interfaces, Constants
-import { IBrand, IPlace, IPurchaseItem } from 'constants/objectInterfaces';
+import { TBrand, TPlace, TPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
 import { dynamicSort } from 'utils/utils'
 
@@ -49,15 +49,14 @@ const PurchaseList = () => {
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
     const [isPurchaseSaved, setIsPurchaseSaved] = useState<boolean>(false);
 
-    const purchaseList: IPurchaseItem[] = useSelector(selectPurchaseList);
-    const brands: IBrand[] = useSelector(selectBrands);
-    const places: IPlace[] = useSelector(selectPlaces);
+    const purchaseList: TPurchaseItem[] = useSelector(selectPurchaseList);
+    const brands: TBrand[] = useSelector(selectBrands);
+    const places: TPlace[] = useSelector(selectPlaces);
     const isLoading: boolean = useSelector(selectIsLoading);
     const hasError: boolean = useSelector(selectHasError);
     const dispatch = useDispatch();
     const history = useHistory();
 
-    console.log(purchaseList);
     useEffect(() => {
         dispatch(fetchPlaces());
         dispatch(fetchBrands())
@@ -73,44 +72,56 @@ const PurchaseList = () => {
     }, [hasError, isLoading]);
 
     const onSavePurchase = () => {
-        dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlaceId, purchaseTotal));
-        setIsPurchaseSaved(true);
+        if (selectedPlaceId !== null) {
+            const selectedPlace = places.find((place) => place.id === selectedPlaceId);
+
+            if (selectedPlace !== undefined) {
+                dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlace, purchaseTotal));
+                setIsPurchaseSaved(true);
+            }
+        }
     };
 
-    const getSum = (total: number, item: IPurchaseItem) => {
-        if (isNaN(item.total_price)) {
+    const getSum = (total: number, item: TPurchaseItem) => {
+        const totalPrice = Math.round(item.price * item.quantity * 100) / 100;
+        if (isNaN(totalPrice)) {
             return total;
         }
-        return total + item.total_price;
+        return total + totalPrice;
     };
 
-    const onDelete = (item: IPurchaseItem) => {
+    const onDelete = (item: TPurchaseItem) => {
         dispatch(removeFromList(item));
     };
 
-    const onUpdate = (item: IPurchaseItem) => {
+    const onUpdate = (item: TPurchaseItem) => {
         const updatedPurchaseList = purchaseList.map((purchaseItem) => ({ ...purchaseItem }));
         const foundIndex = updatedPurchaseList.findIndex((purchaseItem) => purchaseItem.id === item.id);
+
+        let totalPrice = Math.round(item.price * item.quantity * 100) / 100;
 
         if (foundIndex === -1) {
             return;
         }
 
-        if (item.price !== updatedPurchaseList[foundIndex].price && !isNaN(item.price)) {
-            item.total_price = item.price > 0
+        const foundItem = updatedPurchaseList[foundIndex];
+        const foundItemTotalPrice = Math.round(foundItem.price * foundItem.quantity * 100) / 100;
+
+        if (item.price !== foundItem.price && !isNaN(item.price)) {
+            totalPrice = item.price > 0
                 ? Math.round(item.price * item.quantity * 100) / 100
                 : 0
-        } else if (item.total_price !== updatedPurchaseList[foundIndex].total_price && !isNaN(item.total_price)) {
-            item.price = item.total_price > 0
-                ? Math.round(item.total_price / item.quantity * 100) / 100
+        } else if (totalPrice !== foundItemTotalPrice && !isNaN(totalPrice)) {
+            item.price = totalPrice > 0
+                ? Math.round(totalPrice / item.quantity * 100) / 100
                 : 0;
-        } else if (item.quantity !== updatedPurchaseList[foundIndex].quantity && !isNaN(item.quantity)) {
-            item.total_price = item.price > 0
+        } else if (item.quantity !== foundItem.quantity && !isNaN(item.quantity)) {
+            totalPrice = item.price > 0
                 ? Math.round(item.price * item.quantity * 100) / 100
                 : 0;
 
-            item.price = item.total_price > 0
-                ? Math.round(item.total_price / item.quantity * 100) / 100
+            item.price = totalPrice > 0
+                ? Math.round(totalPrice / item.quantity * 100) / 100
                 : 0;
         }
 
@@ -133,18 +144,17 @@ const PurchaseList = () => {
     if (isLoading) {
         return <Loading />;
     }
-
-    const hasInvalidItem = purchaseList.find((item) => item.total_price <= 0) !== undefined;
+    const hasInvalidItem = purchaseList.find((item) => item.price <= 0 && item.quantity <= 0) !== undefined;
     const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
 
     const renderCategoriesTotal = () => {
         const allCategories: TCategoryCount[] = [];
         purchaseList
             .filter((item) => {
-                const foundIndex = allCategories.findIndex((x) => (x.description === item.category_description));
+                const foundIndex = allCategories.findIndex((x) => (x.description === item.product.category.description));
                 if (foundIndex <= -1) {
                     allCategories.push({
-                        description: item.category_description,
+                        description: item.product.category.description,
                         count: 1,
                         total: Math.round(item.price * item.quantity * 100) / 100
                     });

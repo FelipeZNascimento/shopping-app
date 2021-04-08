@@ -20,7 +20,8 @@ import CategoriesSection from 'sections/categories/categories';
 
 // Types, Constants, Misc
 import { IAutocompleteItem } from 'components/autocomplete/types';
-import { ICategory, ISortingState } from 'constants/objectInterfaces';
+import { TSortingState } from 'components/generic_table/types';
+import { TCategory } from 'constants/objectInterfaces';
 import { invertSort } from 'utils/utils';
 
 const defaultSortState = {
@@ -29,11 +30,11 @@ const defaultSortState = {
 };
 
 const ProductsCategories = () => {
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchField, setSearchField] = useState<string>('');
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
 
-    const categories: ICategory[] = useSelector(selectProductCategories);
+    const categories: TCategory[] = useSelector(selectProductCategories);
     const isCategoriesLoading: boolean = useSelector(selectIsLoadingCategories);
     const totalCount: number = useSelector(selectProductCategoriesCount);
     const dispatch = useDispatch();
@@ -42,24 +43,34 @@ const ProductsCategories = () => {
         dispatch(fetchProductCategories(currentPage - 1));
     }, []);
 
-    const onDeleteCategory = (category: ICategory) => {
-        dispatch(deleteProductCategory(category));
+    const onDeleteCategory = (category: TCategory) => {
+        dispatch(deleteProductCategory(
+            category,
+            currentPage - 1,
+            currentSortState,
+            searchField
+        ));
     }
 
     const onAddNewCategory = (categoryName: string) => {
-        const newCategory: ICategory = {
+        const newCategory: TCategory = {
             id: null,
             description: categoryName
         }
 
-        dispatch(saveProductCategory(newCategory));
+        dispatch(saveProductCategory(
+            newCategory,
+            currentPage - 1,
+            currentSortState,
+            searchField
+        ));
     };
 
-    const onSortChange = (currentPage: number, orderBy: string, sort: string) => {
+    const onSortChange = (page: number, orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
         setCurrentSortState({ orderBy, sort: newSort });
-        dispatch(fetchProductCategories(currentPage - 1, { orderBy, sort: newSort }, searchField));
+        dispatch(fetchProductCategories(page - 1, { orderBy, sort: newSort }, searchField));
     };
 
     const onSearch = (item: IAutocompleteItem | string | null) => {

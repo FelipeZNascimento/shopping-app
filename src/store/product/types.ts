@@ -1,14 +1,13 @@
 import * as ACTIONTYPES from 'store/actionTypes';
 import {
-    ICategory,
-    IItemName,
-    IProduct,
-    TProductHistoryItem,
-    TProductInfo
+    TCategory,
+    TItemName,
+    TProduct,
+    TProductHistoryItem
 } from 'constants/objectInterfaces';
 
 type TAction = {
-    readonly response?: IProduct[] | ICategory[];
+    readonly response?: TProduct[] | TCategory[];
     readonly errorMessage?: string;
 };
 
@@ -19,12 +18,20 @@ export type TState = {
     loadingCategories: boolean,
     loadingCategoryNames: boolean,
     loadingNames: boolean,
-    productNames: IItemName[],
-    productCategoryNames: IItemName[],
+    productNames: TItemName[],
+    productCategoryNames: TItemName[],
     productHistory: TProductHistoryItem[],
-    productInfo: null | TProductInfo,
-    products: TProductsObject,
-    productCategories: TCategoriesObject
+    productInfo: null | TProduct,
+    products: {
+        count: number,
+        totalCount: number,
+        data: TProduct[]
+    },
+    productCategories: {
+        count: number,
+        totalCount: number,
+        data: TCategory[]
+    }
 }
 
 export type TFetchProductNames = TAction & {
@@ -44,7 +51,7 @@ export type TFetchProductCategoryNames = TAction & {
 };
 
 export type TFetchProducts = TAction & {
-    readonly products?: IProduct[];
+    readonly products?: TProduct[];
     readonly type: typeof ACTIONTYPES.FETCHING_PRODUCTS
     | typeof ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PRODUCTS_ERROR
@@ -61,7 +68,7 @@ export type TFetchProduct = TAction & {
 };
 
 export type TFetchCategories = TAction & {
-    readonly categories?: ICategory[];
+    readonly categories?: TCategory[];
     readonly type: typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES
     | typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES_SUCCESS
     | typeof ACTIONTYPES.FETCHING_PLACES_CATEGORIES_ERROR
@@ -76,7 +83,7 @@ export type TSaveCategory = TAction & {
     | typeof ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS
     | typeof ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly newCategory?: ICategory;
+    readonly newCategory?: TCategory;
 };
 
 export type TSaveProduct = TAction & {
@@ -84,7 +91,7 @@ export type TSaveProduct = TAction & {
     | typeof ACTIONTYPES.SAVING_PRODUCTS_SUCCESS
     | typeof ACTIONTYPES.SAVING_PRODUCTS_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly newProduct?: IProduct;
+    readonly newProduct?: TProduct;
 };
 
 export type TDeleteProduct = TAction & {
@@ -92,15 +99,13 @@ export type TDeleteProduct = TAction & {
     | typeof ACTIONTYPES.DELETING_PRODUCTS_SUCCESS
     | typeof ACTIONTYPES.DELETING_PRODUCTS_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly toBeDeleted?: IProduct;
 };
 
 export type TDeleteProductCategory = TAction & {
-    readonly type: typeof ACTIONTYPES.DELETING_PRODUCT_CATEGORY
-    | typeof ACTIONTYPES.DELETING_PRODUCT_CATEGORY_SUCCESS
-    | typeof ACTIONTYPES.DELETING_PRODUCT_CATEGORY_ERROR
+    readonly type: typeof ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES
+    | typeof ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_SUCCESS
+    | typeof ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_ERROR
     | typeof ACTIONTYPES.TOGGLE_NOTIFICATION;
-    readonly toBeDeleted?: ICategory;
 };
 
 type TApiResponse = {
@@ -109,9 +114,9 @@ type TApiResponse = {
 }
 
 export type TCategoriesObject = TApiResponse & {
-    readonly data: ICategory[]
+    readonly data: TCategory[]
 }
 
 export type TProductsObject = TApiResponse & {
-    readonly data: IProduct[]
+    readonly data: TProduct[]
 }

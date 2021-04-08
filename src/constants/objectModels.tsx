@@ -1,27 +1,28 @@
-export const brand = {
-    created: '',
+import {
+    TBrand,
+    TPlace,
+    TCategory,
+    TProduct
+} from 'constants/objectInterfaces';
+
+export const category: TCategory = {
     description: '',
     id: null
 };
 
-export const place = {
-    category_description: '',
-    category_id: null,    
-    created: '',
-    description: '',    
-    id: null
-};
-
-export const category = {
+export const brand: TBrand = {
     description: '',
     id: null
 };
 
-export const product = {
-    category_description: '',
-    category_id: null,    
-    created: '',
+export const place: TPlace = {
+    id: null,
+    description: '',
+    category: category
+};
+
+export const product: TProduct = {
     description: '',    
     id: null,
-    product_id: null
+    category: category
 };

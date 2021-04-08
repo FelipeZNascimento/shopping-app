@@ -16,7 +16,7 @@ import {
     TSaveCategory,
     TSaveProduct
 } from './types';
-import { ICategory, IProduct } from 'constants/objectInterfaces';
+import { TCategory, TProduct } from 'constants/objectInterfaces';
 import { objectTypes } from 'constants/general';
 
 export const fetchProductNames = () => async (dispatch: Dispatch<TFetchProductNames>) => {
@@ -86,8 +86,7 @@ export const fetchProductHistory = (
         .then((data) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCT_SUCCESS,
-                productInfo: data.productInfo[0],
-                productHistory: data.data
+                productHistory: data
             });
         })
         .catch((error) => {
@@ -120,10 +119,10 @@ export const fetchProducts = (
         sort: sort,
         searchField: searchField
     })
-        .then((list) => {
+        .then((data) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS,
-                products: list
+                response: data
             });
         })
         .catch((error) => {
@@ -156,10 +155,10 @@ export const fetchProductCategories = (
         sort: sort,
         searchField: searchField
     })
-        .then((list) => {
+        .then((data) => {
             return dispatch({
                 type: ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES_SUCCESS,
-                categories: list
+                response: data
             });
         })
         .catch((error) => {
@@ -174,52 +173,30 @@ export const fetchProductCategories = (
         })
 };
 
-export const saveProductCategory = (
-    newCategory: ICategory
-) => async (dispatch: Dispatch<TSaveCategory>) => {
-    dispatch({ type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES } as const);
-
-    setItem({
-        itemArray: [newCategory],
-        objectType: objectTypes.productCategories
-    })
-        .then((responseBody) => {
-            newCategory.id = responseBody.insertId;
-            dispatch({
-                type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS,
-                newCategory: newCategory
-            });
-            return dispatch({
-                type: ACTIONTYPES.TOGGLE_NOTIFICATION
-            });
-        })
-        .catch((error) => {
-            dispatch({
-                type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR,
-                errorMessage: error.message
-            });
-            return dispatch({
-                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error.message
-            });
-        })
-};
-
 export const saveProduct = (
-    newProduct: IProduct
+    newProduct: TProduct,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
 ) => async (dispatch: Dispatch<TSaveProduct>) => {
+    const { orderBy, sort } = sortState;
     dispatch({ type: ACTIONTYPES.SAVING_PRODUCTS } as const);
 
     setItem({
         itemArray: [newProduct],
-        objectType: objectTypes.products
+        objectType: objectTypes.products,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
     })
-        .then((responseBody) => {
-            newProduct.id = responseBody.insertId;
-
+        .then((data) => {
             dispatch({
                 type: ACTIONTYPES.SAVING_PRODUCTS_SUCCESS,
-                newProduct
+                response: data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
@@ -238,21 +215,33 @@ export const saveProduct = (
 };
 
 export const deleteProduct = (
-    product: IProduct
+    product: TProduct,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
 ) => async (dispatch: Dispatch<TDeleteProduct>) => {
     if (product.id === null) {
         return;
     }
 
+    const { orderBy, sort } = sortState;
     dispatch({ type: ACTIONTYPES.DELETING_PRODUCTS } as const);
+
     deleteItems({
         objectId: product.id,
-        objectType: objectTypes.products
+        objectType: objectTypes.products,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
     })
-        .then(() => {
+        .then((data) => {
             dispatch({
                 type: ACTIONTYPES.DELETING_PRODUCTS_SUCCESS,
-                toBeDeleted: product
+                response: data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -271,22 +260,30 @@ export const deleteProduct = (
         })
 };
 
-export const deleteProductCategory = (
-    category: ICategory
-) => async (dispatch: Dispatch<TDeleteProductCategory>) => {
-    if (category.id === null) {
-        return;
-    }
+export const saveProductCategory = (
+    newCategory: TCategory,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
+) => async (dispatch: Dispatch<TSaveCategory>) => {
+    const { orderBy, sort } = sortState;
+    dispatch({ type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES } as const);
 
-    dispatch({ type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY } as const);
-    deleteItems({
-        objectId: category.id,
-        objectType: objectTypes.productCategories
+    setItem({
+        itemArray: [newCategory],
+        objectType: objectTypes.productCategories,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
     })
-        .then(() => {
+        .then((data) => {
             dispatch({
-                type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY_SUCCESS,
-                toBeDeleted: category
+                type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS,
+                response: data
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION
@@ -294,12 +291,57 @@ export const deleteProductCategory = (
         })
         .catch((error) => {
             dispatch({
-                type: ACTIONTYPES.DELETING_PRODUCT_CATEGORY_ERROR,
-                errorMessage: error.message.message
+                type: ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_ERROR,
+                errorMessage: error.message
             });
             return dispatch({
                 type: ACTIONTYPES.TOGGLE_NOTIFICATION,
-                errorMessage: error.message.message
+                errorMessage: error.message
+            });
+        })
+};
+
+export const deleteProductCategory = (
+    category: TCategory,
+    currentPage: number | null = 0,
+    sortState = {
+        orderBy: 'description',
+        sort: 'ASC'
+    },
+    searchField = ''
+) => async (dispatch: Dispatch<TDeleteProductCategory>) => {
+    if (category.id === null) {
+        return;
+    }
+
+    const { orderBy, sort } = sortState;
+    dispatch({ type: ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES } as const);
+
+    deleteItems({
+        objectId: category.id,
+        objectType: objectTypes.productCategories,
+        currentPage,
+        orderBy,
+        sort,
+        searchField
+    })
+        .then((data) => {
+            dispatch({
+                type: ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_SUCCESS,
+                response: data
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION
+            });
+        })
+        .catch((error) => {
+            dispatch({
+                type: ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_ERROR,
+                errorMessage: error.message
+            });
+            return dispatch({
+                type: ACTIONTYPES.TOGGLE_NOTIFICATION,
+                errorMessage: error.message
             });
         })
 };

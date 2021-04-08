@@ -2,28 +2,30 @@ import * as ACTIONTYPES from '../actionTypes';
 
 import {
     TCategoriesObject,
-    TProductsObject,
     TState
 } from './types';
 import {
-    ICategory,
-    IProduct,
-    TProductHistoryItem,
-    TProductInfo
+    TCategory,
+    TProduct,
+    TProductHistoryItem
 } from 'constants/objectInterfaces';
 
 interface IAction {
-    categories: ICategory[],
+    categories: TCategory[],
     errorMessage: string,
     itemId: number
     names: string[],
-    newCategory: ICategory,
-    newProduct: IProduct,
-    productHistory: TProductHistoryItem[],
-    productInfo: TProductInfo,
-    products: TProductsObject,
+    productHistory: {
+        product: TProduct,
+        history: TProductHistoryItem[]
+    },
+    response: {
+        count: number,
+        totalCount: number,
+        data: TProduct[] | TCategory[]
+    }
     productCategories: TCategoriesObject,
-    toBeDeleted: IProduct | ICategory,
+    toBeDeleted: TProduct | TCategory,
     type: string
 }
 
@@ -85,15 +87,17 @@ export default function productReducer(
                 ...state,
                 error: false,
                 loading: false,
-                productHistory: action.productHistory,
-                productInfo: action.productInfo
+                productHistory: action.productHistory.history,
+                productInfo: action.productHistory.product
             };
+        case ACTIONTYPES.SAVING_PRODUCTS_SUCCESS:
+        case ACTIONTYPES.DELETING_PRODUCTS_SUCCESS:
         case ACTIONTYPES.FETCHING_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 error: false,
                 loading: false,
-                products: action.products
+                products: action.response
             };
         case ACTIONTYPES.FETCHING_PRODUCT_NAMES_SUCCESS:
             return {
@@ -109,12 +113,14 @@ export default function productReducer(
                 loadingCategoryNames: false,
                 productCategoryNames: action.names
             };
+        case ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_SUCCESS:
+        case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS:
         case ACTIONTYPES.FETCHING_PRODUCTS_CATEGORIES_SUCCESS:
             return {
                 ...state,
                 error: false,
                 loadingCategories: false,
-                productCategories: action.categories,
+                productCategories: action.response,
             };
         case ACTIONTYPES.FETCHING_PRODUCT_ERROR:
         case ACTIONTYPES.FETCHING_PRODUCTS_ERROR:
@@ -141,27 +147,6 @@ export default function productReducer(
                 ...state,
                 loadingCategories: true
             };
-        case ACTIONTYPES.SAVING_PRODUCTS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                products: {
-                    ...state.products,
-                    data: [action.newProduct, ...state.products.data]
-                }
-
-            };
-        case ACTIONTYPES.SAVING_PRODUCTS_CATEGORIES_SUCCESS:
-            return {
-                ...state,
-                loadingCategories: false,
-                error: false,
-                productCategories: {
-                    ...state.productCategories,
-                    data: [action.newCategory, ...state.productCategories.data]
-                }
-            };
         case ACTIONTYPES.SAVING_PRODUCTS_ERROR:
             return {
                 ...state,
@@ -181,34 +166,12 @@ export default function productReducer(
                 ...state,
                 loading: true,
             };
-        case ACTIONTYPES.DELETING_PRODUCT_CATEGORY:
+        case ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES:
             return {
                 ...state,
                 loadingCategories: true,
             };
 
-        case ACTIONTYPES.DELETING_PRODUCTS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                products: {
-                    data: state.products.data.filter((product: IProduct) => product.id !== action.toBeDeleted.id),
-                    count: state.products.count - 1,
-                    totalCount: state.products.totalCount - 1
-                }
-            };
-        case ACTIONTYPES.DELETING_PRODUCT_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                loadingCategories: false,
-                error: false,
-                productCategories: {
-                    data: state.productCategories.data.filter((category: ICategory) => category.id !== action.toBeDeleted.id),
-                    count: state.productCategories.count - 1,
-                    totalCount: state.productCategories.totalCount - 1
-                }
-            };
         case ACTIONTYPES.DELETING_PRODUCTS_ERROR:
             return {
                 ...state,
@@ -216,7 +179,7 @@ export default function productReducer(
                 errorMessage: action.errorMessage,
                 loading: false,
             };
-        case ACTIONTYPES.DELETING_PRODUCT_CATEGORY_ERROR:
+        case ACTIONTYPES.DELETING_PRODUCTS_CATEGORIES_ERROR:
             return {
                 ...state,
                 error: true,

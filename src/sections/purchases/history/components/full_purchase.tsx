@@ -24,10 +24,10 @@ import {
 } from 'components/index';
 
 import {
-    IPurchaseItem,
-    ISortingState
+    TPurchase,
+    TPurchaseItem
 } from 'constants/objectInterfaces';
-import { TPurchase } from '../types';
+import { TSortingState } from 'components/generic_table/types';
 
 import { invertSort } from 'utils/utils';
 import { routes } from 'constants/routes';
@@ -47,7 +47,7 @@ const defaultSortState = {
 const FullPurchase = ({
     purchase
 }: TProps) => {
-    const [currentSortState, setCurrentSortState] = useState<ISortingState>(defaultSortState);
+    const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
 
     const dispatch = useDispatch();
     const fullPurchase = useSelector(selectFullPurchase);
@@ -65,7 +65,7 @@ const FullPurchase = ({
             showOnMobile: true
         },
         {
-            key: 'category_description',
+            key: 'category',
             renderFunction: () => 'Categoria',
             sortable: true,
             showOnMobile: false
@@ -96,22 +96,22 @@ const FullPurchase = ({
         }
     ];
 
-    const itemUnit = (item: IPurchaseItem) => productUnits.find((unit) => unit.id === item.unit);
+    const itemUnit = (item: TPurchaseItem) => productUnits.find((unit) => unit.id === item.unit);
 
     const bodyColumns = [
         {
             key: 'quantity',
-            renderFunction: (item: IPurchaseItem) => <td className="align-left">{item.quantity} {itemUnit(item)?.description}</td>,
+            renderFunction: (item: TPurchaseItem) => <td className="align-left">{item.quantity} {itemUnit(item)?.description}</td>,
             showOnMobile: true
         },
         {
-            key: 'category_description',
-            renderFunction: (item: IPurchaseItem) => <td>{item.category_description}</td>,
+            key: 'category',
+            renderFunction: (item: TPurchaseItem) => <td>{item.product.category.description}</td>,
             showOnMobile: false
         },
         {
             key: 'description',
-            renderFunction: (item: IPurchaseItem) => {
+            renderFunction: (item: TPurchaseItem) => {
                 const renderItemDetails = () => {
                     if (item.details === '') {
                         return;
@@ -122,7 +122,7 @@ const FullPurchase = ({
 
                 return (
                     <td>
-                        <Link to={routes.PRODUCT + `/${item.product_id}`}>{item.description}</Link> {renderItemDetails()}
+                        <Link to={routes.PRODUCT + `/${item.product.id}`}>{item.product.description}</Link> {renderItemDetails()}
                     </td>
                 )
             },
@@ -130,17 +130,17 @@ const FullPurchase = ({
         },
         {
             key: 'brand_description',
-            renderFunction: (item: IPurchaseItem) => <td>{item.brand_description || '-'}</td>,
+            renderFunction: (item: TPurchaseItem) => <td>{item.brand ? item.brand.description : '-'}</td>,
             showOnMobile: false
         },
         {
             key: 'price',
-            renderFunction: (item: IPurchaseItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price} / {itemUnit(item)?.description}</td>,
+            renderFunction: (item: TPurchaseItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price} / {itemUnit(item)?.description}</td>,
             showOnMobile: true
         },
         {
             key: 'total',
-            renderFunction: (item: IPurchaseItem) => <td>€ {Math.round(item.price * item.quantity * 100) / 100}</td>,
+            renderFunction: (item: TPurchaseItem) => <td>€ {Math.round(item.price * item.quantity * 100) / 100}</td>,
             showOnMobile: false
         }
     ];
@@ -158,7 +158,7 @@ const FullPurchase = ({
         )
     };
 
-    const renderIcon = (categoryId: number) => <PlaceIcon categoryId={categoryId} />
+    const renderIcon = (categoryId: null | number) => <PlaceIcon categoryId={categoryId} />
 
     const onSortChange = (orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
@@ -172,8 +172,8 @@ const FullPurchase = ({
             <InfoCard
                 responsiveWidth
                 subtitle={moment(purchase.date).format('DD/MM/YYYY')}
-                title={purchase.description}
-                renderButton={() => renderIcon(purchase.categoryId)}
+                title={purchase.place.description}
+                renderButton={() => renderIcon(purchase.place.category.id)}
             />
             <GenericTable
                 bodyColumns={bodyColumns}

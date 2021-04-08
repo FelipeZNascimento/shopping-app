@@ -3,21 +3,39 @@ import {
     objectTypeInfo,
 } from 'constants/general';
 
-import { http } from './utilities';
+import {
+    http,
+    stringifyQueryParams
+} from './utilities';
 
 type TProps = {
     objectId: null | number,
-    objectType: number
+    objectType: number,
+    currentPage?: number | null,
+    orderBy?: string,
+    sort?: string,
+    searchField?: string
 };
 
 const deleteItems = ({
     objectId,
-    objectType
+    objectType,
+    currentPage = 0,
+    orderBy = 'description',
+    sort = 'ASC',
+    searchField = '',
 }: TProps) => {
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
+    let requestUrl = `${apiBaseUrl}${apiCallTarget}`;
+
+    if (objectId !== null) {
+        requestUrl += `${objectId}`;
+    }
+
+    requestUrl += stringifyQueryParams(currentPage, orderBy, sort, searchField);
 
     const requestObject = new Request(
-        `${apiBaseUrl}${apiCallTarget}${objectId}`,
+        `${requestUrl}`,
         {
             method: "delete",
             headers: {
