@@ -37,7 +37,7 @@ export const fetchBrandNames = () => async (dispatch: Dispatch<TFetchBrandNames>
 };
 
 export const fetchBrands = (
-    currentPage = 0,
+    currentPage: number | null = 0,
     sortState = {
         orderBy: 'description',
         sort: 'ASC'
