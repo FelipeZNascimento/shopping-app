@@ -37,7 +37,7 @@ const ProductCard = ({
     useEffect(() => {
         if (!objectsAreEqual(itemInfo, purchaseItem)) {
             onUpdate(itemInfo);
-            setCurrentUnit(productUnits.find((unit) => unit.id === purchaseItem.unit) || productUnits[0]);
+            setCurrentUnit(productUnits.find((unit) => unit.id === itemInfo.unit) || productUnits[0]);
         }
     }, [itemInfo]);
 
