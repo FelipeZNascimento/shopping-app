@@ -26,3 +26,7 @@
 .icon {
     @include font-colored($of-red);
 }
+
+.disabled {
+    @include font-colored($of-grey3);
+}

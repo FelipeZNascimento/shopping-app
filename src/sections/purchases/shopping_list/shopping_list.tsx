@@ -56,7 +56,7 @@ const ShoppingList = () => {
     const history = useHistory();
 
     const renderHeaderCheckbox = () => {
-        const isChecked = checkedProducts.length === shoppingList.length;
+        const isChecked = checkedProducts.length === shoppingList.length && shoppingList.length > 0;
         return (
             <Checkbox
                 checked={isChecked}
@@ -74,10 +74,10 @@ const ShoppingList = () => {
     const renderDeleteAll = () => (
         <IconButton
             aria-label="delete"
-            classes={{ root: styles.icon }}
+            disabled={shoppingList.length === 0}
             onClick={() => setIsDeleteModalOpen(true)}
         >
-            <DeleteIcon classes={{ root: styles.icon }} />
+            <DeleteIcon classes={{ root: shoppingList.length === 0 ? styles.disabled : styles.icon }} />
         </IconButton>
     );
 
@@ -185,10 +185,6 @@ const ShoppingList = () => {
         dispatch(fetchShoppingList());
     }, []);
 
-    if (shoppingList.length === 0) {
-        return null;
-    }
-
     const onSortChange = (orderBy: string, sort: string) => {
         const newSort: string = orderBy === currentSortState.orderBy ? invertSort(currentSortState.sort) : sort;
 
@@ -251,7 +247,7 @@ const ShoppingList = () => {
                     onSearch={onSearch}
                 />
                 <GenericTable
-                    bodyColumns={isLoading ? [] : bodyColumns}
+                    bodyColumns={bodyColumns}
                     color="orange"
                     data={shoppingList}
                     headerColumns={headers}

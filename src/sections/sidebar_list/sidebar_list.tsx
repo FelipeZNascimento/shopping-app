@@ -75,7 +75,11 @@ const SidebarList = () => {
         );
     };
 
-    if (!list || list.length === 0 || isMobile || pathname.includes(routes.SHOPPING_LIST) || pathname === '/') {
+    if (!list || list.length === 0 || isMobile
+        || pathname.includes(routes.SHOPPING_LIST)
+        || pathname.includes(routes.PURCHASE_FORM)
+        || pathname === routes.HOME
+    ) {
         return null;
     }
 
