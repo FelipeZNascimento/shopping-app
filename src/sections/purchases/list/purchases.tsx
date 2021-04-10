@@ -34,7 +34,7 @@ import { IAutocompleteItem } from 'components/autocomplete/types';
 // Interfaces, Constants
 import { TBrand, TPlace, TPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
-import { dynamicSort } from 'utils/utils'
+import { dynamicSort, twoDecimals } from 'utils/utils'
 
 import styles from './purchases.module.scss';
 
@@ -89,7 +89,7 @@ const PurchaseList = () => {
     };
 
     const getSum = (total: number, item: TPurchaseItem) => {
-        const totalPrice = Math.round(item.price * item.quantity * 100) / 100;
+        const totalPrice = twoDecimals(item.price * item.quantity);
         if (isNaN(totalPrice)) {
             return total;
         }
@@ -127,11 +127,11 @@ const PurchaseList = () => {
                     allCategories.push({
                         description: item.product.category.description,
                         count: 1,
-                        total: Math.round(item.price * item.quantity * 100) / 100
+                        total: twoDecimals(item.price * item.quantity)
                     });
                 } else {
                     allCategories[foundIndex].count++;
-                    allCategories[foundIndex].total += Math.round(item.price * item.quantity * 100) / 100;
+                    allCategories[foundIndex].total += twoDecimals(item.price * item.quantity);
                 }
                 return null;
             });
@@ -144,7 +144,7 @@ const PurchaseList = () => {
                         {item.count}x {item.description}
                     </div>
                     <div className={styles.total}>
-                        € {isNaN(item.total) ? '0' : item.total}
+                        € {isNaN(item.total) ? '0' : twoDecimals(item.total)}
                     </div>
                 </div>
             ));
@@ -153,7 +153,7 @@ const PurchaseList = () => {
     const renderFooter = () => {
         return (
             <div className={styles.totalCardFooter}>
-                € {purchaseTotal}
+                € {twoDecimals(purchaseTotal)}
             </div>
         );
     };
