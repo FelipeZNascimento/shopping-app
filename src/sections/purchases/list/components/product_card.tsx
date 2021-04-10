@@ -162,10 +162,12 @@ const ProductCard = ({
 };
 
 const arePropsEqual = (prevItem: TProps, nextItem: TProps) => {
-    return prevItem.purchaseItem.price === nextItem.purchaseItem.price
+    return prevItem.purchaseItem.id === nextItem.purchaseItem.id
+        && prevItem.purchaseItem.price === nextItem.purchaseItem.price
         && prevItem.purchaseItem.quantity === nextItem.purchaseItem.quantity
         && prevItem.purchaseItem.details === nextItem.purchaseItem.details
         && prevItem.purchaseItem.brand?.id === nextItem.purchaseItem.brand?.id
+        && prevItem.purchaseItem.product.id === nextItem.purchaseItem.product.id
         && prevItem.purchaseItem.unit === nextItem.purchaseItem.unit
         && prevItem.purchaseItem.discount === nextItem.purchaseItem.discount;
 };
