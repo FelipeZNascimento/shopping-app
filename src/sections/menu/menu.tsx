@@ -31,7 +31,7 @@ const Menu = () => {
             id: 2,
             display: 'Compras',
             hasDropdown: true,
-            route: routes.PURCHASES_SECTION,
+            route: routes.PURCHASE_HISTORY,
             dropdownOptions: [
                 {
                     display: 'Nova Compra',
@@ -47,7 +47,7 @@ const Menu = () => {
             id: 3,
             display: 'Lugares',
             hasDropdown: true,
-            route: routes.PLACES_SECTION,
+            route: routes.PLACES_LIST,
             dropdownOptions: [
                 {
                     display: 'Lista de Lugares',
@@ -63,7 +63,7 @@ const Menu = () => {
             id: 4,
             display: 'Produtos',
             hasDropdown: true,
-            route: routes.PRODUCTS_SECTION,
+            route: routes.PRODUCTS_LIST,
             dropdownOptions: [
                 {
                     display: 'Lista de Produtos',
@@ -135,7 +135,7 @@ const Menu = () => {
 
         return (
             <div className={dropdownClass}>
-                {item.display}
+                <Link to={item.route}>{item.display}</Link>
                 {item.dropdownOptions
                     && <div className={styles['dropdown--hovered']}>
                         {item.dropdownOptions.map((option) => (

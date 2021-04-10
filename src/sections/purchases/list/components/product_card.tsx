@@ -13,6 +13,7 @@ import {
     TBrand,
     TPurchaseItem
 } from 'constants/objectInterfaces';
+import { twoDecimals } from 'utils/utils';
 
 import styles from './product_card.module.scss';
 
@@ -138,7 +139,7 @@ const ProductCard = ({
     )
     const renderFooter = () => {
         const totalPrice = purchaseItem.price > 0 && purchaseItem.quantity > 0
-            ? Math.round(purchaseItem.price * purchaseItem.quantity * 100) / 100
+            ? twoDecimals(purchaseItem.price * purchaseItem.quantity)
             : 0;
 
         return (
@@ -162,14 +163,7 @@ const ProductCard = ({
 };
 
 const arePropsEqual = (prevItem: TProps, nextItem: TProps) => {
-    return prevItem.purchaseItem.id === nextItem.purchaseItem.id
-        && prevItem.purchaseItem.price === nextItem.purchaseItem.price
-        && prevItem.purchaseItem.quantity === nextItem.purchaseItem.quantity
-        && prevItem.purchaseItem.details === nextItem.purchaseItem.details
-        && prevItem.purchaseItem.brand?.id === nextItem.purchaseItem.brand?.id
-        && prevItem.purchaseItem.product.id === nextItem.purchaseItem.product.id
-        && prevItem.purchaseItem.unit === nextItem.purchaseItem.unit
-        && prevItem.purchaseItem.discount === nextItem.purchaseItem.discount;
+    return JSON.stringify(prevItem.purchaseItem) === JSON.stringify(nextItem.purchaseItem);
 };
   
 export default React.memo(ProductCard, arePropsEqual);

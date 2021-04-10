@@ -29,7 +29,7 @@ import {
 } from 'constants/objectInterfaces';
 import { TSortingState } from 'components/generic_table/types';
 
-import { invertSort } from 'utils/utils';
+import { invertSort, twoDecimals } from 'utils/utils';
 import { routes } from 'constants/routes';
 import { productUnits } from 'constants/products';
 
@@ -140,7 +140,7 @@ const FullPurchase = ({
         },
         {
             key: 'total',
-            renderFunction: (item: TPurchaseItem) => <td>€ {Math.round(item.price * item.quantity * 100) / 100}</td>,
+            renderFunction: (item: TPurchaseItem) => <td>€ {twoDecimals(item.price * item.quantity * 100)}</td>,
             showOnMobile: false
         }
     ];

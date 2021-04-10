@@ -58,6 +58,7 @@
 
 .centerAligned {
     @include flex-aligned(center, center);
+    @include aligned(center);
 }
 
 .clickable {

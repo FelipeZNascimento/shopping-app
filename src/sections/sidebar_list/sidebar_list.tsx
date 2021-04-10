@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { isMobile } from "react-device-detect";

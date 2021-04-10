@@ -2,12 +2,12 @@
 @import "style/colors.scss";
 @import "style/font-sizes.scss";
 @import "style/paddings.scss";
+@import "style/variables.scss";
 
-$sidebar-width: 250px;
 
 .container {
     @include padded(all, m);
-    min-width: $sidebar-width;
+    width: $sidebar-width;
 
     a {
         text-decoration: none;

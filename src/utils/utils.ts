@@ -1,3 +1,5 @@
+export const twoDecimals = (value: number) => Math.round(value * 100) / 100;
+
 export const dynamicSort = (property: string) => {
     let sortOrder = 1;
     if (property[0] === "-") {
