@@ -3,11 +3,12 @@ import { useHistory } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import cloneDeep from 'lodash.clonedeep';
 
 // Actions
 import { fetchBrands } from 'store/brand/actions';
 import { fetchPlaces } from 'store/place/actions';
-import { savePurchaseList, removeFromList, updateList } from 'store/purchase/actions';
+import { savePurchaseList, removeFromList, updateItem } from 'store/purchase/actions';
 
 // Selectors
 import {
@@ -71,6 +72,11 @@ const PurchaseList = () => {
         }
     }, [hasError, isLoading]);
 
+    useEffect(() => {
+        const totalSum = purchaseList.reduce(getSum, 0);
+        setPurchaseTotal(totalSum);
+    }, [purchaseList]);
+
     const onSavePurchase = () => {
         if (selectedPlaceId !== null) {
             const selectedPlace = places.find((place) => place.id === selectedPlaceId);
@@ -95,40 +101,8 @@ const PurchaseList = () => {
     };
 
     const onUpdate = (item: TPurchaseItem) => {
-        const updatedPurchaseList = purchaseList.map((purchaseItem) => ({ ...purchaseItem }));
-        const foundIndex = updatedPurchaseList.findIndex((purchaseItem) => purchaseItem.id === item.id);
-
-        let totalPrice = Math.round(item.price * item.quantity * 100) / 100;
-
-        if (foundIndex === -1) {
-            return;
-        }
-
-        const foundItem = updatedPurchaseList[foundIndex];
-        const foundItemTotalPrice = Math.round(foundItem.price * foundItem.quantity * 100) / 100;
-
-        if (item.price !== foundItem.price && !isNaN(item.price)) {
-            totalPrice = item.price > 0
-                ? Math.round(item.price * item.quantity * 100) / 100
-                : 0
-        } else if (totalPrice !== foundItemTotalPrice && !isNaN(totalPrice)) {
-            item.price = totalPrice > 0
-                ? Math.round(totalPrice / item.quantity * 100) / 100
-                : 0;
-        } else if (item.quantity !== foundItem.quantity && !isNaN(item.quantity)) {
-            totalPrice = item.price > 0
-                ? Math.round(item.price * item.quantity * 100) / 100
-                : 0;
-
-            item.price = totalPrice > 0
-                ? Math.round(totalPrice / item.quantity * 100) / 100
-                : 0;
-        }
-
-        updatedPurchaseList[foundIndex] = item;
-        const totalSum = updatedPurchaseList.reduce(getSum, 0);
-        setPurchaseTotal(totalSum);
-        dispatch(updateList(updatedPurchaseList));
+        const foundIndex = purchaseList.findIndex((purchaseItem) => purchaseItem.id === item.id);
+        dispatch(updateItem(cloneDeep(item), foundIndex));
     };
 
     const onPlaceChange = (placeInput: IAutocompleteItem | string) => {
@@ -141,9 +115,6 @@ const PurchaseList = () => {
 
     };
 
-    if (isLoading) {
-        return <Loading />;
-    }
     const hasInvalidItem = purchaseList.find((item) => item.price <= 0 && item.quantity <= 0) !== undefined;
     const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
 
@@ -173,7 +144,7 @@ const PurchaseList = () => {
                         {item.count}x {item.description}
                     </div>
                     <div className={styles.total}>
-                        € {item.total}
+                        € {isNaN(item.total) ? '0' : item.total}
                     </div>
                 </div>
             ));
@@ -186,6 +157,20 @@ const PurchaseList = () => {
             </div>
         );
     };
+
+    const renderProductCard = (item: TPurchaseItem, index: number) => (
+        <ProductCard
+            brands={brands}
+            color={index % 2 === 0 ? 'grey3' : 'grey4'}
+            purchaseItem={item}
+            onDelete={onDelete}
+            onUpdate={onUpdate}
+        />
+    );
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <>
@@ -212,19 +197,12 @@ const PurchaseList = () => {
             <div className={isMobile ? styles.purchaseCardContainerMobile : styles.purchaseCardContainerDesktop}>
                 <InfoCard
                     title={'Total'}
-                    subtitle={`${purchaseTotal} itens`}
+                    subtitle={`${purchaseList.length} itens`}
                     renderFooter={renderFooter}
                 >
                     {renderCategoriesTotal()}
                 </InfoCard>
-                {purchaseList.map((item, index) =>
-                    <ProductCard
-                        brands={brands}
-                        color={index % 2 === 0 ? 'grey3' : 'grey4'}
-                        purchaseItem={item}
-                        onDelete={onDelete}
-                        onUpdate={onUpdate}
-                    />)}
+                {purchaseList.map(renderProductCard)}
             </div>
         </>
     );

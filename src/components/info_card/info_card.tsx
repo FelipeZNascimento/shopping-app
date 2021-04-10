@@ -15,7 +15,7 @@ type TProps = {
     onClick?: null | (() => void);
 }
 
-const PurchaseCard = ({
+const InfoCard = ({
     children = null,
     clickable = false,
     color = 'cyan',
@@ -59,4 +59,4 @@ const PurchaseCard = ({
     );
 };
 
-export default PurchaseCard;
+export default InfoCard;
