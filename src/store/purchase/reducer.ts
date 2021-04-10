@@ -6,15 +6,15 @@ import {
 } from 'constants/objectInterfaces';
 import { TState } from './types';
 
-import { dynamicSort } from 'utils/utils'
-
 interface IAction {
     type: string,
     newlyAddedItems: TPurchaseItem[],
     purchaseHistory: TPurchase[],
     purchaseList: TPurchaseItem[],
+    purchaseItem: TPurchaseItem,
     fullPurchase: TPurchaseItem[],
     itemId: number,
+    index: number,
     response: TShoppingListItem,
     errorMessage: string
 }
@@ -46,10 +46,19 @@ export default function purchaseReducer(
                 ...state,
                 purchaseList: state.purchaseList.filter((item: TPurchaseItem) => item.id !== action.itemId)
             };
+        case ACTIONTYPES.UPDATE_PURCHASE_LIST:
+            return {
+                ...state,
+                purchaseList: [...action.purchaseList]
+            };
         case ACTIONTYPES.UPDATE_PURCHASE_ITEM:
             return {
                 ...state,
-                purchaseList: action.purchaseList
+                purchaseList: state.purchaseList.map(
+                    (item, index) => index === action.index
+                        ? { ...action.purchaseItem }
+                        : { ...item }
+                )
             };
         case ACTIONTYPES.CLEAR_PURCHASE:
             return {

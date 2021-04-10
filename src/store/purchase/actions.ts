@@ -114,8 +114,16 @@ export function removeFromList(item: TPurchaseItem) {
 
 export function updateList(purchaseList: TPurchaseItem[]) {
     return {
-        type: ACTIONTYPES.UPDATE_PURCHASE_ITEM,
+        type: ACTIONTYPES.UPDATE_PURCHASE_LIST,
         purchaseList
+    }
+}
+
+export function updateItem(purchaseItem: TPurchaseItem, index: number) {
+    return {
+        type: ACTIONTYPES.UPDATE_PURCHASE_ITEM,
+        purchaseItem,
+        index
     }
 }
 

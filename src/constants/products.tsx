@@ -13,6 +13,6 @@ export const productUnits = [
     },
     {
         id: 3,
-        description: 'ml'
+        description: 'litro'
     }
 ];

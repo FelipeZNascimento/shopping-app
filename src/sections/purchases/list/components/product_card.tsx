@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
     Checkbox,
@@ -13,10 +13,10 @@ import {
     TBrand,
     TPurchaseItem
 } from 'constants/objectInterfaces';
-import styles from './product_card.module.scss';
-import { objectsAreEqual } from 'services/utilities';
 
-interface IProps {
+import styles from './product_card.module.scss';
+
+type TProps = {
     brands: TBrand[];
     color: string;
     purchaseItem: TPurchaseItem
@@ -30,24 +30,21 @@ const ProductCard = ({
     purchaseItem,
     onDelete,
     onUpdate
-}: IProps) => {
-    const [itemInfo, setItemInfo] = useState<TPurchaseItem>(purchaseItem);
-    const [currentUnit, setCurrentUnit] = useState(productUnits[0]);
+}: TProps) => {
+    const getCurrentUnit = useCallback(() => (
+        productUnits.find((unit) => unit.id === purchaseItem.unit) || productUnits[0]
+    ), [purchaseItem.unit]);
 
-    useEffect(() => {
-        if (!objectsAreEqual(itemInfo, purchaseItem)) {
-            onUpdate(itemInfo);
-            setCurrentUnit(productUnits.find((unit) => unit.id === itemInfo.unit) || productUnits[0]);
-        }
-    }, [itemInfo]);
+    console.log(`Rerendering item id ${purchaseItem.id}`);
 
     const renderContent = () => (
         <div>
             <div className={styles.cardElementContainer}>
                 <Autocomplete
                     options={brands}
+                    selected={purchaseItem.brand && purchaseItem.brand.id !== null ? purchaseItem.brand : null}
                     title="Marca"
-                    onChange={(item: any) => setItemInfo({
+                    onChange={(item: any) => onUpdate({
                         ...purchaseItem,
                         brand: {
                             description: item ? item.description : '',
@@ -65,7 +62,7 @@ const ProductCard = ({
                         label="Qtd"
                         type="number"
                         value={purchaseItem.quantity}
-                        onChange={(e) => setItemInfo({
+                        onChange={(e) => onUpdate({
                             ...purchaseItem,
                             quantity: parseFloat(e.target.value)
                         })}
@@ -74,10 +71,10 @@ const ProductCard = ({
                 <div className={styles.cardElement}>
                     <Autocomplete
                         options={productUnits}
-                        selected={currentUnit}
+                        selected={getCurrentUnit()}
                         title="Unidade"
                         onChange={(item: any) => {
-                            setItemInfo({
+                            onUpdate({
                                 ...purchaseItem,
                                 unit: item.id
                             })
@@ -91,10 +88,10 @@ const ProductCard = ({
                         required
                         id="price"
                         InputProps={{ inputProps: { min: 0 } }}
-                        label={`€/${currentUnit.description}`}
+                        label={`€/${getCurrentUnit().description}`}
                         type="number"
                         value={purchaseItem.price}
-                        onChange={(e) => setItemInfo({
+                        onChange={(e) => onUpdate({
                             ...purchaseItem,
                             price: parseFloat(e.target.value),
                         })}
@@ -103,9 +100,10 @@ const ProductCard = ({
                 <div className={styles.promo}>
                     Promo?
                     <Checkbox
+                        checked={purchaseItem.discount}
                         size="small"
                         inputProps={{ 'aria-label': 'checkbox with small size' }}
-                        onChange={(e) => setItemInfo({
+                        onChange={(e) => onUpdate({
                             ...purchaseItem,
                             discount: e.target.checked
                         })}
@@ -118,7 +116,8 @@ const ProductCard = ({
                     id="details"
                     label="Detalhes"
                     type="text"
-                    onChange={(e) => setItemInfo({
+                    value={purchaseItem.details}
+                    onChange={(e) => onUpdate({
                         ...purchaseItem,
                         details: e.target.value
                     })}
@@ -126,6 +125,8 @@ const ProductCard = ({
             </div>
         </div>
     );
+
+    const memoizedContent = useMemo(renderContent, [getCurrentUnit(), purchaseItem]);
 
     const renderButton = () => (
         <IconButton
@@ -136,7 +137,10 @@ const ProductCard = ({
         </IconButton>
     )
     const renderFooter = () => {
-        const totalPrice = Math.round(purchaseItem.price * purchaseItem.quantity * 100) / 100;
+        const totalPrice = purchaseItem.price > 0 && purchaseItem.quantity > 0
+            ? Math.round(purchaseItem.price * purchaseItem.quantity * 100) / 100
+            : 0;
+
         return (
             <div className={totalPrice > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
                 € {totalPrice}
@@ -152,9 +156,18 @@ const ProductCard = ({
             renderFooter={renderFooter}
             renderButton={renderButton}
         >
-            {renderContent()}
+            {memoizedContent}
         </InfoCard>
     );
 };
 
-export default ProductCard;
+const arePropsEqual = (prevItem: TProps, nextItem: TProps) => {
+    return prevItem.purchaseItem.price === nextItem.purchaseItem.price
+        && prevItem.purchaseItem.quantity === nextItem.purchaseItem.quantity
+        && prevItem.purchaseItem.details === nextItem.purchaseItem.details
+        && prevItem.purchaseItem.brand?.id === nextItem.purchaseItem.brand?.id
+        && prevItem.purchaseItem.unit === nextItem.purchaseItem.unit
+        && prevItem.purchaseItem.discount === nextItem.purchaseItem.discount;
+};
+  
+export default React.memo(ProductCard, arePropsEqual);
