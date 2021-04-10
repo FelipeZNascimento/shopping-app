@@ -28,10 +28,7 @@ const deleteItems = ({
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     let requestUrl = `${apiBaseUrl}${apiCallTarget}`;
 
-    if (objectId !== null) {
-        requestUrl += `${objectId}`;
-    }
-
+    requestUrl += objectId === null ? 'all' : `${objectId}`;
     requestUrl += stringifyQueryParams(currentPage, orderBy, sort, searchField);
 
     const requestObject = new Request(
