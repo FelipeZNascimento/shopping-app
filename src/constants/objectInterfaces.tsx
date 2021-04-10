@@ -47,6 +47,7 @@ export type TPurchase = {
 
 export type TProductHistoryItem = {
     price: number;
+    details: string;
     discount: boolean;
     unit: number;
     date: string;

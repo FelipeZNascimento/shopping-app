@@ -71,6 +71,7 @@ const SingleProduct = () => {
                 brand: item.brand?.description,
                 date: moment(item.date).format('DD/MM/YYYY'),
                 discount: item.discount,
+                details: item.details,
                 price: item.price,
                 place: item.place.description
             }));
@@ -94,6 +95,12 @@ const SingleProduct = () => {
         {
             key: 'brand',
             renderFunction: () => 'Marca',
+            sortable: false,
+            showOnMobile: false
+        },
+        {
+            key: 'details',
+            renderFunction: () => 'Detalhes',
             sortable: false,
             showOnMobile: false
         },
@@ -123,6 +130,11 @@ const SingleProduct = () => {
             showOnMobile: false
         },
         {
+            key: 'details',
+            renderFunction: (item: TProductHistoryItem) => <td>{item.details ? item.details : '-'}</td>,
+            showOnMobile: false
+        },
+        {
             key: 'price',
             renderFunction: (item: TProductHistoryItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price}</td>,
             showOnMobile: true
@@ -149,6 +161,7 @@ const SingleProduct = () => {
                     <p className={styles.place}>{dataInfo.place}</p>
                     <p className={styles.date}>{dataInfo.date}</p>
                     <p className={styles.brand}>{dataInfo.brand}</p>
+                    {dataInfo.details && <p>{dataInfo.details}</p>}
                     <p className={dataInfo.discount ? styles.discount : styles.price}>€ {dataInfo.price}</p>
                 </div>
             );
