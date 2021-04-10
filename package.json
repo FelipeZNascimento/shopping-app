@@ -25,6 +25,7 @@
     "classnames": "^2.2.6",
     "clone": "^2.1.2",
     "immutability-helper": "^3.1.1",
+    "lodash.clonedeep": "^4.5.0",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
