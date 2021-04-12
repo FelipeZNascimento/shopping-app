@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { AddCircle as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
-import { GenericTable, Loading, SearchInput } from 'components/index';
+import { GenericTable, SearchInput } from 'components/index';
 import AddCategoryModal from './components/add_category_modal';
 import DeleteCategoryModal from './components/delete_category_modal';
 
@@ -164,7 +164,6 @@ const CategoriesSection = ({
                         onChange={onPagination}
                     />
                 </div>
-                {isLoading && <Loading />}
                 <AddCategoryModal
                     isOpen={isAddModalOpen}
                     onClose={() => setIsAddModalOpen(false)}

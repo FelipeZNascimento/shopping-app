@@ -20,7 +20,6 @@ import {
 import {
     ConfirmationDialog,
     GenericTable,
-    Loading,
     SearchInput
 } from 'components/index';
 import { TSortingState } from 'components/generic_table/types';
@@ -255,7 +254,6 @@ const ShoppingList = () => {
                     sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
-                {isLoading && <Loading />}
             </div>
         </>
     );

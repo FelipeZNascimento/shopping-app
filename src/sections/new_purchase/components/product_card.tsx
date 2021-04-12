@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import {
     Checkbox,
@@ -8,7 +8,7 @@ import {
 import { Remove as RemoveIcon } from '@material-ui/icons';
 import { Autocomplete, InfoCard } from 'components/index';
 
-import { productUnits } from 'constants/products';
+import { getUnitObject, productUnits } from 'constants/products';
 import {
     TBrand,
     TPurchaseItem
@@ -32,10 +32,6 @@ const ProductCard = ({
     onDelete,
     onUpdate
 }: TProps) => {
-    const getCurrentUnit = useCallback(() => (
-        productUnits.find((unit) => unit.id === purchaseItem.unit) || productUnits[0]
-    ), [purchaseItem.unit]);
-
     const checkNumberInputRegex = (event: any) => {
         const { id, value } = event.target;
 
@@ -78,7 +74,7 @@ const ProductCard = ({
                 <div className={styles.cardElement}>
                     <Autocomplete
                         options={productUnits}
-                        selected={getCurrentUnit()}
+                        selected={getUnitObject(purchaseItem.unit)}
                         title="Unidade"
                         onChange={(item: any) => {
                             onUpdate({
@@ -94,7 +90,7 @@ const ProductCard = ({
                     <TextField
                         required
                         id="price"
-                        label={`€/${getCurrentUnit().description}`}
+                        label={`€/${getUnitObject(purchaseItem.unit).description}`}
                         type="string"
                         value={purchaseItem.price}
                         onChange={(e) => checkNumberInputRegex(e)}
@@ -129,7 +125,7 @@ const ProductCard = ({
         </div>
     );
 
-    const memoizedContent = useMemo(renderContent, [getCurrentUnit(), purchaseItem]);
+    const memoizedContent = useMemo(renderContent, [purchaseItem]);
 
     const renderButton = () => (
         <IconButton

@@ -21,7 +21,7 @@ import {
 import { Fab, IconButton } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import { AddCircle as AddIcon, Delete as DeleteIcon } from '@material-ui/icons';
-import { GenericTable, Loading, SearchInput } from 'components/index';
+import { GenericTable, SearchInput } from 'components/index';
 import AddBrandModal from './components/add_brand_modal';
 import DeleteBrandModal from './components/delete_brand_modal';
 
@@ -194,7 +194,6 @@ const BrandsSection = () => {
                     sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
-                {isLoading && <Loading />}
                 <AddBrandModal
                     isOpen={isAddModalOpen}
                     onClose={() => setIsAddModalOpen(false)}

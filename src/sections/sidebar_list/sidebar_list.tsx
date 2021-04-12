@@ -6,7 +6,7 @@ import { isMobile } from "react-device-detect";
 import { routes } from 'constants/routes';
 
 // Selectors
-import { selectShoppingList } from 'store/shopping_list/selector';
+import { selectShoppingList, selectIsLoading } from 'store/shopping_list/selector';
 
 // Actions
 import { fetchShoppingList, deleteFromShoppingList } from 'store/shopping_list/actions';
@@ -17,7 +17,8 @@ import { TShoppingListItem } from 'constants/objectInterfaces';
 // Components
 import {
     InfoCard,
-    Separator
+    Separator,
+    Loading
 } from 'components/index';
 import {
     Remove as RemoveIcon
@@ -28,6 +29,7 @@ import styles from './sidebar_list.module.scss';
 
 const SidebarList = () => {
     const dispatch = useDispatch();
+    const isLoading: boolean = useSelector(selectIsLoading);
     const list: TShoppingListItem[] = useSelector(selectShoppingList);
     const { pathname } = useLocation();
     const history = useHistory();
@@ -71,6 +73,7 @@ const SidebarList = () => {
                         );
                     })
                 }
+                {isLoading && <Loading />}
             </div>
         );
     };

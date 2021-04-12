@@ -33,7 +33,7 @@ import {
     Delete as DeleteIcon,
     PlaylistAdd
 } from '@material-ui/icons';
-import { GenericTable, Loading, SearchInput } from 'components/index';
+import { GenericTable, SearchInput } from 'components/index';
 import AddProductModal from 'sections/products/list/components/add_product_modal';
 import DeleteProductModal from 'sections/products/list/components/delete_product_modal';
 
@@ -313,7 +313,6 @@ const ProductsList = () => {
                     sortState={currentSortState}
                     onSortChange={(column: string, direction: string) => onSortChange(column, direction)}
                 />
-                {isProductsLoading && <Loading />}
                 <AddProductModal
                     value={searchField}
                     isOpen={isAddProductOpen}
