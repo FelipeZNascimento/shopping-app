@@ -236,7 +236,7 @@ const ProductsList = () => {
 
     const onConvertClick = () => {
         dispatch(convertToPurchase(checkedProducts, purchaseList));
-        history.push(routes.PURCHASE_FORM);
+        history.push(routes.NEW_PURCHASE);
     };
 
     const onPageChange = (newPage: number) => {
@@ -315,6 +315,7 @@ const ProductsList = () => {
                 />
                 {isProductsLoading && <Loading />}
                 <AddProductModal
+                    value={searchField}
                     isOpen={isAddProductOpen}
                     onClose={() => setIsAddProductOpen(false)}
                     onConfirm={onAddNewProduct}

@@ -21,13 +21,9 @@ const Autocomplete = ({
     title = 'Selecione uma opção',
     onChange
 }: IProps) => {
-    const handleChange = (evt: any, selectedOption: string | null) => {
-        if (selectedOption === null) {
-            onChange('');
-        } else {
-            const selectedObject = options.find((option) => option.description === selectedOption);
-            onChange(selectedObject || selectedOption);
-        }
+    const handleChange = (evt: any, value: string) => {
+        const selectedObject = options.find((option) => option.description === value);
+        onChange(selectedObject || value);
     };
 
     return (
@@ -45,7 +41,7 @@ const Autocomplete = ({
             )}
             style={{ flex: 1 }}
             value={selected?.description}
-            onChange={handleChange}
+            onInputChange={handleChange}
         />
     );
 };
