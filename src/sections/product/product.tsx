@@ -26,16 +26,20 @@ import {
 
 // Components
 import { GenericTable, InfoCard, Loading } from 'components/index';
-
+import {
+    Button
+} from '@material-ui/core';
+// Constants, types and tnterfaces
 import {
     TProductHistoryItem,
     TProduct
 } from 'constants/objectInterfaces';
 import { TSortingState } from 'components/generic_table/types';
-
 import { TProductGraphic } from './types';
-import { invertSort } from 'utils/utils';
+import { getUnitObject } from 'constants/products';
 
+// Utilities and Style
+import { invertSort } from 'utils/utils';
 import styles from './product.module.scss';
 
 const defaultSortState = {
@@ -45,8 +49,11 @@ const defaultSortState = {
 
 const SingleProduct = () => {
     const [currentSortState, setCurrentSortState] = useState<TSortingState>(defaultSortState);
+    const [tableData, setTableData] = useState<TProductHistoryItem[]>([]);
     const [graphicData, setGraphicData] = useState<TProductGraphic[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
+    const [productUnits, setProductUnits] = useState<number[]>([]);
+    const [selectedProductUnit, setSelectedProductUnit] = useState<number>(0);
 
     const dispatch = useDispatch();
     const { productId } = useParams<{ productId: string }>();
@@ -67,19 +74,60 @@ const SingleProduct = () => {
 
     useEffect(() => {
         if (productHistory && !isLoading) {
-            const data = productHistory.map((item) => ({
-                brand: item.brand?.description,
-                date: moment(item.date).format('DD/MM/YYYY'),
-                discount: item.discount,
-                details: item.details,
-                price: item.price,
-                place: item.place.description
-            }));
+            const dataTable: TProductHistoryItem[] = [];
+            const dataGraphic: TProductGraphic[] = [];
+            const allUnits: number[] = [];
 
-            setGraphicData(data);
+            productHistory.forEach((item) => {
+                if (!allUnits.find((unit) => unit === item.unit)) {
+                    allUnits.push(item.unit);
+                }
+
+                if (allUnits.length > 0 && item.unit === allUnits[0]) {
+                    dataGraphic.push({
+                        brand: item.brand?.description,
+                        date: moment(item.date).format('DD/MM/YYYY'),
+                        discount: item.discount,
+                        details: item.details,
+                        price: item.price,
+                        unit: item.unit,
+                        place: item.place.description
+                    })
+
+                    dataTable.push(item);
+                }
+            });
+
+            setProductUnits(allUnits);
+            setSelectedProductUnit(allUnits[0]);
+            setGraphicData(dataGraphic);
+            setTableData(dataTable);
         }
     }, [productHistory]);
 
+    useEffect(() => {
+        const dataTable: TProductHistoryItem[] = [];
+        const dataGraphic: TProductGraphic[] = [];
+
+        productHistory.forEach((item) => {
+            if (item.unit === selectedProductUnit) {
+                dataGraphic.push({
+                    brand: item.brand?.description,
+                    date: moment(item.date).format('DD/MM/YYYY'),
+                    discount: item.discount,
+                    details: item.details,
+                    price: item.price,
+                    unit: item.unit,
+                    place: item.place.description
+                })
+
+                dataTable.push(item);
+            }
+        });
+
+        setGraphicData(dataGraphic);
+        setTableData(dataTable);
+    }, [selectedProductUnit]);
 
     if (isLoading) {
         return <Loading />;
@@ -136,7 +184,11 @@ const SingleProduct = () => {
         },
         {
             key: 'price',
-            renderFunction: (item: TProductHistoryItem) => <td className={item.discount ? 'of-green' : ''}>€ {item.price}</td>,
+            renderFunction: (item: TProductHistoryItem) => (
+                <td className={item.discount ? 'of-green' : ''}>
+                    € {item.price} / {getUnitObject(item.unit).description}
+                </td>
+            ),
             showOnMobile: true
         },
         {
@@ -189,6 +241,27 @@ const SingleProduct = () => {
         </ResponsiveContainer>
     );
 
+    const renderUnits = () => {
+        if (productUnits.length <= 1) {
+            return null;
+        }
+
+        return (
+            <div className={styles.unitsContainer}>
+                {productUnits.map((unit) => (
+                    <Button
+                        color="primary"
+                        classes={{ root: styles.button }}
+                        variant={selectedProductUnit === unit ? 'outlined' : 'text'}
+                        onClick={() => setSelectedProductUnit(unit)}
+                    >
+                        {getUnitObject(unit).description}
+                    </Button>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <div className={styles.container}>
             {selectedProduct && <InfoCard
@@ -197,10 +270,11 @@ const SingleProduct = () => {
                 title={`[${selectedProduct.id}] ${selectedProduct.description}`}
                 subtitle={selectedProduct.category.description}
             />}
+            {renderUnits()}
             <GenericTable
                 bodyColumns={isLoading ? [] : bodyColumns}
                 color="green"
-                data={productHistory}
+                data={tableData}
                 headerColumns={headers}
                 isLoading={isLoading}
                 sortState={currentSortState}

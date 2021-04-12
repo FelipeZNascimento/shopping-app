@@ -17,8 +17,8 @@ export type TProduct = TBase & {
 }
 
 export type TPurchaseDetail = {
-    price: number;
-    quantity: number;
+    price: string;
+    quantity: string;
     unit: number;
     discount: boolean;
     details: string;

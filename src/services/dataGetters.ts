@@ -17,6 +17,8 @@ type TProps = {
     id?: number | null
 };
 
+let controller: (AbortController & { requestUrl?: string }) | null = null;
+
 const fetchItems = ({
     objectType,
     currentPage = 0,
@@ -28,6 +30,14 @@ const fetchItems = ({
     const apiCallTarget = objectTypeInfo[objectType].apiCall;
     let requestUrl = `${apiBaseUrl}${apiCallTarget}`;
 
+    if (controller && requestUrl === controller.requestUrl) {
+        controller.abort();
+    }
+
+    controller = new AbortController();
+    controller.requestUrl = requestUrl;
+    const signal = controller.signal;
+
     if (id !== null) {
         requestUrl += `${id}/`;
     }
@@ -38,6 +48,7 @@ const fetchItems = ({
         `${requestUrl}`,
         {
             method: "get",
+            signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': 'Content-Type',
@@ -47,6 +58,7 @@ const fetchItems = ({
 
     return http(requestObject)
         .then((response) => {
+            controller = null;
             return response;
         })
         .catch((error) => {

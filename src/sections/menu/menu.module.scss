@@ -88,6 +88,10 @@
     height: 100%;
     transition: all 0.3s ease-in-out;
 
+    &:hover {
+        @include bg-rgba-colored($of-white, 0.1);
+    }
+
     &__selected {
         @include bg-rgba-colored($of-white, 0.2);
     }

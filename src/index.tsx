@@ -36,7 +36,7 @@ import {
     ProductsCategories,
     SidebarList,
     ShoppingList,
-    PurchaseList,
+    NewPurchase,
     PurchaseHistory
 } from './sections/index';
 
@@ -137,7 +137,7 @@ const theme = createMuiTheme({
         MuiButton: {
             root: {
                 '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.5) !important'
+                    backgroundColor: 'rgba(0,0,0,0.4) !important'
                 }
             }
         },
@@ -192,10 +192,10 @@ render(
                             <HomeSection />
                         </Route>
                         <Route path={routes.PURCHASES_SECTION}>
-                            <Route path={routes.PURCHASE_FORM} component={PurchaseList} />
+                            <Route path={routes.NEW_PURCHASE} component={NewPurchase} />
                             <Route path={routes.PURCHASE_HISTORY} component={PurchaseHistory} />
                         </Route>
-                        <Route path={routes.PURCHASE + "/:purchaseId"} component={PurchaseHistory} />
+                        <Route exact path={routes.PURCHASE + "/:purchaseId"} component={PurchaseHistory} />
                         <Route path={routes.PLACES_SECTION}>
                             <Route path={routes.PLACES_CATEGORIES} component={PlacesCategoriesList} />
                             <Route path={routes.PLACES_LIST} component={PlacesList} />

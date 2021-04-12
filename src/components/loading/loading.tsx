@@ -4,12 +4,10 @@ import Spinner from 'img/loader.gif';
 import styles from './loading.module.scss';
 
 type TProps = {
-    fullscreen?: boolean;
     text?: string;
 };
 
 const Loading = ({
-    fullscreen = false,
     text = 'Loading...'
 }: TProps) => {
     return (

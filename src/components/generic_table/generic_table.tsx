@@ -5,6 +5,9 @@ import {
     ArrowDropDown as ArrowDropDownIcon,
     ArrowDropUp as ArrowDropUpIcon,
 } from '@material-ui/icons';
+import {
+    Loading
+} from 'components/index';
 
 import {
     TBodyColumn,
@@ -118,10 +121,11 @@ const GenericTable = ({
                 </tr>
             </thead>
             <tbody>
+                {isLoading && <tr><td colSpan={20}><Loading /></td></tr>}
                 {data.length === 0 && !isLoading &&
                     <tr><td className={styles.notFound} colSpan={20}><p>Nenhum resultado encontrado.</p></td></tr>
                 }
-                {data.map((item) => <tr>{renderRow(item)}</tr>)}
+                {!isLoading && data.map((item) => <tr>{renderRow(item)}</tr>)}
                 {lastRow !== null && !isLoading && lastRow()}
             </tbody>
         </table>

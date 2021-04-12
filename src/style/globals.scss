@@ -54,6 +54,7 @@ a {
     bottom: 20px;
     color: $of-beige !important;
     position: fixed !important;
+    z-index: $z-index-top-max;
 }
 
 .no-display {

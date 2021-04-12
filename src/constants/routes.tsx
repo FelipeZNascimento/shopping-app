@@ -16,7 +16,7 @@ export const routes = {
 
     // Purchases
     PURCHASES_SECTION: '/purchases',
-    PURCHASE_FORM: '/purchases/form',
+    NEW_PURCHASE: '/purchases/new',
     SHOPPING_LIST: '/shopping_list',
     PURCHASE_HISTORY: '/purchases/history',
     PURCHASE: '/purchase',

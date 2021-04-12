@@ -23,12 +23,14 @@ import styles from './modal.module.scss';
 
 interface IProps {
     isOpen: boolean;
+    value: string;
     onClose: () => void;
     onConfirm: (object: TProduct) => void;
 }
 
 const AddProductModal = ({
     isOpen,
+    value = '',
     onClose,
     onConfirm
 }: IProps) => {
@@ -38,8 +40,14 @@ const AddProductModal = ({
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchProductCategories(null));
-    }, []);
+        if (isOpen) {
+            dispatch(fetchProductCategories(null));
+            setSelectedItem({
+                ...selectedItem,
+                description: value
+            });
+        }
+    }, [isOpen]);
 
     const onDescriptionChange = (event: any) => {
         const newDescription = event.target.value;
@@ -73,6 +81,7 @@ const AddProductModal = ({
                 id="description"
                 label="Nome"
                 type="text"
+                value={selectedItem.description}
                 onChange={onDescriptionChange}
             />
             <div className={styles.minPadding}>

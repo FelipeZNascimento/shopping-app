@@ -1,7 +1,3 @@
-export const ProductsCategory = Object.freeze({
-    alcohol: 1,
-});
-
 export const productUnits = [
     {
         id: 1,
@@ -16,3 +12,7 @@ export const productUnits = [
         description: 'litro'
     }
 ];
+
+export const getUnitObject = (itemUnit: number) => (
+    productUnits.find((unit) => unit.id === itemUnit) || productUnits[0]
+);

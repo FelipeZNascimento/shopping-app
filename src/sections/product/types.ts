@@ -18,4 +18,5 @@ export type TProductGraphic = {
     discount: boolean;
     place: string;
     price: number;
+    unit: number;
 }

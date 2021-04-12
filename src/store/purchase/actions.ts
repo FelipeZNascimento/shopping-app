@@ -27,9 +27,9 @@ export function convertToPurchase(productsList: TProduct[], purchaseList: TPurch
         .map((product, index) => ({
         id: nextId + index,
         details: '',
-        quantity: 1,
+        quantity: '1',
         unit: productUnits[0].id,
-        price: 0,
+        price: '0',
         discount: false,
         brand: {
             id: null,

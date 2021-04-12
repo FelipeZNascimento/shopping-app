@@ -36,7 +36,7 @@ import { TBrand, TPlace, TPurchaseItem } from 'constants/objectInterfaces';
 import { routes } from 'constants/routes';
 import { dynamicSort, twoDecimals } from 'utils/utils'
 
-import styles from './purchases.module.scss';
+import styles from './new_purchase.module.scss';
 
 type TCategoryCount = {
     description: string;
@@ -44,7 +44,7 @@ type TCategoryCount = {
     total: number;
 }
 
-const PurchaseList = () => {
+const NewPurchase = () => {
     const [selectedDate, setSelectedDate] = useState<string>(moment().format());
     const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
@@ -89,7 +89,7 @@ const PurchaseList = () => {
     };
 
     const getSum = (total: number, item: TPurchaseItem) => {
-        const totalPrice = twoDecimals(item.price * item.quantity);
+        const totalPrice = twoDecimals(parseFloat(item.price) * parseFloat(item.quantity));
         if (isNaN(totalPrice)) {
             return total;
         }
@@ -115,7 +115,7 @@ const PurchaseList = () => {
 
     };
 
-    const hasInvalidItem = purchaseList.find((item) => item.price <= 0 && item.quantity <= 0) !== undefined;
+    const hasInvalidItem = purchaseList.find((item) => parseFloat(item.price) <= 0 && parseFloat(item.quantity) <= 0) !== undefined;
     const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
 
     const renderCategoriesTotal = () => {
@@ -127,11 +127,11 @@ const PurchaseList = () => {
                     allCategories.push({
                         description: item.product.category.description,
                         count: 1,
-                        total: twoDecimals(item.price * item.quantity)
+                        total: twoDecimals(parseFloat(item.price) * parseFloat(item.quantity))
                     });
                 } else {
                     allCategories[foundIndex].count++;
-                    allCategories[foundIndex].total += twoDecimals(item.price * item.quantity);
+                    allCategories[foundIndex].total += twoDecimals(parseFloat(item.price) * parseFloat(item.quantity));
                 }
                 return null;
             });
@@ -144,7 +144,7 @@ const PurchaseList = () => {
                         {item.count}x {item.description}
                     </div>
                     <div className={styles.total}>
-                        € {isNaN(item.total) ? '0' : twoDecimals(item.total)}
+                        € {isNaN(item.total) ? '0' : twoDecimals(item.total).toFixed(2)}
                     </div>
                 </div>
             ));
@@ -153,7 +153,7 @@ const PurchaseList = () => {
     const renderFooter = () => {
         return (
             <div className={styles.totalCardFooter}>
-                € {twoDecimals(purchaseTotal)}
+                € {twoDecimals(purchaseTotal).toFixed(2)}
             </div>
         );
     };
@@ -208,4 +208,4 @@ const PurchaseList = () => {
     );
 };
 
-export default PurchaseList;
+export default NewPurchase;

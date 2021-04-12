@@ -48,3 +48,17 @@
 
     }
 }
+
+.unitsContainer {
+    @include flex-aligned(center, center);
+    @include marged(all, none);
+    @include padded(all, none);
+
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.button {
+    @include marged(all, s);
+}
