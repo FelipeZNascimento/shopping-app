@@ -12,3 +12,7 @@ export const productUnits = [
         description: 'litro'
     }
 ];
+
+export const getUnitObject = (itemUnit: number) => (
+    productUnits.find((unit) => unit.id === itemUnit) || productUnits[0]
+);
