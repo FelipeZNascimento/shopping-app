@@ -202,7 +202,7 @@ const ShoppingList = () => {
         })
 
         dispatch(convertToPurchase(convertingProducts, purchaseList));
-        history.push(routes.PURCHASE_FORM);
+        history.push(routes.NEW_PURCHASE);
     };
 
     const onSearch = (item: IAutocompleteItem | string) => {

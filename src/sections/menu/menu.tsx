@@ -35,7 +35,7 @@ const Menu = () => {
             dropdownOptions: [
                 {
                     display: 'Nova Compra',
-                    path: routes.PURCHASE_FORM
+                    path: routes.NEW_PURCHASE
                 },
                 {
                     display: 'Histórico',
@@ -120,11 +120,9 @@ const Menu = () => {
 
         if (!item.hasDropdown) {
             return (
-                <Link to={item.route}>
-                    <div className={buttonClass} onClick={() => setIsMenuOpen(false)}>
-                        {item.display}
-                    </div>
-                </Link>
+                <div className={buttonClass} onClick={() => setIsMenuOpen(false)}>
+                    {item.display}
+                </div>
             )
         }
 
@@ -135,7 +133,7 @@ const Menu = () => {
 
         return (
             <div className={dropdownClass}>
-                <Link to={item.route}>{item.display}</Link>
+                {item.display}
                 {item.dropdownOptions
                     && <div className={styles['dropdown--hovered']}>
                         {item.dropdownOptions.map((option) => (
@@ -172,7 +170,7 @@ const Menu = () => {
     return (
         <div className={styles['container--regular']}>
             <div className={styles['buttons-container']}>
-                {menuItems.map((item) => renderButton(item))}
+                {menuItems.map((item) => <Link to={item.route}>{renderButton(item)}</Link>)}
             </div>
         </div>
     );

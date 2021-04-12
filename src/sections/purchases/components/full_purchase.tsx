@@ -140,7 +140,7 @@ const FullPurchase = ({
         },
         {
             key: 'total',
-            renderFunction: (item: TPurchaseItem) => <td>€ {twoDecimals(item.price * item.quantity * 100)}</td>,
+            renderFunction: (item: TPurchaseItem) => <td>€ {twoDecimals(parseFloat(item.price) * parseFloat(item.quantity) * 100)}</td>,
             showOnMobile: false
         }
     ];

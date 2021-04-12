@@ -1,7 +1,3 @@
-export const ProductsCategory = Object.freeze({
-    alcohol: 1,
-});
-
 export const productUnits = [
     {
         id: 1,

@@ -14,7 +14,7 @@ const HomeSection = () => {
         },
         {
             title: 'Nova Compra',
-            route: routes.PURCHASE_FORM,
+            route: routes.NEW_PURCHASE,
             color: 'cyan'
         },
         {

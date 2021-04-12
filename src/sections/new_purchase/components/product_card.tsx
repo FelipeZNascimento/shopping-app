@@ -23,7 +23,7 @@ type TProps = {
     purchaseItem: TPurchaseItem
     onDelete: (item: TPurchaseItem) => void;
     onUpdate: (item: TPurchaseItem) => void;
-}
+};
 
 const ProductCard = ({
     brands,
@@ -36,7 +36,17 @@ const ProductCard = ({
         productUnits.find((unit) => unit.id === purchaseItem.unit) || productUnits[0]
     ), [purchaseItem.unit]);
 
-    console.log(`Rerendering item id ${purchaseItem.id}`);
+    const checkNumberInputRegex = (event: any) => {
+        const { id, value } = event.target;
+
+        const pattern = /^\d*[.,]?\d*$/;
+        if (pattern.test(value)) {
+            onUpdate({
+                ...purchaseItem,
+                [id]: value.replace(',', '.')
+            })
+        }
+    };
 
     const renderContent = () => (
         <div>
@@ -58,15 +68,11 @@ const ProductCard = ({
                 <div className={styles.cardElement}>
                     <TextField
                         required
-                        id="price"
-                        InputProps={{ inputProps: { min: 0 } }}
+                        id="quantity"
                         label="Qtd"
-                        type="number"
+                        type="string"
                         value={purchaseItem.quantity}
-                        onChange={(e) => onUpdate({
-                            ...purchaseItem,
-                            quantity: parseFloat(e.target.value)
-                        })}
+                        onChange={(e) => checkNumberInputRegex(e)}
                     />
                 </div>
                 <div className={styles.cardElement}>
@@ -88,14 +94,10 @@ const ProductCard = ({
                     <TextField
                         required
                         id="price"
-                        InputProps={{ inputProps: { min: 0 } }}
                         label={`€/${getCurrentUnit().description}`}
-                        type="number"
+                        type="string"
                         value={purchaseItem.price}
-                        onChange={(e) => onUpdate({
-                            ...purchaseItem,
-                            price: parseFloat(e.target.value),
-                        })}
+                        onChange={(e) => checkNumberInputRegex(e)}
                     />
                 </div>
                 <div className={styles.promo}>
@@ -138,13 +140,13 @@ const ProductCard = ({
         </IconButton>
     )
     const renderFooter = () => {
-        const totalPrice = purchaseItem.price > 0 && purchaseItem.quantity > 0
-            ? twoDecimals(purchaseItem.price * purchaseItem.quantity)
+        const totalPrice = parseFloat(purchaseItem.price) > 0 && parseFloat(purchaseItem.quantity) > 0
+            ? twoDecimals(parseFloat(purchaseItem.price) * parseFloat(purchaseItem.quantity))
             : 0;
 
         return (
             <div className={totalPrice > 0 ? styles.totalCardFooterValid : styles.totalCardFooter}>
-                € {totalPrice}
+                € {totalPrice.toFixed(2)}
             </div>
         );
     }
@@ -165,5 +167,5 @@ const ProductCard = ({
 const arePropsEqual = (prevItem: TProps, nextItem: TProps) => {
     return JSON.stringify(prevItem.purchaseItem) === JSON.stringify(nextItem.purchaseItem);
 };
-  
+
 export default React.memo(ProductCard, arePropsEqual);
