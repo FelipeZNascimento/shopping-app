@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TextField } from '@material-ui/core';
 import { FormDialog } from 'components/index';
 
 interface IProps {
+    value: string;
     isOpen: boolean;
     onClose: () => void;
     onConfirm: (object: any) => void;
@@ -11,10 +12,15 @@ interface IProps {
 
 const AddCategoryModal = ({
     isOpen,
+    value = '',
     onClose,
     onConfirm
 }: IProps) => {
     const [newCategory, setNewCategory] = useState<string>('');
+
+    useEffect(() => {
+        setNewCategory(value);
+    }, [isOpen]);
 
     const onDescriptionChange = (event: any) => {
         const value = event.target.value;
@@ -35,6 +41,7 @@ const AddCategoryModal = ({
                 id="description"
                 label="Nome"
                 type="text"
+                value={newCategory}
                 onChange={onDescriptionChange}
             />
         </FormDialog>

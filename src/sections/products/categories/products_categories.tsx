@@ -96,6 +96,7 @@ const ProductsCategories = () => {
             data={categories}
             isLoading={isCategoriesLoading}
             searchOptions={categories}
+            searchValue={searchField}
             sortState={currentSortState}
             totalCount={totalCount}
 

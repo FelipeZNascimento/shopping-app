@@ -96,6 +96,7 @@ const PlacesCategories = () => {
             color={'yellow'}
             data={categories}
             isLoading={isLoadingCategories}
+            searchValue={searchField}
             searchOptions={categories}
             sortState={currentSortState}
             totalCount={totalCount}

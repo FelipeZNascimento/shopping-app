@@ -20,6 +20,7 @@ type TProps = {
     color: string;
     data: TCategory[];
     isLoading?: boolean;
+    searchValue: string;
     searchOptions: TCategory[];
     sortState: TSortingState;
     totalCount: number;
@@ -39,6 +40,7 @@ const CategoriesSection = ({
     color,
     data,
     isLoading = false,
+    searchValue = '',
     searchOptions,
     sortState = defaultSortState,
     totalCount,
@@ -166,6 +168,7 @@ const CategoriesSection = ({
                 </div>
                 <AddCategoryModal
                     isOpen={isAddModalOpen}
+                    value={searchValue}
                     onClose={() => setIsAddModalOpen(false)}
                     onConfirm={addNewCategory}
                 />

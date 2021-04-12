@@ -196,6 +196,7 @@ const BrandsSection = () => {
                 />
                 <AddBrandModal
                     isOpen={isAddModalOpen}
+                    value={searchField}
                     onClose={() => setIsAddModalOpen(false)}
                     onConfirm={onAddNewBrand}
                 />
