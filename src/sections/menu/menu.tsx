@@ -155,7 +155,7 @@ const Menu = () => {
                             startIcon={<MenuIcon />}
                         >
                             Menu
-                    </Button>
+                        </Button>
                     </div>
                 </div>
                 <Drawer anchor='left' open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
