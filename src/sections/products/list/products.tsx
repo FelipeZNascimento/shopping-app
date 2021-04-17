@@ -222,9 +222,7 @@ const ProductsList = () => {
     };
 
     const onAddToShoppingList = (product: TProduct) => {
-        if (shoppingList.find((item) => item.id === product.id) === undefined) {
-            dispatch(addToShoppingList(product));
-        }
+        dispatch(addToShoppingList(product));
     };
 
     const onSortChange = (orderBy: string, sort: string) => {
