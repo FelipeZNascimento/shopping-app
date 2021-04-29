@@ -1,5 +1,6 @@
 import * as ACTIONTYPES from '../actionTypes';
 import {
+    TPlace,
     TPurchase,
     TPurchaseItem,
     TShoppingListItem
@@ -16,7 +17,9 @@ interface IAction {
     itemId: number,
     index: number,
     response: TShoppingListItem,
-    errorMessage: string
+    errorMessage: string,
+    place: TPlace,
+    date: string
 }
 
 const initialState: TState = {
@@ -25,7 +28,9 @@ const initialState: TState = {
     loading: false,
     purchaseHistory: [],
     purchaseList: [],
-    fullPurchase: []
+    fullPurchase: [],
+    place: null,
+    date: ''
 };
 
 export default function purchaseReducer(
@@ -50,6 +55,16 @@ export default function purchaseReducer(
             return {
                 ...state,
                 purchaseList: [...action.purchaseList]
+            };
+        case ACTIONTYPES.UPDATE_PURCHASE_PLACE:
+            return {
+                ...state,
+                place: action.place
+            };
+        case ACTIONTYPES.UPDATE_PURCHASE_DATE:
+            return {
+                ...state,
+                date: action.date
             };
         case ACTIONTYPES.UPDATE_PURCHASE_ITEM:
             return {

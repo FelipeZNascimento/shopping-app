@@ -9,10 +9,12 @@ import {
 } from '@material-ui/pickers';
 
 interface IProps {
+    value?: string;
     onChange: (date: string) => void;
 }
 
 const Datepicker = ({
+    value = '',
     onChange
 }: IProps) => {
     const [selectedDate, setSelectedDate] = useState<string | null | Moment>(moment());
@@ -31,7 +33,7 @@ const Datepicker = ({
                 showTodayButton
                 format="DD/MM/YYYY"
                 label="Quando?"
-                value={selectedDate}
+                value={value === '' ? selectedDate : value}
                 onChange={handleDateChange}
                 animateYearScrolling
             />

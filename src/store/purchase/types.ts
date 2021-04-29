@@ -1,5 +1,6 @@
 import * as ACTIONTYPES from 'store/actionTypes';
 import {
+    TPlace,
     TProduct,
     TPurchase,
     TPurchaseItem
@@ -16,7 +17,9 @@ export type TState = {
     loading: boolean,
     purchaseHistory: TPurchase[],
     purchaseList: TPurchaseItem[],
-    fullPurchase: TPurchaseItem[]
+    fullPurchase: TPurchaseItem[],
+    place: TPlace | null,
+    date: string
 }
 
 export type TSavePurchaseList = TAction & {

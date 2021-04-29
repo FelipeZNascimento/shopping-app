@@ -2,19 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { isMobile } from "react-device-detect";
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
 import cloneDeep from 'lodash.clonedeep';
 
 // Actions
 import { fetchBrands } from 'store/brand/actions';
 import { fetchPlaces } from 'store/place/actions';
-import { savePurchaseList, removeFromList, updateItem } from 'store/purchase/actions';
+import {
+    savePurchaseList,
+    removeFromList,
+    updateDate,
+    updateItem,
+    updatePlace
+} from 'store/purchase/actions';
 
 // Selectors
 import {
-    selectPurchaseList,
     selectHasError,
-    selectIsLoading
+    selectIsLoading,
+    selectPurchaseDate,
+    selectPurchaseList,
+    selectPurchasePlace
 } from 'store/purchase/selector';
 import { selectBrands } from 'store/brand/selector';
 import { selectPlaces } from 'store/place/selector';
@@ -45,12 +52,12 @@ type TCategoryCount = {
 }
 
 const NewPurchase = () => {
-    const [selectedDate, setSelectedDate] = useState<string>(moment().format());
-    const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
     const [purchaseTotal, setPurchaseTotal] = useState<number>(0);
     const [isPurchaseSaved, setIsPurchaseSaved] = useState<boolean>(false);
 
     const purchaseList: TPurchaseItem[] = useSelector(selectPurchaseList);
+    const purchasePlace: TPlace | null = useSelector(selectPurchasePlace);
+    const purchaseDate: string = useSelector(selectPurchaseDate);
     const brands: TBrand[] = useSelector(selectBrands);
     const places: TPlace[] = useSelector(selectPlaces);
     const isLoading: boolean = useSelector(selectIsLoading);
@@ -67,7 +74,7 @@ const NewPurchase = () => {
         if (!isLoading && !hasError && isPurchaseSaved) {
             setIsPurchaseSaved(false);
             setPurchaseTotal(0);
-            setSelectedPlaceId(null);
+            dispatch(updatePlace(null));
             history.push(routes.PURCHASE_HISTORY);
         }
     }, [hasError, isLoading]);
@@ -78,13 +85,9 @@ const NewPurchase = () => {
     }, [purchaseList]);
 
     const onSavePurchase = () => {
-        if (selectedPlaceId !== null) {
-            const selectedPlace = places.find((place) => place.id === selectedPlaceId);
-
-            if (selectedPlace !== undefined) {
-                dispatch(savePurchaseList(purchaseList, selectedDate, selectedPlace, purchaseTotal));
-                setIsPurchaseSaved(true);
-            }
+        if (purchasePlace !== null && purchaseDate !== '') {
+            dispatch(savePurchaseList(purchaseList, purchaseDate, purchasePlace, purchaseTotal));
+            setIsPurchaseSaved(true);
         }
     };
 
@@ -106,17 +109,16 @@ const NewPurchase = () => {
     };
 
     const onPlaceChange = (placeInput: IAutocompleteItem | string) => {
-        console.log(placeInput);
-        if (typeof placeInput === 'string') {
-            setSelectedPlaceId(null);
-        } else {
-            setSelectedPlaceId(placeInput.id);
+        if (typeof placeInput !== 'string') {
+            const selectedPlace = places.find((place) => place.id === placeInput.id);
+            if (selectedPlace && selectedPlace.id !== purchasePlace?.id) {
+                dispatch(updatePlace(selectedPlace));
+            }
         }
-
     };
 
     const hasInvalidItem = purchaseList.find((item) => parseFloat(item.price) <= 0 && parseFloat(item.quantity) <= 0) !== undefined;
-    const isFabButtonDisabled = !selectedPlaceId || !selectedDate || purchaseTotal === 0 || hasInvalidItem;
+    const isFabButtonDisabled = !purchasePlace || !purchaseDate || purchaseTotal === 0 || hasInvalidItem;
 
     const renderCategoriesTotal = () => {
         const allCategories: TCategoryCount[] = [];
@@ -190,9 +192,13 @@ const NewPurchase = () => {
                     freeSolo={false}
                     options={places}
                     title="Onde?"
+                    selected={purchasePlace}
                     onChange={onPlaceChange}
                 />
-                <Datepicker onChange={setSelectedDate} />
+                <Datepicker
+                    value={purchaseDate}
+                    onChange={(newDate) => dispatch(updateDate(newDate))}
+                />
             </div>
             <div className={isMobile ? styles.purchaseCardContainerMobile : styles.purchaseCardContainerDesktop}>
                 <InfoCard
