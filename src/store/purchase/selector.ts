@@ -8,6 +8,14 @@ export function selectHasError(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.error;
 }
 
+export function selectPurchasePlace(state: { purchaseReducer: TState }) {
+    return state.purchaseReducer.place;
+}
+
+export function selectPurchaseDate(state: { purchaseReducer: TState }) {
+    return state.purchaseReducer.date;
+}
+
 export function selectPurchaseHistory(state: { purchaseReducer: TState }) {
     return state.purchaseReducer.purchaseHistory;
 }

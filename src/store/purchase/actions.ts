@@ -19,30 +19,30 @@ import { productUnits } from 'constants/products';
 import { objectTypes } from 'constants/general';
 import { dynamicSort } from 'utils/utils'
 
-export function convertToPurchase(productsList: TProduct[], purchaseList: TPurchaseItem[]) {
+export const convertToPurchase = (productsList: TProduct[], purchaseList: TPurchaseItem[]) => {
     const nextId = purchaseList.length === 0 ? 0 : Math.max(...purchaseList.map(function (item) { return item.id; })) + 1;
 
     const newlyAddedItems: TPurchaseItem[] = productsList
         .sort(dynamicSort('description'))
         .map((product, index) => ({
-        id: nextId + index,
-        details: '',
-        quantity: '1',
-        unit: productUnits[0].id,
-        price: '0',
-        discount: false,
-        brand: {
-            id: null,
-            description: ''
-        },
-        product: product
-    }));
+            id: nextId + index,
+            details: '',
+            quantity: '1',
+            unit: productUnits[0].id,
+            price: '0',
+            discount: false,
+            brand: {
+                id: null,
+                description: ''
+            },
+            product: product
+        }));
 
     return {
         type: ACTIONTYPES.CONVERT_TO_PURCHASE,
         newlyAddedItems
     }
-}
+};
 
 export const fetchPurchases = () => async (dispatch: Dispatch<TFetchPurchases>) => {
     dispatch({ type: ACTIONTYPES.FETCHING_PURCHASES } as const);
@@ -103,27 +103,41 @@ export const fetchPurchase = (
         })
 };
 
-export function removeFromList(item: TPurchaseItem) {
+export const removeFromList = (item: TPurchaseItem) => {
     const itemId = item.id;
 
     return {
         type: ACTIONTYPES.REMOVE_ITEM_FROM_PURCHASE,
         itemId
     }
-}
+};
 
-export function updateList(purchaseList: TPurchaseItem[]) {
+export const updateList = (purchaseList: TPurchaseItem[]) => {
     return {
         type: ACTIONTYPES.UPDATE_PURCHASE_LIST,
         purchaseList
     }
-}
+};
 
-export function updateItem(purchaseItem: TPurchaseItem, index: number) {
+export const updateItem = (purchaseItem: TPurchaseItem, index: number) => {
     return {
         type: ACTIONTYPES.UPDATE_PURCHASE_ITEM,
         purchaseItem,
         index
+    }
+};
+
+export const updatePlace = (place: TPlace | null) => {
+    return {
+        type: ACTIONTYPES.UPDATE_PURCHASE_PLACE,
+        place
+    }
+}
+
+export const updateDate = (date: string | null) => {
+    return {
+        type: ACTIONTYPES.UPDATE_PURCHASE_DATE,
+        date
     }
 }
 
