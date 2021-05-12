@@ -68,7 +68,7 @@ export const fetchPlaceCategoryNames = () => async (dispatch: Dispatch<TFetchPla
 };
 
 export const fetchPlaces = (
-    currentPage = 0,
+    currentPage: number | null = 0,
     sortState = {
         orderBy: 'description',
         sort: 'ASC'

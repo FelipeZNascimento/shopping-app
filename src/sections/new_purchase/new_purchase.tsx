@@ -66,7 +66,7 @@ const NewPurchase = () => {
     const history = useHistory();
 
     useEffect(() => {
-        dispatch(fetchPlaces());
+        dispatch(fetchPlaces(null));
         dispatch(fetchBrands(null))
     }, []);
 
