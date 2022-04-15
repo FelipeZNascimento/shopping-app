@@ -1,5 +1,5 @@
 // export const apiBaseUrl = 'http://localhost:8081/shopping/';
-export const apiBaseUrl = 'https://omega-cors.herokuapp.com/shopping/';
+export const apiBaseUrl = 'https://api.omegafox.me/shopping/';
 
 export const resultsPerPage = 20;
 export const objectTypes = Object.freeze({
