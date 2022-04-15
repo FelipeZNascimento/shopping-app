@@ -1,7 +1,7 @@
-name: CI/CD Prod
+name: CI/CD Dev
 
 on:
-  push:
+  pull_request:
     branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -33,11 +33,11 @@ jobs:
       - name: 🔨 Build
         run: CI='' npm run build
 
-      - name: 📂 Sync files to prod folder
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: ${{ secrets.server }}
-          username: ${{ secrets.username }}
-          password: ${{ secrets.password }}
-          local-dir: ./build/
-          server-dir: "shopping.omegafox.me/"
+    # - name: 📂 Sync files to dev folder
+    #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
+    #   with:
+    #     server: ${{ secrets.server }}
+    #     username: ${{ secrets.username }}
+    #     password: ${{ secrets.password }}
+    #     local-dir: ./build/
+    #     server-dir: dev.bolao.omegafox.me/
