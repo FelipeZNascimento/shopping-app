@@ -40,4 +40,4 @@ jobs:
           username: ${{ secrets.username }}
           password: ${{ secrets.password }}
           local-dir: ./build/
-          server-dir: dev.omegafox.me/shopping/
+          server-dir: dev.shopping.omegafox.me/
