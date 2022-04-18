@@ -33,11 +33,11 @@ jobs:
       - name: 🔨 Build
         run: CI='' npm run build
 
-    # - name: 📂 Sync files to dev folder
-    #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
-    #   with:
-    #     server: ${{ secrets.server }}
-    #     username: ${{ secrets.username }}
-    #     password: ${{ secrets.password }}
-    #     local-dir: ./build/
-    #     server-dir: dev.bolao.omegafox.me/
+      - name: 📂 Sync files to dev folder
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.server }}
+          username: ${{ secrets.username }}
+          password: ${{ secrets.password }}
+          local-dir: ./build/
+          server-dir: dev.shopping.omegafox.me/
